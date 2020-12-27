@@ -1,55 +1,86 @@
 var express = require('express');
 var router = express.Router();
-
-var auth = require('../lib/auth');
 var template = require('../lib/template.js');
-var session = require('express-session');
-var MySQLStore = require('express-mysql-session')(session);
+var auth = require('../lib/auth');
+var mysql = require('mysql');
 
-
-
-var options = {
-	host: 'localhost',
-	port: 3308,
-	user: 'root',
-	password: 'Ih336449!',
-	database: 'session_test'
-};
-
-var sessionStore = new MySQLStore(options);
-
-
-
-
-
-router.get('/login', function(request, response){
-  var login = template.login();
-  var html = template.html(login); 
-  response.send(html);
+var db = mysql.createConnection({
+  host     : 'localhost',
+  port     : '3308',
+  user     : 'root',
+  password : 'Ih336449!',
+  database : 'balsongyee'
 });
 
-/* //얘를 passport버전으로 바꿔줄거다!
-router.post('/login_process', function (request, response) {
-  var post = request.body;
-  var email = post.email;
-  var password = post.pwd;
-  if(email === authData.email && password === authData.password){
-    
-    request.session.is_logined = true;
-    request.session.nickname = authData.nickname;
-    request.session.save(function(){ //save가 완료가 된뒤에 redirect를 해주기 때문에, 혹시모를 상태정보가 꼬일일을 막아준다
-      response.redirect(`/`);
-    });
-  } else {
-    response.send('Who?');
+db.connect();
+
+
+router.get('/login', function(req, res){
+  var flashMsg = req.flash();
+  var feedback = '';
+  if(flashMsg.error){
+    feedback = '<div style="color:red;margin:10px;"><h5>' + flashMsg.error + '</h5></div>';
   }
-  
+
+  var login = template.login();
+  login = login + feedback
+  var html = template.html(login, auth.statusUI(req,res)); 
+  res.send(html);
 });
-*/
-router.get('/logout', function (request, response) {
-  request.session.destroy(function(err){
-    response.redirect('/');
+
+router.get('/logout', function (req, res) {
+  req.logout();
+  req.session.save(function(){
+  res.redirect('/');
   });
 });
+
+router.get('/register', function (req, res) {
+  var flashMsg = req.flash();
+  var feedback = '';
+  if(flashMsg.error){
+    feedback = '<div style="color:red; margin:10px;"><h5>' + flashMsg.error + '</h5></div>';
+  }
+  var register = template.register();
+  register += feedback;
+  var html = template.html(register, auth.statusUI(req,res)); 
+  res.send(html);
+});
+
+
+router.post('/register_process', function (req, res) {
+  var post = req.body;
+  var email = post.email;
+  var pwd = post.pwd;
+  var pwdCheck = post.pwdCheck;
+
+
+  db.query('select email from user where email = ?', [email], function (error, results, fields) {
+    console.log(results)
+    if(!(results.length === 0)){
+      req.flash('error', '이미 존재하는 아이디입니다')
+      res.redirect('/auth/register');
+      return false;
+    }
+
+    if(pwd === pwdCheck){
+      db.query(`INSERT INTO user
+       VALUES ('` + email + `','` + pwd + `')`,
+        function (error, results, fields) {
+        if (error) throw error;
+        console.log(results[0]);
+      });
+      req.login({'email':email, 'pwd':pwd}, function(err) {
+        return res.redirect('/');
+      });
+    }else{
+      req.flash('error', '비밀번호가 다릅니다')
+      res.redirect('/auth/register');
+    }
+  });  
+});
+
+
+
 
 module.exports = router; 
