@@ -53,8 +53,7 @@ router.post('/processOld', function(req, res){
       console.log(results[0]);
     });
   }
-  console.log(req.body);
-  res.redirect('/');
+  res.send("OK");
 })
 
 

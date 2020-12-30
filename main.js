@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 //const helmet = require("helmet");
+ //요거를 해줘야  mentor에 있는 정적파일을 활용할 수 있다!
+
 
 var flash = require('connect-flash');
 var session = require('express-session');
@@ -66,7 +68,8 @@ app.use('/auth', authRouter);
 app.use('/sendMsg', sendMsgRouter); 
 app.use('/', indexRouter); 
 
-
+app.use(express.static('kelly')); //이걸 맨 위에 써놓으니까 그냥 처음부터 index.html에서 시작한다....
+app.use(express.static('files'));
 
 app.use(function (req, res, next) {
   res.status(404).send('Sorry cant find that!');

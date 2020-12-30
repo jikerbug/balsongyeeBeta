@@ -1,0 +1,159 @@
+@charset "utf-8"; 
+
+
+/* html, body, div.wrap {height:100%} */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,button,pre {font-size:inherit; font-weight:normal; box-sizing:border-box; margin:0; padding:0; word-break:keep-all;}
+body {background:#fff; direction:ltr; -webkit-text-size-adjust:none;}
+body,th,td,input,select,textarea,button,pre {font-family:"Noto Sans KR", sans-serif, 'malgun Gothic', Dotum, Gulim, Helvetica, sans-serif; font-weight:normal; line-height:1.5; color:#000; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+address,caption,cite,code,dfn,em,var,i {font-weight:400; font-style:normal;}
+button {font-family:'Noto Sans KR', Dotum, Gulim, Helvetica, sans-serif; font-weight:400; cursor:pointer; border:0 none; background-color:transparent;}
+pre {white-space:pre-wrap; white-space:-moz-pre-wrap; white-space:-pre-wrap; white-space:-o-pre-wrap; word-break:break-all;}
+fieldset,img {border:0 none;}
+img {vertical-align:top;}
+dl,ul,ol,menu,li {list-style:none;}
+blockquote,q {quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after {content:''; content:none;}
+iframe {display:block;}
+
+a {text-decoration:none; color:#000;}
+a:hover {text-decoration:none;}
+a:active {text-decoration:none;}
+
+.blind, legend {display:block; overflow:hidden; font-size:medium; line-height:normal; width:0; height:0; word-break:break-all; opacity:0; filter:alpha(opacity=0); -ms-filter:'progid:DXImageTransform.Microsoft.Alpha(opacity=0)';}
+.ellipsis {overflow:hidden; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis;}
+
+table {width:100%;}
+table,th,td {table-layout:fixed; border-collapse:collapse;}
+table caption {overflow:hidden; font-size:medium; line-height:normal; width:100%; height:0; word-break:break-all; opacity:0; filter:alpha(opacity=0); -ms-filter:'progid:DXImageTransform.Microsoft.Alpha(opacity=0)';}
+
+.selects {display:inline-block; box-sizing:border-box; width:100%; max-width:710px; background:#f8f6f5;}
+.selects select {box-sizing:border-box; width:100%; height:50px; padding:0; padding:0 37px 0 15px; color:#000; border:0 none; border-radius:0; background:#f8f6f5; appearance:none; -moz-appearance:none; -webkit-appearance:none; -ms-appearance:none; -o-appearance:none;}
+.textarea_typeA textarea {cursor:pointer; display:block; background:transparent; position:relative; line-height:23px; box-sizing:border-box; width:100%; resize:none; border:none; outline:0; color:#000;}
+.textarea_typeA textarea.placeholder {color:#ccc !important;}
+.textarea_typeA.big textarea:hover {font-size:15px !important; line-height:20px !important; -webkit-box-shadow:inset 0px 0px 5px 2px rgba(148,148,148,0.30); -moz-box-shadow:inset 0px 0px 5px 2px rgba(148,148,148,0.30); box-shadow:inset 0px 0px 5px 2px rgba(148,148,148,0.30);}
+
+label {cursor:pointer;}
+input[type="file"] {width:100%; background:none; border:none;}
+input[type='text'],input[type='password'],input[type='search'],input[type='date'] {-webkit-text-fill-color:#000; -ms-text-fill-color:#000;}
+input,select,textarea,button {vertical-align:middle; -webkit-appearance: none; -webkit-border-radius: 0; outline: none;}
+input::-ms-clear, hr {display:none;}
+::-webkit-input-placeholder {color:#bbb; -webkit-text-fill-color:#bbb;}
+::-moz-input-placeholder {color:#bbb; -moz-text-fill-color:#bbb;}
+:-ms-input-placeholder {color:#bbb; -ms-text-fill-color:#bbb;}
+:-moz-input-placeholder {color:#bbb; -moz-text-fill-color:#bbb;}
+
+select::-ms-expand {display:none; }
+
+
+@media print {
+	html, body {width:210mm; height:297mm;}
+	div.titleArea,
+	div.btArea01,
+	div.header,
+	div.userInfoArea,
+	div.areaQuickMenu,
+	div.subTitle,
+	div.tab_typeE,
+	ul.subInfo,
+	div.dateArea,
+	div.subText,
+	div.btArea01,
+	div.areaChargeDetail,
+	div.footer  {opacity:0; visibility:hidden;display:none;}
+	html, body {width: 210mm; height: 297mm;}
+	div.printDiv {
+		-webkit-print-color-adjust: exact;
+		visibility:visible;
+		background-color: white;
+		height: 100%;
+		width: 100%;
+		position: relative;
+		top: 0;
+		left: 0;
+		margin: 0;
+		padding: 15px;
+	}
+}
+
+
+/* gdn 서버 폰트 
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 250;
+  src: local('NotoSansKR-Thin'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Thin-Hangul.woff2') format('woff2'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Thin-Hangul.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+0021-33FF,U+A000-F8FF,U+FB00-F251;
+}
+
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 300;
+  src: local('NotoSansKR-Light'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Light-Hangul.woff2') format('woff2'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Light-Hangul.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+0021-33FF,U+A000-F8FF,U+FB00-F251;
+}
+
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 350;
+  src: local('NotoSansKR-DemiLight'),
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-DemiLight-Hanja.woff2') format('woff2'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-DemiLight-Hanja.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+4E00-9F95,U+F900-FA0B;
+}
+
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 400;
+  src: local('NotoSansKR-Regular'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Regular-Hangul.woff2') format('woff2'), 
+	   url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Regular-Hangul.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+0021-33FF,U+A000-F8FF,U+FB00-F251;
+}
+
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 500;
+  src: local('NotoSansKR-Medium'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Medium-Hangul.woff2') format('woff2'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Medium-Hangul.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+0021-33FF,U+A000-F8FF,U+FB00-F251;
+}
+
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 700;
+  src: local('NotoSansKR-Bold'),
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Bold-Hangul.woff2') format('woff2'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Bold-Hangul.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+0021-33FF,U+A000-F8FF,U+FB00-F251;
+}
+
+@font-face {
+  font-family: 'NotoSansKR';
+  font-style: normal;
+  font-weight: 900;
+  src: local('NotoSansKR-Black'),
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Black-Hangul.woff2') format('woff2'), 
+       url('//cdn.jsdelivr.net/korean-webfonts/latest/corps/google/NotoSansKR/NotoSansKR-Black-Hangul.woff') format('woff');
+  font-stretch: normal;
+  unicode-range: U+0021-33FF,U+A000-F8FF,U+FB00-F251;
+}
+*/ 
+
+
+
