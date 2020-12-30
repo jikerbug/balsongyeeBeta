@@ -21,7 +21,8 @@ router.get('/', function(req, res){
 */
 
 router.get('/', function(req, res){
-  res.sendFile(path.join(__dirname, "../Kelly", "index.html"));
+
+  res.sendFile(path.join(__dirname, "../", "Kelly/index.html"));
 })
 
 module.exports = router;

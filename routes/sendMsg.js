@@ -52,9 +52,26 @@ router.post('/processOld', function(req, res){
       if (error) throw error;
       console.log(results[0]);
     });
+    res.send("OK");
+  }else{
+    res.send("잘못된 비밀번호입니다");
   }
-  res.send("OK");
-})
+  
+});
+
+router.post('/processTest', function(req, res){
+  if(req.body.passwd == '3456'){
+    db.query(`INSERT INTO SC_TRAN (TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG)
+     VALUES (NOW(), '0', '0', '` + req.body.phonenum + `','01071891476','` + req.body.msg + `')`,
+      function (error, results, fields) {
+      if (error) throw error;
+      console.log(results[0]);
+    });
+    res.send("OK");
+  }else{
+    res.send("잘못된 비밀번호입니다");
+  }
+});
 
 
 
