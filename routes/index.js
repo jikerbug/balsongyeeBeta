@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var template = require('../lib/template.js');
+var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
 const path = require("path");
 
@@ -21,8 +21,30 @@ router.get('/', function(req, res){
 */
 
 router.get('/', function(req, res){
+  var feedback = '';
+  var header = template.header(feedback, auth.statusUI(req,res)); 
+  res.render('index', {
+            header: header,
+            length: 5
+        });
+});
 
-  res.sendFile(path.join(__dirname, "../", "Kelly/index.html"));
+router.get('/services', function(req, res){
+  var feedback = '';
+  var header = template.header(feedback, auth.statusUI(req,res)); 
+  res.render('services', {
+            header: header,
+            length: 5
+        });
 })
+
+router.get('/test', function(req, res){
+  res.render('test', {
+            title: "<h1>MY HOMEPAGE</h1>",
+            length: 5
+        });
+})
+
+
 
 module.exports = router;

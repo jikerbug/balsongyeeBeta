@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="author" content="Kodinger">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>My Login Page &mdash; Bootstrap 4 Login Page Snippet</title>
+	<title>회원가입</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="assets/css/my-login.css">
 </head>
@@ -18,55 +18,62 @@
 					</div>
 					<div class="card fat">
 						<div class="card-body">
-							<h4 class="card-title">Register</h4>
-							<form method="POST" class="my-login-validation" novalidate="">
+							<h4 class="card-title">회원가입</h4>
+							<form method="POST" action="/auth/register_process" class="my-login-validation" novalidate="">
 								<div class="form-group">
-									<label for="name">Name</label>
+									<label for="name">이름</label>
 									<input id="name" type="text" class="form-control" name="name" required autofocus>
 									<div class="invalid-feedback">
-										What's your name?
+										이름을 입력해주세요
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="email">E-Mail Address</label>
+									<label for="email">아이디를 입력해주세요</label>
 									<input id="email" type="email" class="form-control" name="email" required>
 									<div class="invalid-feedback">
-										Your email is invalid
+										이메일 형식으로 입력해주세요
 									</div>
 								</div>
 
 								<div class="form-group">
-									<label for="password">Password</label>
-									<input id="password" type="password" class="form-control" name="password">
+									<label for="password">비밀번호</label>
+									<input id="password" type="password" class="form-control" name="pwd">
 									<div class="invalid-feedback">
-										Password is required
+										비밀번호를 입력해주세요
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="password">비밀번호 확인</label>
+									<input id="password" type="password" class="form-control" name="pwdCheck">
+									<div class="invalid-feedback">
+										비밀번호 확인을 해주세요
 									</div>
 								</div>
 
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
-										<label for="agree" class="custom-control-label">I agree to the <a href="#">Terms and Conditions</a></label>
+										<label for="agree" class="custom-control-label"><a href="#">이용약관</a>에 동의합니다</label>
 										<div class="invalid-feedback">
-											You must agree with our Terms and Conditions
+											이용약관에 동의하셔야 합니다
 										</div>
 									</div>
 								</div>
 
 								<div class="form-group m-0">
 									<button type="submit" class="btn btn-primary btn-block" style="background-color:#34b7a7;">
-										Register
+										회원가입
 									</button>
 								</div>
 								<div class="mt-4 text-center">
-									Already have an account? <a href="index.html">Login</a>
+									이미 계정이 있으신가요? <a href="index.html">로그인</a>
 								</div>
 							</form>
 						</div>
 					</div>
 					<div class="footer">
-						Copyright &copy; 2017 &mdash; Your Company 
+						Copyright &copy; 2021 &mdash; 발송이
 					</div>
 				</div>
 			</div>

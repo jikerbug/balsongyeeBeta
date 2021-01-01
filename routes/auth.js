@@ -22,10 +22,8 @@ router.get('/login', function(req, res){
     feedback = '<div style="color:red;margin:10px;"><h5>' + flashMsg.error + '</h5></div>';
   }
 
-  var login = template.login();
-  login = login + feedback
-  var html = template.html(login, auth.statusUI(req,res)); 
-  res.send(html);
+
+  res.render('login');
 });
 
 router.get('/logout', function (req, res) {
@@ -41,10 +39,8 @@ router.get('/register', function (req, res) {
   if(flashMsg.error){
     feedback = '<div style="color:red; margin:10px;"><h5>' + flashMsg.error + '</h5></div>';
   }
-  var register = template.register();
-  register += feedback;
-  var html = template.html(register, auth.statusUI(req,res)); 
-  res.send(html);
+  
+  res.render('register');
 });
 
 

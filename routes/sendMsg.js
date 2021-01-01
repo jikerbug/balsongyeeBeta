@@ -1,7 +1,7 @@
 
 var express = require('express');
 var router = express.Router();
-var template = require('../lib/template.js');
+var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
 var mysql = require('mysql');
 
@@ -33,15 +33,12 @@ router.post('/process', function(req, res){
 })
 
 router.get('/', function(req, res){
-  if (!auth.isOwner(req, res)) {
-
-    req.flash('info', 'login required');
-    res.redirect('/');
-    return false;
-  }
-  var form = template.form();
-  var html = template.html(form, auth.statusUI(req,res)); 
-  res.send(html);
+  var feedback = '';
+  var header = template.header(feedback, auth.statusUI(req,res)); 
+  res.render('sendMsg', {
+            header: header,
+            length: 5
+          });    
 })
 
 

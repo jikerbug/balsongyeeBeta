@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
+const ejs = require('ejs');
 //const helmet = require("helmet");
- //요거를 해줘야  mentor에 있는 정적파일을 활용할 수 있다!
+app.set('view engine', 'ejs');
+app.set('views', './views');
 
 
 var flash = require('connect-flash');
@@ -63,13 +65,16 @@ var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var sendMsgRouter = require('./routes/sendMsg');
 
+
 ///이게 session뒤에 있어야 적용된다!!!
 app.use('/auth', authRouter); 
 app.use('/sendMsg', sendMsgRouter); 
 app.use('/', indexRouter); 
 
-app.use(express.static('kelly')); //이걸 맨 위에 써놓으니까 그냥 처음부터 index.html에서 시작한다....
-app.use(express.static('files'));
+
+app.use('/auth', express.static('ui')); //이렇게 해야 라우터에서도 ui에서 가져올 수 있다!
+app.use('/sendMsg', express.static('ui'));
+app.use('/', express.static('ui')); //static을 무조건 ui에서 가져오는 거다
 
 app.use(function (req, res, next) {
   res.status(404).send('Sorry cant find that!');
