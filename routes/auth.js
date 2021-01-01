@@ -19,11 +19,10 @@ router.get('/login', function(req, res){
   var flashMsg = req.flash();
   var feedback = '';
   if(flashMsg.error){
-    feedback = '<div style="color:red;margin:10px;"><h5>' + flashMsg.error + '</h5></div>';
+    feedback = '<script>alert("' + flashMsg.error + '")</script>';
   }
 
-
-  res.render('login');
+  res.render('login', {script:feedback});
 });
 
 router.get('/logout', function (req, res) {

@@ -25,6 +25,13 @@ db.connect();
 app.use(express.urlencoded({ extended: true }))
 //app.use(helmet());
 
+
+app.use('/auth', express.static('ui')); //이렇게 해야 라우터에서도 ui에서 가져올 수 있다!
+app.use('/sendMsg', express.static('ui'));
+app.use('/', express.static('ui')); //static을 무조건 ui에서 가져오는 거다
+//이게 세션 아래에 있으면 static을 가져올때마다 desiralize가 실행되기때문에 위로 가야한다!
+
+
 var options = {
 	host: 'localhost',
 	port: 3308,
@@ -72,9 +79,6 @@ app.use('/sendMsg', sendMsgRouter);
 app.use('/', indexRouter); 
 
 
-app.use('/auth', express.static('ui')); //이렇게 해야 라우터에서도 ui에서 가져올 수 있다!
-app.use('/sendMsg', express.static('ui'));
-app.use('/', express.static('ui')); //static을 무조건 ui에서 가져오는 거다
 
 app.use(function (req, res, next) {
   res.status(404).send('Sorry cant find that!');
