@@ -1,0 +1,13 @@
+
+.phone-section {
+  border:solid ; border-style: outset; border-radius: 30px; border-width:20px; 
+  
+  border-color:lightslategray ;
+}
+
+.phone-section button{
+  font-size: 0.8em;
+}
+
+
+

@@ -4,13 +4,15 @@ module.exports = {
   <li><a href="/auth/register">회원가입</a></li>`, alert=''){
     return `
     <!-- ======= Header ======= -->
-    <header id="header" class="fixed-top">
-      <div class="container-fluid d-flex justify-content-between align-items-center">
 
-        <h2 class="logo"><a href="/"><img src="assets/img/logo2.svg" style="margin-bottom:8px"/> 발송이</a></h2>
+    
+    <header id="header" class="fixed-top">
+    
+      <div class="container-fluid d-flex justify-content-between align-items-center">
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
+        <h2 class="logo"><a href="/"><img src="assets/img/logo2.svg" style="margin-bottom:7px"/> 발송이</a></h2>
         <nav class="nav-menu d-none d-lg-block">
           <ul>
             <li><a href="/sendMsg">단문발송</a></li>

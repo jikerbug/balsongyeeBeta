@@ -26,9 +26,10 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/custom.css" rel="stylesheet">
 
   <!-- =======================================================
-  * Template Name: Kelly - v2.1.0
+  * Template Name: Kelly - v3.0.0
   * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
@@ -39,14 +40,105 @@
 
   <%- header %>
 
-<!-- ======= Hero Section ======= -->
-<section id="hero" class="d-flex align-items-center">
-  <div class="container d-flex flex-column align-items-center" data-aos="zoom-in" data-aos-delay="100">
-    <h1>발송이</h1>
-    <h2>문자발송 서비스</h2>
-    <a href="/auth/login" class="btn-about">로그인</a>
-  </div>
-</section><!-- End Hero -->
+  <main id="main">
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title" style="margin-top: 30px;">
+          <h2>문자 발송하기</h2>
+          
+       
+        </div>
+
+        <div class="msg-area"></div>
+
+        <textarea class="form-control" name="msg" id="msg" rows="5" 
+            data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력"></textarea>
+        <div class="row">
+          
+    
+          <div class="col">
+            <div class="form-inline">
+              <div class="form-group mx-sm-3 mb-2">
+                <input type="text" name="phonenum" class="form-control" id="name" placeholder="수신번호" 
+                data-rule="minlen:11;"data-msg="11자의 전화번호를 입력해주세요" />
+              </div>
+              <button type="button" class="btn btn-info" onclick="addPhonenum()">추가</button>
+            </div>
+          </div>
+          
+
+          
+        </div>
+        <div class="row">
+          <div class="col"><div class="col-md-3 form-group mt-3 mt-md-0">
+            <select class="form-control" id="phonenumList" size="10" style="width:250px"></select>
+          </div></div>
+          <div class="col">col</div>
+          <div class="col">col</div>
+          <div class="col">
+
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+         
+            <input type="text" class="form-control" name="passwd" id="email" placeholder="비밀번호"/>
+            <div class="validate"></div>
+         
+          </div>
+          <div class="col">col</div>
+          <div class="col">col</div>
+          <div class="col">col</div>
+        </div>
+
+        
+
+        <div class="row mt-5">
+          
+
+          <div class="col-lg-2">
+          </div>
+
+          <div class="col-lg-8 mt-5 mt-lg-0">
+
+            <form action="/sendMsg/processTest" method="post" role="form" class="php-email-form">
+              
+                
+
+                
+         
+              
+              
+
+              
+              
+              
+      
+
+              <div class="form-group mt-3">
+                
+                <div class="validate"></div>
+              </div>
+              <div class="mb-3">
+                <div class="loading">로딩중...</div>
+                <div class="error-message"></div>
+                <div class="sent-message">문자발송 성공!</div>
+              </div>
+              <div class="text-center"><button type="submit">발송</button></div>
+            </form>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
@@ -68,6 +160,7 @@
     </div>
   </footer><!-- End  Footer -->
 
+  <div id="preloader"></div>
   <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
 
   <!-- Vendor JS Files -->
@@ -85,6 +178,26 @@
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
+  <script>
+
+    function addPhonenum(){
+
+      
+      var phonenum = document.getElementById("name").value;
+
+      if(phonenum.length > 10){
+        $('#phonenumList').append('<option value="'+ phonenum +'">'+ phonenum +'</option>');
+        console.log(phonenum);
+      }
+
+      
+    }
+    
+    
+
+  </script>
+
 </body>
 
 </html>
+

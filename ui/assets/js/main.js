@@ -1,5 +1,5 @@
 /**
-* Template Name: Kelly - v3.0.0
+* Template Name: Kelly - v2.1.0
 * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
