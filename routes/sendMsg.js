@@ -44,12 +44,21 @@ router.get('/', function(req, res){
 
 
 router.post('/processOld', function(req, res){
+  console.log(req.body);
+  console.log("data");
+
   if(req.body.passwd == '3456'){
+
+    console.log(req.body.passwd);
+    console.log(req.body);
+    
+    res.send("OK"); //꼭 ok로 보내야함
+
     db.query('insert into test(id) value("' + req.body.msg + '")', function (error, results, fields) {
       if (error) throw error;
       console.log(results[0]);
     });
-    res.send("OK");
+
   }else{
     res.send("잘못된 비밀번호입니다");
   }

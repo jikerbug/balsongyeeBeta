@@ -21,8 +21,10 @@ var db = mysql.createConnection({
 db.connect();
 
 //use:사용자의 요청이 있을때마다 실행하도록 약속되어있음
-
 app.use(express.urlencoded({ extended: true }))
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+
 //app.use(helmet());
 
 
