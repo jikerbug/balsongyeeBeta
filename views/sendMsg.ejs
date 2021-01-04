@@ -28,6 +28,8 @@
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
 
+
+
   <!-- =======================================================
   * Template Name: Kelly - v3.0.0
   * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
@@ -84,7 +86,7 @@
                   <div class="error-message"></div>
                   <div class="sent-message">문자발송 성공!</div>
                 </div>
-                <div class="text-center"><button type="submit">발송</button></div>
+                <div class="text-center"><button type="submit" style="margin-bottom:10px;">발송</button></div>
               </form>
             </div>
    
@@ -93,7 +95,7 @@
 
           </div>
     
-          <div class="col-lg-4">
+          <div class="col-lg-3">
             <div class="form-inline">
               <div class="form-group">
                 <input type="text" name="phonenum" class="form-control" id="name" placeholder="수신번호" 
@@ -108,14 +110,97 @@
             <button type="button" class="btn btn-outline-info" onclick="showInfo()" id="showInfo">세부정보</button>
 
             <select style="display: none" class="form-control" id="infoList" size="10" style="width: 250px;"></select>
+
+            <div style="margin-top: 50px;"></div>
+
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="reserveSend">
+              <label class="form-check-label" for="reserveSend">
+                예약발송
+              </label>
+            </div>
+            <div class="form-group" style="width: 250px;"> 
+              <div class="input-group date" id="datetimepicker1" data-target-input="nearest"> 
+                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="예약시간 설정(달력 클릭)"> 
+                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker"> 
+                  <div class="input-group-text"><i class="fa fa-calendar"></i>
+                  </div> 
+                </div> 
+              </div> 
+            </div>
+
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="termSend">
+              <label class="form-check-label" for="termSend">
+                분할발송
+              </label>
+            </div>
+
+            <div class="form-row">
+              <div class="col-5">
+                <input type="text" class="form-control" name="mterm" style="width:40% ;display: inline;">
+                <label>분 간격</label>
+              </div>
+              <div class="col-5">
+                <input type="text" class="form-control" name="count" style="width:60% ;display: inline;">
+                건씩 
+              </div>
+              <div class="col-2">
+              </div>
+            </div>
+
+
           </div>
 
           <div class="col-lg-4">
             <div class="form-group">
-              <label for="exampleFormControlFile1">엑셀 파일</label>
-              <input type="file" class="form-control-file" id="exampleFormControlFile1" onchange="readExcel()">
+              <div class="card-file">
+                <div class="card">
+                  <div class="card-header">
+                      엑셀 파일
+                  </div>
+                  <div class="card-body">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="customFile" onchange="readExcel()">
+                      <label class="custom-file-label" for="customFile">파일 선택</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-file">
+                <div class="card">
+                  <div class="card-header">
+                      텍스트 파일
+                  </div>
+                  <div class="card-body">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="customFile" onchange="readText()">
+                      <label class="custom-file-label" for="customFile">파일 선택</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-file-header">
+                    파일 입력 예시
+                  </div> 
+                </div>
+                <div class="card-body">
+                  <div class="custom-file">
+                    <p>010-100-1000</p>
+                    <p>홍길동 010-100-1000</p>
+                    <p> 010-100-1000 홍길동</p>
+                    <p>- 기호는 생략가능합니다</p>
+                    <p>엑셀파일의 경우,</p>
+                    <p>앞자리 0이 생략되어도 정상발송됩니다</p>
+                  </div>
+                </div>
+              </div>
+
+                  
+              
             </div>
-            <button type="button" class="btn btn-info" onclick="addExel()">엑셀 추가</button>
           </div>
           
         </div>
@@ -261,6 +346,24 @@
 
   <!-- external module-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+
+  <!--출처: https://blog.edit.kr/entry/Bootstrap-4-달력-datetimepicker-Bootstrap-3버전-업그레이드-버전-인기-달력 -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> 
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+
+  <script type="text/javascript"> 
+
+    $(function () {
+            $('#datetimepicker1').datetimepicker({
+                minDate: new Date(),
+            });
+    });
+   
+  </script>
+
   
 
   <script id="msg-handler">

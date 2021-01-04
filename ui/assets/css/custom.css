@@ -9,5 +9,15 @@
   font-size: 0.8em;
 }
 
+.custom-file-input:lang(en)~.custom-file-label::after {
+  content: "불러오기";
+}
+
+.card-file{
+  font-weight: bold;
+  margin-bottom: 30px;
+  width: 80%;
+}
+
 
 

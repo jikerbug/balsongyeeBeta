@@ -123,12 +123,13 @@ h1, h2, h3, h4, h5, h6 {
 
 #header .logo {
   font-size: 32px;
-  margin: 0;
+  margin-left: 20%;
   padding: 0;
   line-height: 1;
   font-weight: bold;
   letter-spacing: 2px;
-  margin-top:6px
+  margin-top:16px
+
 }
 
 #header .logo a {
@@ -170,7 +171,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   color: #888888;
   transition: 0.3s;
-  font-size: 15px;
+  font-size: 18px;
   font-family: "Raleway", sans-serif;
   font-weight: 600;
 }
@@ -385,7 +386,7 @@ h1, h2, h3, h4, h5, h6 {
 # Header Social Links
 --------------------------------------------------------------*/
 .header-padding{
-  padding-left: 180px;
+  padding-left: 25%;
 }
 
 /*--------------------------------------------------------------

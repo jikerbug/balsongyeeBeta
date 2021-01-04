@@ -7,9 +7,28 @@ $(function($) {
     var passwd = document.getElementById("passwd").value;
 
     var resultInfo = new Array();
-    var listInfo = $('#phonenumList').find('option').map(function() {return $(this).val();}).get();
+    var listInfo = $('#phonenumList').find('option').map(function() {
+      if(this.id == ""){
+        return $(this).val();
+      } 
+    
+    }).get();
     resultInfo.push(listInfo);
-    resultInfo.push(sendInfo);
+
+    var fileInfo = $('#phonenumList').find('option').map(function() {
+      if(this.id != ""){
+        return sendInfo[this.id]; //하나의 list로 합쳐지는 이유는 map의 특성때문인듯
+        //$(this).val()는 그냥 값이라 값째로 리스트에 들어가고
+        //sendInfo[this.id]는 리스트라서 그 리스트안의 원소들이 하나의 리스트로 들어간다
+      }  
+    }).get();
+
+    resultInfo.push(fileInfo);
+
+    console.log(resultInfo[0]);
+    console.log(resultInfo[1]);
+
+
 
     var  ferror = false;
     if (ferror) return false;
@@ -73,13 +92,16 @@ function showInfo(){
     $('#infoList').css("display","none");
     document.getElementById("showInfo").innerHTML = "세부정보"
   }
-  
-  
-  
 
 }
 
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
 function readExcel() {
+  
   
   let input = event.target;
   let reader = new FileReader();
