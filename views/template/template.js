@@ -15,11 +15,14 @@ module.exports = {
         <h2 class="logo"><a href="/"><img src="assets/img/logo2.svg" style="margin-bottom:7px"/> 발송이</a></h2>
         <nav class="nav-menu d-none d-lg-block">
           <ul>
+            <li><a href="/userInfo/sendResult">발송결과</a></li>
             <li><a href="/sendMsg">단문발송</a></li>
             <li><a href="/sendMsg">장문발송</a></li>
+            <li><a href="/userInfo/address">주소록</a></li>
+            <li><a href="/userInfo/cash">충전</a></li>
             ${authStatus}
             <li><a href="/services">고객센터</a></li>
-            <li><a href="/sendMsg">Contact</a></li>
+            
           </ul>
         </nav><!-- .nav-menu -->
 

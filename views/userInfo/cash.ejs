@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>발송이 - 문자발송 서비스</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.ico" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Kelly - v2.1.0
+  * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <%- header %>
+
+
+  <section id="contact" class="contact">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title" style="margin-top: 100px; font-weight: bold;">
+        <h2>충전</h2>
+        코인을 충전합니다
+        <p>단문 1건: 1코인</p>
+        <p>장문 1건: 3코인</p>
+      </div>
+
+
+      <table class="table table-bordered" style="text-align: center;">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">선택</th>
+            <th scope="col">결재금액</th>
+            <th scope="col">코인</th>
+            <th scope="col">단문</th>
+            <th scope="col">장문</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">
+              <div class="custom-control custom-radio">
+                <input value="10000" type="radio" id="customRadio1" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio1"></label>
+              </div>
+            </th>
+            <td>10000원</td>
+            <td>600코인</td>
+            <td>600건</td>
+            <td>200건</td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              <div class="custom-control custom-radio">
+                <input value="20000" type="radio" id="customRadio2" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio2"></label>
+              </div>
+            </th>
+            <td>20000원</td>
+            <td>1200코인</td>
+            <td>1200건</td>
+            <td>600건</td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              <div class="custom-control custom-radio">
+                <input value="30000" type="radio" id="customRadio3" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio3"></label>
+              </div>
+            </th>
+            <td>30000원</td>
+            <td>1800코인</td>
+            <td>1800건</td>
+            <td>900건</td>
+          </tr>
+        
+       
+        </tbody>
+      </table>
+
+      <div class="charge-box" style="text-align: center;">
+
+        
+      
+        <button type="button" class="btn btn-warning" onclick="paymentCard()">카드결제</button>
+        <button type="button" class="btn btn-warning" onclick="paymentAccount()">계좌이체</button>
+      </div>
+
+      
+
+
+
+    </div>
+  </section>
+
+  
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      
+      <div style="fontSize:5; textAlign: 'center'">
+        <p>(주)모은유통대표 : 임모은 / 사업자등록번호 : 155-08-01080</p>
+        <p>주소 : 경기도 남양주시 경강로294번길 17(삼패동)</p>  
+        <p>COPYRIGHT 발송이 ALL RIGHTS RESERVED.</p>    
+      </div>
+
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/ -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer><!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/jquery/jquery.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="assets/vendor/counterup/counterup.min.js"></script>
+  <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/venobox/venobox.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <!--결제모듈-->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+  <script>
+
+    
+
+
+
+
+    var IMP = window.IMP; // 생략가능
+    IMP.init('imp88356796'); 
+
+    function paymentCard(){
+      
+      var price = $('input:radio[name="price"]:checked').val();
+      price = parseInt(price);
+    
+
+
+      IMP.request_pay({
+      pg : 'danal', // version 1.1.0부터 지원.
+      pay_method : 'card',
+      merchant_uid : 'merchant_' + new Date().getTime(),
+      name : '주문명:결제테스트',
+      amount : price,
+      buyer_email : 'iamport@siot.do',
+      buyer_name : '구매자이름',
+      buyer_tel : '010-1234-5678',
+      buyer_addr : '서울특별시 강남구 삼성동',
+      buyer_postcode : '123-456',
+      m_redirect_url : 'https://www.yourdomain.com/payments/complete'
+      }, function(rsp) {
+          if ( rsp.success ) {
+              var msg = '결제가 완료되었습니다.';
+              msg += '고유ID : ' + rsp.imp_uid;
+              msg += '상점 거래ID : ' + rsp.merchant_uid;
+              msg += '결제 금액 : ' + rsp.paid_amount;
+              msg += '카드 승인번호 : ' + rsp.apply_num;
+          } else {
+              var msg = '결제에 실패하였습니다.';
+              msg += '에러내용 : ' + rsp.error_msg;
+          }
+          alert(msg);
+      });
+    }
+
+    function paymentAccount(){
+      alert("테스트는 카드결제만 됩니다");
+      return;
+
+      IMP.request_pay({
+      pg : 'danal', // version 1.1.0부터 지원.
+      pay_method : 'trans',
+      merchant_uid : 'merchant_' + new Date().getTime(),
+      name : '주문명:결제테스트',
+      amount : 14000,
+      buyer_email : 'iamport@siot.do',
+      buyer_name : '구매자이름',
+      buyer_tel : '010-1234-5678',
+      buyer_addr : '서울특별시 강남구 삼성동',
+      buyer_postcode : '123-456',
+      m_redirect_url : 'https://www.yourdomain.com/payments/complete'
+      }, function(rsp) {
+          if ( rsp.success ) {
+              var msg = '결제가 완료되었습니다.';
+              msg += '고유ID : ' + rsp.imp_uid;
+              msg += '상점 거래ID : ' + rsp.merchant_uid;
+              msg += '결제 금액 : ' + rsp.paid_amount;
+              msg += '카드 승인번호 : ' + rsp.apply_num;
+          } else {
+              var msg = '결제에 실패하였습니다.';
+              msg += '에러내용 : ' + rsp.error_msg;
+          }
+          alert(msg);
+      });
+
+    }
+  </script>
+
+
+</body>
+
+</html>

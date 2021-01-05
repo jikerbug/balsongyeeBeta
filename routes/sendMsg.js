@@ -4,20 +4,11 @@ var router = express.Router();
 var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
 var mysql = require('mysql');
-const { sendDataToProcessId } = require('pm2');
+var dbConn = require('../lib/dbConn');
 
 
+var db = dbConn.balsongyeeDb(mysql);
 
-var db = mysql.createConnection({
-  host     : 'localhost',
-  port     : '3308',
-  user     : 'root',
-  password : 'Ih336449!',
-  database : 'balsongyee',
-  multipleStatements : true
-});
-
-db.connect();
 
 
 
