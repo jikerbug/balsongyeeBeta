@@ -5,6 +5,16 @@ $(function($) {
     var sender = document.getElementById("sender").value;
     var msg = document.getElementById("msg").value;
     var passwd = document.getElementById("passwd").value;
+    var subject = document.getElementById("msgSubject").value;
+    var text = document.getElementById("msg").value;
+    var len = getTextLength(text);
+    var msgType;
+
+    if(parseInt(len)> 90){
+      msgType = "lms";
+    }else{
+      msgType = "sms";
+    }
 
     var resultInfo = new Array();
     var listInfo = $('#phonenumList').find('option').map(function() {
@@ -47,7 +57,9 @@ $(function($) {
       "phonenumList" : JSON.stringify(resultInfo),
       "sender" : sender,
       "msg" : msg,
-      "passwd" : passwd  
+      "passwd" : passwd,
+      "msgType": msgType,
+      "subject": subject
       },
       success: function(msg) {
         if (msg == 'OK') {
@@ -79,7 +91,7 @@ function showInfo(){
 
   var showInfo = document.getElementById("showInfo").innerHTML
 
-  if(showInfo == "세부정보"){
+  if(showInfo == "명단확인"){
 
     $('#infoList').children('option').remove();
     for(var i =0; i < sendInfo[id].length;i++){     
@@ -90,7 +102,7 @@ function showInfo(){
 
   }else{
     $('#infoList').css("display","none");
-    document.getElementById("showInfo").innerHTML = "세부정보"
+    document.getElementById("showInfo").innerHTML = "명단확인"
   }
 
 }

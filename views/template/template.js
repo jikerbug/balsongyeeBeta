@@ -33,6 +33,28 @@ module.exports = {
 
     </header><!-- End Header --> 
     `
+  },
+
+  footer:function() {
+    return `<!-- ======= Footer ======= -->
+    <footer id="footer">
+      <div class="container">
+        
+        <div style="fontSize:5; textAlign: 'center'">
+          <p>모은유통대표 : 임모은 / 사업자등록번호 : 155-08-01080</p>
+          <p>주소 : 경기도 남양주시 경강로294번길 17(삼패동) / 대표전화 : 010-8752-1215</p>  
+          <p>COPYRIGHT 발송이 ALL RIGHTS RESERVED.</p>    
+        </div>
+  
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/ -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+      </div>
+    </footer><!-- End  Footer -->`;
   }
   
   

@@ -22,24 +22,31 @@ router.post('/process', function(req, res){
     });
   }
   console.log(req.body);
-  res.redirect('/');
+  res.redirect('/sendMsg');
 })
 
 router.get('/', function(req, res){
+  var flashMsg = req.flash();
   var feedback = '';
+  if(flashMsg.error){
+    feedback = '<script>alert("' + flashMsg.error + '")</script>';
+  }
+
   var header = template.header(feedback, auth.statusUI(req,res)); 
+  var footer = template.footer(); 
   res.render('sendMsg', {
             header: header,
-            length: 5
+            footer: footer
           });    
 })
 
 
 
 
-function processInputSend(phonenumList, sender, msg) {
+function processInputSend(req) {
+  
 
-  var pList = JSON.parse(phonenumList);
+  var pList = JSON.parse(req.body.phonenumList);
 
   var resultList = [];
 
@@ -85,29 +92,51 @@ function processInputSend(phonenumList, sender, msg) {
   //pList[2]에는 텍스트파일 입력들이 모여있음
 
   console.log(resultList);
-  processDbQuery(resultList, sender, msg);
+  processDbQuery(resultList, req.body.sender, req.body.msg, req.body.msgType, req.body.subject);
   
   
 }
 
-function processDbQuery(resultList, sender, msg) {
-    var sql = `INSERT INTO SC_TRAN (TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG)
-    VALUES (NOW(), '0', '0', ?,'` + sender + `','` + msg + `');`;
-    var sqls = "";
-    resultList.forEach(function(item){
-      sqls += mysql.format(sql, item);
-    });
+function processDbQuery(resultList, sender, msg, msgType, subject) {
 
+    if(msgType == "sms"){
+      var sql = `INSERT INTO SC_TRAN (TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG)
+      VALUES (NOW(), '0', '0', ?,'` + sender + `','` + msg + `');`;
+      var sqls = "";
+      resultList.forEach(function(item){
+        sqls += mysql.format(sql, item);
+      });
+    }else if(msgType == "lms"){
+      `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, TYPE)
+      VALUES ('[차세대MMS 전송테스트]', '수신 번호', '발신 번호', '0', NOW(), '5월 가
+      정의달을 맞아 아래 기프트상품 구매시(10%할인)+(5%적립금)혜택을 드립니다.', '0');`
+
+      var sql = `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, TYPE)
+      VALUES ('`+ subject + `', ?,'` + sender + `', '0', NOW(), '` + msg + `', '0');`;
+      var sqls = "";
+      resultList.forEach(function(item){
+        sqls += mysql.format(sql, item);
+      });
+
+    }else{
+      console.log("not sms and not lms ... fatal error")
+    }
+    
+
+    console.log(sqls);
+
+    /*
     db.query(sqls,
         function (error, results, fields) {
         if (error) throw error;
         console.log(results[0]);
-    });
+    });*/
 }
 
 
 
 router.post('/processOld', function(req, res){
+
 
 
   if(req.body.passwd == '3456'){
@@ -118,7 +147,7 @@ router.post('/processOld', function(req, res){
     
     res.send("OK"); //꼭 ok로 보내야함
 
-    processInputSend(req.body.phonenumList, req.body.sender, req.body.msg);
+    processInputSend(req);
 
 
   }else{

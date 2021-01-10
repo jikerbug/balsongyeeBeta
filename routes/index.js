@@ -6,35 +6,37 @@ const path = require("path");
 
 
 
-///요 아래의 get, post이런게 바로 라우트 방식이다
-
-/*
 router.get('/', function(req, res){
-  var flashMsg = req.flash();
-  var feedback = '';
-  if(flashMsg.info){
-    feedback = '<div style="color:red; margin:10px;"><h5>로그인 후 사용가능합니다</h5></div>';
-  }
-  var html = template.html(feedback, auth.statusUI(req,res)); 
-  res.send(html);
-})
-*/
 
-router.get('/', function(req, res){
   var feedback = '';
+
   var header = template.header(feedback, auth.statusUI(req,res)); 
+  var footer = template.footer(); 
   res.render('index', {
             header: header,
-            length: 5
+            footer: footer,
         });
+});
+
+
+router.get('/flash', function(req, res){
+  // Set a flash message by passing the key, followed by the value, to req.flash().
+  req.flash('error', 'Flash is back!')
+  res.redirect('/');
+});
+ 
+router.get('/2', function(req, res){
+  // Get an array of flash messages by passing the key to req.flash()
+  res.send(req.flash('info'));
 });
 
 router.get('/services', function(req, res){
   var feedback = '';
   var header = template.header(feedback, auth.statusUI(req,res)); 
+  var footer = template.footer(); 
   res.render('services', {
             header: header,
-            length: 5
+            footer: footer
         });
 })
 

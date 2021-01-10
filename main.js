@@ -6,19 +6,20 @@ app.set('view engine', 'ejs');
 app.set('views', ['./views', './views/userInfo']);
 
 
+
 var flash = require('connect-flash');
 var session = require('express-session');
-var MySQLStore = require('express-mysql-session')(session);
-var mysql = require('mysql');
-var dbConn = require('./lib/dbConn');
+var FileStore = require('session-file-store')(session);
+const LowdbStore = require('lowdb-session-store')(session);
+const lowdb = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
 
+const adapter = new FileSync('./sessions/db.json', { defaultValue: [] });
+const db = lowdb(adapter);
 
-var db = dbConn.balsongyeeDb(mysql);
 
 //use:사용자의 요청이 있을때마다 실행하도록 약속되어있음
 app.use(express.urlencoded({ extended: true }))
-var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended: false}));
 
 //app.use(helmet());
 
@@ -38,40 +39,20 @@ app.use('/', express.static('ui')); //static을 무조건 ui에서 가져오는 
 //이게 세션 아래에 있으면 static을 가져올때마다 desiralize가 실행되기때문에 위로 가야한다!
 
 
-var options = {
-	host: 'localhost',
-	port: 3308,
-	user: 'root',
-	password: 'Ih336449!',
-	database: 'session_test'
-};
 
-var sessionStore = new MySQLStore(options);
 
 app.use(session({
-  HttpOnly:true,
-	key: 'eshfk534$#%#$ggwefw', //이것도 비밀로 감춰놓든가 해야될거
-	secret: 'session_cookie_secret',
-	store: sessionStore,
+  //HttpOnly:true,
+	secret: 'eshfk534$#%#$ggwefw', //소스코드에 포함시키지 말고 별도의 파일로 빼기(변수처리)
+  store: new LowdbStore(db, {
+    ttl: 86400
+  }),
 	resave: false,
-	saveUninitialized: false
+  saveUninitialized: true, //세션을 사용할때만 실행시켜서 서버에 부담 줄임
+  
 }));
+
 app.use(flash());
-
-
-
-var passportModule = require('./lib/passport');
-var passport = passportModule(app,db);
-
-app.post('/auth/login_process',
-passport.authenticate('local', {
-  successRedirect: '/', 
-  failureRedirect: '/auth/login',
-  failureFlash: true })
-); 
-//passport.auth.... 요놈이 callback인 거다
-
-
 
 
 var authRouter = require('./routes/auth');

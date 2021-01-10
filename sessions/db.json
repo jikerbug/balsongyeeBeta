@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "vklmhYe9LA9gRuq1AZAGMByl5hc2rnu-",
+    "session": {
+      "cookie": {
+        "originalMaxAge": null,
+        "expires": null,
+        "httpOnly": true,
+        "path": "/"
+      },
+      "flash": {}
+    },
+    "expires": 1610351134895
+  },
+  {
+    "_id": "XIsxvDWMIRdzLsjO_0BKidk405msQrR2",
+    "session": {
+      "cookie": {
+        "originalMaxAge": null,
+        "expires": null,
+        "httpOnly": true,
+        "path": "/"
+      },
+      "flash": {}
+    },
+    "expires": 1610350125839
+  }
+]
