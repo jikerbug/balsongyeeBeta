@@ -34,6 +34,7 @@ router.post('/login_process', function (req, res) {
       bcrypt.compare(passwd, results[0].pwd, function(err,result) {
         if(result){
           req.session.is_logined = true;
+          req.session.userId = email;
           req.session.save(function(){
             res.redirect(`/`);
           });
@@ -98,8 +99,10 @@ router.post('/register_process', function (req, res) {
               if (error) throw error;
               console.log(results[0]);
             });
-            req.login({'email':email, 'pwd':hash}, function(err) {
-              return res.redirect('/');
+            req.session.is_logined = true;
+            req.session.userId = email;
+            req.session.save(function(){
+              res.redirect(`/`);
             });   
         });
       });

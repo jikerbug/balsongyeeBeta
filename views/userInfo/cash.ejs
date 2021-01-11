@@ -65,11 +65,11 @@
           <tr>
             <th scope="row">
               <div class="custom-control custom-radio">
-                <input value="10000" type="radio" id="customRadio1" name="price" class="custom-control-input">
+                <input value="100" type="radio" id="customRadio1" name="price" class="custom-control-input">
                 <label class="custom-control-label" for="customRadio1"></label>
               </div>
             </th>
-            <td>10000원</td>
+            <td>100원</td>
             <td>600코인</td>
             <td>600건</td>
             <td>200건</td>
@@ -135,6 +135,8 @@
   <script src="assets/vendor/venobox/venobox.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
 
+
+
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
@@ -143,12 +145,6 @@
   <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
   <script>
-
-    
-
-
-
-
     var IMP = window.IMP; // 생략가능
     IMP.init('imp88356796'); 
 
@@ -156,8 +152,6 @@
       
       var price = $('input:radio[name="price"]:checked').val();
       price = parseInt(price);
-    
-
 
       IMP.request_pay({
       pg : 'danal', // version 1.1.0부터 지원.
@@ -178,6 +172,7 @@
               msg += '상점 거래ID : ' + rsp.merchant_uid;
               msg += '결제 금액 : ' + rsp.paid_amount;
               msg += '카드 승인번호 : ' + rsp.apply_num;
+              paymentToServer(rsp.paid_amount);
           } else {
               var msg = '결제에 실패하였습니다.';
               msg += '에러내용 : ' + rsp.error_msg;
@@ -187,8 +182,10 @@
     }
 
     function paymentAccount(){
-      alert("테스트는 카드결제만 됩니다");
-      return;
+
+      paymentToServer('100');
+      //alert("테스트는 카드결제만 됩니다");
+      //return;
 
       IMP.request_pay({
       pg : 'danal', // version 1.1.0부터 지원.
@@ -209,14 +206,37 @@
               msg += '상점 거래ID : ' + rsp.merchant_uid;
               msg += '결제 금액 : ' + rsp.paid_amount;
               msg += '카드 승인번호 : ' + rsp.apply_num;
+              paymentToServer(rsp.paid_amount);
           } else {
               var msg = '결제에 실패하였습니다.';
               msg += '에러내용 : ' + rsp.error_msg;
           }
           alert(msg);
       });
-
     }
+  
+
+    function paymentToServer(paidAmount){
+
+      alert('hry!')
+
+      $.ajax({
+        type: "POST",
+        url: "/userInfo/processPayment",
+        data : {
+        "paidAmount" : paidAmount
+        },
+        success: function(msg) {
+          if (msg == 'OK') {
+            alert("코인이 충전되었습니다")
+          } else {
+            alert("충전에 실패하였습니다")
+          }
+        }
+      });
+    }
+    
+    
   </script>
 
 

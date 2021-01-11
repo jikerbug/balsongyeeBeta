@@ -1,7 +1,7 @@
 module.exports = {
 
-  header:function(view='', authStatus=`<li><a href="/auth/login">로그인</a></li>
-  <li><a href="/auth/register">회원가입</a></li>`, alert=''){
+  header:function(alert='', authStatus=`<li><a href="/auth/login">로그인</a></li>
+  <li><a href="/auth/register">회원가입</a></li>`){
     return `
     <!-- ======= Header ======= -->
 
@@ -34,7 +34,6 @@ module.exports = {
     </header><!-- End Header --> 
     `
   },
-
   footer:function() {
     return `<!-- ======= Footer ======= -->
     <footer id="footer">
@@ -55,6 +54,46 @@ module.exports = {
         </div>
       </div>
     </footer><!-- End  Footer -->`;
+  },
+  sidenav:function(name, coin, sms, lms, mms) {
+    return `
+    <div class="sidenav">
+    <p>${name} 고객님</p>
+    <p>잔여건수</p>
+    <input style="display:none" id="coin" value="${coin}"/>
+    <p>코인 : ${coin}코인</p>
+    <p href="#">단문 : ${sms}건</p>
+    <p href="#">장문 : ${lms}건</p>
+    <p href="#">사진 : ${mms}건</p>
+    <a href="#layer2" class="btn-example">정보안내</a>
+    <div class="dim-layer">
+        <div class="dimBg"></div>
+        <div id="layer2" class="pop-layer">
+            <div class="pop-container">
+                <div class="pop-conts">
+                    <!--content //-->
+                    <p class="ctxt mb20">
+                    현재 보여지는 잔여건수는 단문, 장문, 사진을 전송 할 수 있는 최대건수입니다.<br>
+                    각각의 건수가 충전되어 있는 것이 아니며 코인를 단문, 장문, 사진으로 환산해 놓은 건수입니다.<br>
+                    1코인 = 단문 1건<br>
+                    3코인 = 장문 1건<br>
+                    6코인 = 포토 1건
+                    </p>
+
+                    <div class="btn-r">
+                        <a href="#" class="btn-layerClose">Close</a>
+                    </div>
+                    <!--// content-->
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    `
+
+    
+    
   }
   
   

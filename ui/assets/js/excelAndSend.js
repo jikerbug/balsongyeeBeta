@@ -2,6 +2,15 @@ $(function($) {
 
   $('form.php-email-form').on("submit",function() {
 
+    var coin = document.getElementById("coin").value;
+    console.log(coin);
+    coin = parseInt(coin);
+    console.log(coin);
+    if(coin<1000){
+      alert("잔여 코인이 부족합니다");
+      return false;
+    }
+
     var sender = document.getElementById("sender").value;
     var msg = document.getElementById("msg").value;
     var passwd = document.getElementById("passwd").value;
@@ -34,6 +43,7 @@ $(function($) {
     }).get();
 
     resultInfo.push(fileInfo);
+    //이제 resultInfo는 리스트에 있는 번호랑, 파일에 있는 번호를 모두 포함한다!
 
     console.log(resultInfo[0]);
     console.log(resultInfo[1]);

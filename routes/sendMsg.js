@@ -5,6 +5,7 @@ var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
 var mysql = require('mysql');
 var dbConn = require('../lib/dbConn');
+const { sidenav } = require('../views/template/template.js');
 
 
 var db = dbConn.balsongyeeDb(mysql);
@@ -16,8 +17,8 @@ router.post('/process', function(req, res){
   if(req.body.passwd == '3456'){
     db.query(`INSERT INTO SC_TRAN (TR_SENDDATE, TR_SENDSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK, TR_MSG)
      VALUES (NOW(), '0', '0', '` + req.body.phonenum + `','01071891476','` + req.body.msg + `');`,
-      function (error, results, fields) {
-      if (error) throw error;
+      function (err, results, fields) {
+      if (err) throw err;
       console.log(results[0]);
     });
   }
@@ -32,12 +33,45 @@ router.get('/', function(req, res){
     feedback = '<script>alert("' + flashMsg.error + '")</script>';
   }
 
-  var header = template.header(feedback, auth.statusUI(req,res)); 
-  var footer = template.footer(); 
-  res.render('sendMsg', {
-            header: header,
-            footer: footer
-          });    
+  var userId = req.session.userId;
+
+  if(userId){
+    db.query('select cash from user where email = ?', [userId], function (err, results, fields) {
+
+      var coin = results[0].cash;
+      var sms = coin;
+      var lms = parseInt(coin/3);
+      var mms = parseInt(coin/6);
+  
+      console.log(coin);
+  
+      var header = template.header(feedback, auth.statusUI(req,res)); 
+      var footer = template.footer(); 
+      var sidenav = template.sidenav("임지백", coin,sms,lms,mms);
+      res.render('sendMsg', {
+                header: header,
+                footer: footer,
+                sidenav: sidenav
+      });   
+    });
+  }else{
+    var header = template.header(feedback, auth.statusUI(req,res)); 
+    var footer = template.footer(); 
+    res.render('sendMsg', {
+              header: header,
+              footer: footer,
+              sidenav: ""
+    });   
+  }
+
+
+
+  
+
+
+
+
+   
 })
 
 
@@ -125,12 +159,12 @@ function processDbQuery(resultList, sender, msg, msgType, subject) {
 
     console.log(sqls);
 
-    /*
+    
     db.query(sqls,
         function (error, results, fields) {
         if (error) throw error;
         console.log(results[0]);
-    });*/
+    });
 }
 
 
