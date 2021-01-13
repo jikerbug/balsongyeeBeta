@@ -21,6 +21,8 @@ function bytesHandler(obj){
   var len = getTextLength(text);
   if(len > 90){
     $('span.bytes').text(len + "/2000bytes");
+
+    //byId
     $('#msgSubject').css("pointer-events","auto");
   }else{
     $('span.bytes').text(len + "/90bytes");

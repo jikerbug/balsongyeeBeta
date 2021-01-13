@@ -25,16 +25,16 @@ router.get('/login', function(req, res){
 router.post('/login_process', function (req, res) {
   
   var post = req.body;
-  var email = post.email;
+  var id = post.id;
   var passwd = post.pwd;
 
-  db.query('select email,pwd from user where email = ?', [email], function (error, results, fields) {
+  db.query('select id,pwd from user where id = ?', [id], function (error, results, fields) {
 
     if(results[0]){
       bcrypt.compare(passwd, results[0].pwd, function(err,result) {
         if(result){
           req.session.is_logined = true;
-          req.session.userId = email;
+          req.session.userId = id;
           req.session.save(function(){
             res.redirect(`/`);
           });
@@ -64,21 +64,23 @@ router.get('/register', function (req, res) {
   var flashMsg = req.flash();
   var feedback = '';
   if(flashMsg.error){
-    feedback = '<div style="color:red; margin:10px;"><h5>' + flashMsg.error + '</h5></div>';
+    feedback = '<script>alert("' + flashMsg.error + '")</script>';
   }
   
-  res.render('register');
+  res.render('register', {script:feedback});
 });
 
 
 router.post('/register_process', function (req, res) {
   var post = req.body;
   var email = post.email;
+  var id = post.id;
+  var name = post.name;
   var pwd = post.pwd;
   var pwdCheck = post.pwdCheck;
 
 
-  db.query('select email from user where email = ?', [email], function (error, results, fields) {
+  db.query('select id from user where id = ?', [id], function (error, results, fields) {
     console.log(results)
     if(!(results.length === 0)){
       req.flash('error', '이미 존재하는 아이디입니다')
@@ -94,13 +96,14 @@ router.post('/register_process', function (req, res) {
             // Store hash in your password DB.
 
             db.query(`INSERT INTO user
-            VALUES ('` + email + `','` + hash + `')`,
+            VALUES (?,?,?,?,?)`, [email,hash,0,id,name],
               function (error, results, fields) {
               if (error) throw error;
+              console.log("회원가입이 완료되었습니다")
               console.log(results[0]);
             });
             req.session.is_logined = true;
-            req.session.userId = email;
+            req.session.userId = id;
             req.session.save(function(){
               res.redirect(`/`);
             });   

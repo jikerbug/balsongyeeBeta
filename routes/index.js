@@ -2,7 +2,12 @@ var express = require('express');
 var router = express.Router();
 var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
-const path = require("path");
+
+var mysql = require('mysql');
+var dbConn = require('../lib/dbConn');
+
+
+var db = dbConn.balsongyeeDb(mysql);
 
 
 
@@ -12,23 +17,41 @@ router.get('/', function(req, res){
 
   var header = template.header(feedback, auth.statusUI(req,res)); 
   var footer = template.footer(); 
-  res.render('index', {
-            header: header,
-            footer: footer,
-        });
+
+  var userId = req.session.userId;
+  if(userId){
+    var sidenav = template.sidenav();
+    db.query('select cash,name from user where id = ?', [userId], function (err, results, fields) {
+
+      var name = results[0].name;
+      var coin = results[0].cash;
+      var sms = coin;
+      var lms = parseInt(coin/3);
+      var mms = parseInt(coin/6);
+      console.log(coin);
+      var header = template.header(feedback, auth.statusUI(req,res)); 
+      var footer = template.footer(); 
+      var sidenav = template.sidenav(name, coin,sms,lms,mms);
+      res.render('index', {
+                header: header,
+                footer: footer,
+                sidenav: sidenav
+      });   
+    });
+  }else{
+    var sidenav = template.loginSidenav();
+    res.render('index', {
+      header: header,
+      footer: footer,
+      sidenav: sidenav
+  });
+  }
+  
+
+  
 });
 
 
-router.get('/flash', function(req, res){
-  // Set a flash message by passing the key, followed by the value, to req.flash().
-  req.flash('error', 'Flash is back!')
-  res.redirect('/');
-});
- 
-router.get('/2', function(req, res){
-  // Get an array of flash messages by passing the key to req.flash()
-  res.send(req.flash('info'));
-});
 
 router.get('/services', function(req, res){
   var feedback = '';

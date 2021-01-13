@@ -16,12 +16,30 @@ module.exports = {
         <nav class="nav-menu d-none d-lg-block">
           <ul>
             <li><a href="/userInfo/sendResult">발송결과</a></li>
-            <li><a href="/sendMsg">단문발송</a></li>
-            <li><a href="/sendMsg">장문발송</a></li>
+            <li class="nav-item dropdown">
+              <a class="dropdown" href="/sendMsg" id="navbarDropdown">
+                문자전송
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/sendMsg">단문/장문</a>
+                <a class="dropdown-item" href="#">포토</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="/sendMsg" id="navbarDropdown">
+                선거문자
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/sendMsg">선거 단문/장문</a>
+                <a class="dropdown-item" href="#">선거 포토</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">의정부구 선거</a>
+              </div>
+            </li>
             <li><a href="/userInfo/address">주소록</a></li>
-            <li><a href="/userInfo/cash">충전</a></li>
             ${authStatus}
             <li><a href="/services">고객센터</a></li>
+            <li><a href="/userInfo/cash">충전</a></li>
             
           </ul>
         </nav><!-- .nav-menu -->
@@ -55,7 +73,7 @@ module.exports = {
       </div>
     </footer><!-- End  Footer -->`;
   },
-  sidenav:function(name, coin, sms, lms, mms) {
+  sidenav:function(name, coin, sms, lms, mms, logout="") {
     return `
     <div class="sidenav">
     <p>${name} 고객님</p>
@@ -66,6 +84,8 @@ module.exports = {
     <p href="#">장문 : ${lms}건</p>
     <p href="#">사진 : ${mms}건</p>
     <a href="#layer2" class="btn-example">정보안내</a>
+    <a href="/auth/logout" id="logout-button">로그아웃</a>
+   
     <div class="dim-layer">
         <div class="dimBg"></div>
         <div id="layer2" class="pop-layer">
@@ -89,12 +109,115 @@ module.exports = {
         </div>
     </div>
     </div>
+    `
+  },
+  loginSidenav:function() {
+    return `
+        <div class="loginSidenav">
+					<div class="card fat">
+						<div class="card-body">
+							<h4 class="card-title" style="font-size:smaller; font-weight:bold">로그인</h4>
+							<form method="POST" action="/auth/login_process" class="my-login-validation" novalidate="">
+								<div class="form-group">
+									<input id="id" type="id" class="form-control" name="id" placeholder="아이디">
+									<div class="invalid-feedback">
+										id is invalid
+									</div>
+								</div>
+								<div class="form-group">
+									<input id="password" type="password" class="form-control" name="pwd" placeholder="비밀번호">
+								    <div class="invalid-feedback">
+								    	비밀번호를 입력해주세요
+										</div>
+									
+								</div>
 
+								<a href="forgot.html" class="float-right" style="margin-bottom:15px">
+									아이디 / 비밀번호 찾기
+								</a>
+								<div class="login-button" >
+									<button type="submit" class="btn btn-primary btn-block" style="background-color:#34b7a7;margin-bottom:-10px">
+										로그인
+									</button>
+								</div>
+								<div class="mt-4 text-center" >
+									계정이 없으신가요?<a style="display:inline" href="/auth/register">회원가입</a>
+                </div>
+							</form>
+						</div>
+					</div>
+        </div>  
     `
 
+    },
+    sendResultDetail:function(tuples) {
+
+
+      var form = function(date, msg, type, cnt, success, fail, status) {
+        return `<tr>
+        <th scope="row">1</th>
+        <td>${date}</td>
+        <td>${msg}</td>
+        <td>${type}</td>
+        <td>${cnt}</td>
+        <td>${success}</td>
+        <td>${fail}</td>
+        <td>${status}</td>
+        </tr>`
+      }
+
+      var sendResult = ``;
+
+      for(var i =0; i< tuples.length; i++){
+        var date = tuples[i].TR_SENDDATE;
+        var msg = tuples[i].TR_MSG;
+        var type = tuples[i].TR_MSGTYPE;
+        var cnt = "1개"
+        var success = "1개";
+        var fail = "0개";
+        var status = tuples[i].TR_SENDSTAT;
+        sendResult += form(date, msg, type, cnt, success, fail, status);
+      }
+
+      
+      
+
+      return sendResult;
+      
+    },
+    sendResult:function(tuples,type) {
+
+      var form = function(date, title, msgType, cnt, success, fail, status) {
+        return `<tr>
+        <th scope="row">1</th>
+        <td>${date}</td>
+        <td>${title}</td>
+        <td>${msgType}</td>
+        <td>${cnt}</td>
+        <td>${success}</td>
+        <td>${fail}</td>
+        <td>${status}</td>
+        </tr>`
+      }
+
+      var sendResult = ``;
+
+      for(var i =0; i< tuples.length; i++){
+        var date = tuples[i].TR_SENDDATE;
+        var title = tuples[i].userSendTitle;
+        var msgType = type;
+        var cnt = tuples[i].userSendCnt;
+        var success = cnt;
+        var fail = cnt - success;
+        var status = fail ? '진행중' : '완료';
+        sendResult += form(date, title, msgType, cnt, success, fail, status);
+      }
+
+      return sendResult;
+      
+    }
     
-    
-  }
+  
   
   
  

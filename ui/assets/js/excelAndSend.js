@@ -2,15 +2,6 @@ $(function($) {
 
   $('form.php-email-form').on("submit",function() {
 
-    var coin = document.getElementById("coin").value;
-    console.log(coin);
-    coin = parseInt(coin);
-    console.log(coin);
-    if(coin<1000){
-      alert("잔여 코인이 부족합니다");
-      return false;
-    }
-
     var sender = document.getElementById("sender").value;
     var msg = document.getElementById("msg").value;
     var passwd = document.getElementById("passwd").value;
@@ -30,9 +21,10 @@ $(function($) {
       if(this.id == ""){
         return $(this).val();
       } 
-    
     }).get();
     resultInfo.push(listInfo);
+
+
 
     var fileInfo = $('#phonenumList').find('option').map(function() {
       if(this.id != ""){
@@ -42,8 +34,16 @@ $(function($) {
       }  
     }).get();
 
-    resultInfo.push(fileInfo);
+
+    //----------------------잔여 코인 여부확인--------------------------///
+    // 잔여 코인을 value값을 통해 프론트엔드에서 확인하면, html값 조작을 통해 가짜로 처리할 수 있게된다! 절대금지!!
+    //----------------------잔여 코인 여부확인--------------------------///
+
+
     //이제 resultInfo는 리스트에 있는 번호랑, 파일에 있는 번호를 모두 포함한다!
+    var sendCnt = fileInfo.length + listInfo.length;
+    resultInfo.push(fileInfo);
+    
 
     console.log(resultInfo[0]);
     console.log(resultInfo[1]);
@@ -62,14 +62,15 @@ $(function($) {
 
     $.ajax({
       type: "POST",
-      url: "/sendMsg/processOld",
+      url: "/sendMsg/process",
       data : {
       "phonenumList" : JSON.stringify(resultInfo),
       "sender" : sender,
       "msg" : msg,
       "passwd" : passwd,
       "msgType": msgType,
-      "subject": subject
+      "subject": subject,
+      "sendCnt": sendCnt
       },
       success: function(msg) {
         if (msg == 'OK') {

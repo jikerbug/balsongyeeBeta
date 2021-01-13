@@ -26,6 +26,7 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/custom.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: Kelly - v2.1.0
@@ -65,11 +66,24 @@
           <tr>
             <th scope="row">
               <div class="custom-control custom-radio">
-                <input value="100" type="radio" id="customRadio1" name="price" class="custom-control-input">
-                <label class="custom-control-label" for="customRadio1"></label>
+                <input value="100" type="radio" id="customRadio0" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio0"></label>
               </div>
             </th>
             <td>100원</td>
+            <td>6코인</td>
+            <td>6건</td>
+            <td>2건</td>
+          </tr>
+
+          <tr>
+            <th scope="row">
+              <div class="custom-control custom-radio">
+                <input value="10000" type="radio" id="customRadio1" name="price" class="custom-control-input">
+                <label class="custom-control-label" for="customRadio1"></label>
+              </div>
+            </th>
+            <td>10000원</td>
             <td>600코인</td>
             <td>600건</td>
             <td>200건</td>
@@ -150,6 +164,7 @@
 
     function paymentCard(){
       
+      //price로 서버에 보내고, 그 price에 따라 서버에서 충전coin수 결정
       var price = $('input:radio[name="price"]:checked').val();
       price = parseInt(price);
 
@@ -183,7 +198,11 @@
 
     function paymentAccount(){
 
-      paymentToServer('100');
+      var price = $('input:radio[name="price"]:checked').val();
+      price = parseInt(price);
+
+      var priceString = price.toString();
+      paymentToServer(priceString);
       //alert("테스트는 카드결제만 됩니다");
       //return;
 
@@ -192,7 +211,7 @@
       pay_method : 'trans',
       merchant_uid : 'merchant_' + new Date().getTime(),
       name : '주문명:결제테스트',
-      amount : 14000,
+      amount : price,
       buyer_email : 'iamport@siot.do',
       buyer_name : '구매자이름',
       buyer_tel : '010-1234-5678',
@@ -217,8 +236,6 @@
   
 
     function paymentToServer(paidAmount){
-
-      alert('hry!')
 
       $.ajax({
         type: "POST",
