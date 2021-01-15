@@ -1,5 +1,5 @@
 $(function(){
-  $('#msg').keyup(function(){
+  $('#msg').on("keyup change",function(){
     bytesHandler(this);
   });
 });
@@ -28,9 +28,37 @@ function bytesHandler(obj){
     $('span.bytes').text(len + "/90bytes");
     $('#msgSubject').css("pointer-events","none");
     
-  }
-  
+  } 
 }
+
+$(function(){
+  $('#msgMms').on("keyup change",function(){
+    bytesHandlerMms(this);
+  });
+});
+
+function getTextLength(str) {
+  var len = 0;
+  
+  for (var i = 0; i < str.length; i++) {
+    if (escape(str.charAt(i)).length == 6) {
+      len++;
+    }
+      len++;
+    }
+    return len;
+}
+
+function bytesHandlerMms(obj){
+  var text = $(obj).val();
+  var len = getTextLength(text);
+
+  $('span.bytesMms').text(len + "/2000bytes");
+  //# : byId
+  $('#msgSubject').css("pointer-events","auto");
+   
+}
+
 function firstList(choice){
   if(choice === 1){
     return '기분좋은 아침입니다.\n\n한결같은 믿음과 성원에\n\n다시한번 감사의 마음을 전해드리며,\n\n오늘도 기분 좋은 하루되시길 기원합니다.'

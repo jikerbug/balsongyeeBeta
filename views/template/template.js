@@ -15,25 +15,34 @@ module.exports = {
         <h2 class="logo"><a href="/"><img src="assets/img/logo2.svg" style="margin-bottom:7px"/> 발송이</a></h2>
         <nav class="nav-menu d-none d-lg-block">
           <ul>
-            <li><a href="/userInfo/sendResult">발송결과</a></li>
             <li class="nav-item dropdown">
-              <a class="dropdown" href="/sendMsg" id="navbarDropdown">
-                문자전송
+              <a class="dropdown" href="/userInfo/sendResult?msgType=sms" id="navbarDropdown">
+                발송결과
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/sendMsg">단문/장문</a>
-                <a class="dropdown-item" href="#">포토</a>
+                <a class="dropdown-item" href="/userInfo/sendResult?msgType=sms">단문</a>
+                <a class="dropdown-item" href="/userInfo/sendResult?msgType=lms">장문</a>
+                <a class="dropdown-item" href="/userInfo/sendResult?msgType=mms">사진</a>
               </div>
             </li>
             <li class="nav-item dropdown">
-              <a href="/sendMsg" id="navbarDropdown">
+              <a class="dropdown" href="/sendMsg?msgType=smslms" id="navbarDropdown">
+                문자전송
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/sendMsg?msgType=smslms">단문/장문</a>
+                <a class="dropdown-item" href="/sendMsg?msgType=mms">사진</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a href="/sendMsg?msgType=smslms" id="navbarDropdown">
                 선거문자
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/sendMsg">선거 단문/장문</a>
-                <a class="dropdown-item" href="#">선거 포토</a>
+              <a class="dropdown-item" href="/sendMsg?msgType=smslms">선거 단문/장문</a>
+              <a class="dropdown-item" href="/sendMsg?msgType=mms">선거 사진</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">의정부구 선거</a>
+                <a class="dropdown-item" href="/sendMsg?msgType=mms">의정부구 선거</a>
               </div>
             </li>
             <li><a href="/userInfo/address">주소록</a></li>
@@ -178,18 +187,34 @@ module.exports = {
         var status = tuples[i].TR_SENDSTAT;
         sendResult += form(date, msg, type, cnt, success, fail, status);
       }
-
       
-      
-
       return sendResult;
       
     },
     sendResult:function(tuples,type) {
 
-      var form = function(date, title, msgType, cnt, success, fail, status) {
+      // yyyy-MM-dd 포맷으로 반환
+      var getFormatDate = function(date){
+        var year = date.getFullYear();              //yyyy
+        var month = (1 + date.getMonth());          //M
+        month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+        var day = date.getDate();                   //d
+        day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+        var hours = date.getHours();
+        hours = hours >= 10 ? hours : '0' + hours;  
+        var minutes = date.getMinutes();
+        minutes = minutes >= 10 ? minutes : '0' + minutes; 
+        return  year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
+      }
+
+
+
+      var form = function(date, title, msgType, cnt, success, fail, status, sendResultIndex) {
         return `<tr>
-        <th scope="row">1</th>
+        <th scope="col">
+              <input type="checkbox"  aria-label="Checkbox for following text input">
+        </th>
+        <td><a href="/userInfo/sendResult/detail/?msgType=sms&userSendIndex=${sendResultIndex}">상세보기</a></td>
         <td>${date}</td>
         <td>${title}</td>
         <td>${msgType}</td>
@@ -203,14 +228,15 @@ module.exports = {
       var sendResult = ``;
 
       for(var i =0; i< tuples.length; i++){
-        var date = tuples[i].TR_SENDDATE;
+        var date = getFormatDate(tuples[i].TR_SENDDATE);
         var title = tuples[i].userSendTitle;
         var msgType = type;
         var cnt = tuples[i].userSendCnt;
         var success = cnt;
         var fail = cnt - success;
         var status = fail ? '진행중' : '완료';
-        sendResult += form(date, title, msgType, cnt, success, fail, status);
+        var sendResultIndex = tuples[i].userSendIndex;
+        sendResult += form(date, title, msgType, cnt, success, fail, status,sendResultIndex);
       }
 
       return sendResult;

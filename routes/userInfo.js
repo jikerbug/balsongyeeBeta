@@ -5,7 +5,6 @@ var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
 var mysql = require('mysql');
 var dbConn = require('../lib/dbConn');
-const { sendResult } = require('../views/template/template.js');
 
 
 var db = dbConn.balsongyeeDb(mysql);
@@ -13,52 +12,67 @@ var db = dbConn.balsongyeeDb(mysql);
 
 router.get('/sendResult', function(req, res){
 
+  var msgType = req.query.msgType;
   var id = req.session.userId;
 
+
+  
   if(id){
     var feedback = '';
     var header = template.header(feedback, auth.statusUI(req,res)); 
     var footer = template.footer();  
 
-    db.query('select * from userSendResultSMS where userId = ?', [id], function (err, results, fields) {
-      if(err) console.log("err : "+err);
-      var sendResult = template.sendResult(results,"sms");
-      
+    if(!msgType ||(msgType !="lms" && msgType !="mms")){ //msgType이 없거나 sms와 다른 이상한 get도 다 sms가 기본값인것!
+      db.query('select * from userSendResultSMS where userId = ?', [id], function (err, results, fields) {
+        if(err) console.log("err : "+err);
+        var sendResult = template.sendResult(results,"sms");
+        
+        res.render('sendResult', {
+          header: header,
+          footer: footer,
+          sendResult: sendResult
+        });         
+      });    
+    }else if(msgType !="lms"){
       res.render('sendResult', {
         header: header,
         footer: footer,
-        sendResult: sendResult
-      }); 
-             
-  });    
+        sendResult: "sendResult"
+      });  
+    }
   }else{
-    
     //req.session.flash = {'error':'로그인 후 이용해주세요'} 
     req.flash('error', '로그인 후 이용해주세요')
     res.redirect('/auth/login');
-  } 
+  }
+  
+
+  
 });
 
 
-router.get('/sendResult/:tagId', function(req, res){
+router.get('/sendResult/detail', function(req, res){
 
-  var userSendIndex = req.params.tagId;
+  var userSendIndex = req.query.userSendIndex;
+  var msgType = req.query.msgType;
   var id = req.session.userId;
 
-  db.query('select * from SC_TRAN where userId = ? and userSendIndex = ?', [id,userSendIndex], function (err, results, fields) {
-    if(err) console.log("err : "+err);
-    
-    var sendResultDetail = template.sendResultDetail(results);
-    res.render('sendResultDetail', {
-              header: header,
-              footer: footer,
-              sendResultDetail: sendResultDetail
-    }); 
-   
-  });  
+  if(msgType =="sms"){
+    db.query('select * from SC_TRAN where userId = ? and userSendIndex = ?', [id,userSendIndex], function (err, results, fields) {
+      if(err) console.log("err : "+err);
+      var feedback = '';
+      var header = template.header(feedback, auth.statusUI(req,res)); 
+      var footer = template.footer();  
+      var sendResultDetail = template.sendResultDetail(results);
+      res.render('sendResultDetail', {
+                header: header,
+                footer: footer,
+                sendResultDetail: sendResultDetail
+      }); 
+    });  
+  }else if(msgType =="lms"){
 
-
-
+  }
 });
 
 

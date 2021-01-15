@@ -803,6 +803,14 @@ section {
   padding: 10px 12px;
 }
 
+.contact .php-email-form .submitButton[type="button"] {
+  background: #34b7a7;
+  border: 0;
+  padding: 10px 30px 12px 30px;
+  color: #fff;
+  transition: 0.4s;
+  border-radius: 50px;
+}
 .contact .php-email-form button[type="submit"] {
   background: #34b7a7;
   border: 0;
@@ -812,6 +820,9 @@ section {
   border-radius: 50px;
 }
 
+.contact .php-email-form .submitButton button[type="button"]:hover {
+  background: #3dc8b7;
+}
 .contact .php-email-form button[type="submit"]:hover {
   background: #3dc8b7;
 }

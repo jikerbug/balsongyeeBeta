@@ -9,11 +9,9 @@ app.set('views', ['./views', './views/userInfo']);
 
 var flash = require('connect-flash');
 var session = require('express-session');
-var FileStore = require('session-file-store')(session);
 const LowdbStore = require('lowdb-session-store')(session);
 const lowdb = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-
 const adapter = new FileSync('./sessions/db.json', { defaultValue: [] });
 const db = lowdb(adapter);
 
@@ -35,6 +33,11 @@ app.use('/userInfo/sendResult', express.static('ui'));
 app.use('/userInfo/cash', express.static('ui'));
 app.use('/userInfo/myPage', express.static('ui'));
 
+app.use('/userInfo/sendResult/detail', express.static(__dirname + '/ui'));
+//dirname쓰는게 더 안전하다는데? 이건 조사해보기
+
+
+
 app.use('/', express.static('ui')); //static을 무조건 ui에서 가져오는 거다
 //이게 세션 아래에 있으면 static을 가져올때마다 desiralize가 실행되기때문에 위로 가야한다!
 
@@ -53,6 +56,15 @@ app.use(session({
 }));
 
 app.use(flash());
+
+//form-data가져오는 (이미지 전송위해) 라이브러리 
+//왜인지모르겠지만 로그인 안되는 문제 발생 -> sendMsg/processMms에서만 쓰자 / 추후에 문제생기면 multiparty쓰기
+//const formidableMiddleware = require('express-formidable');
+//app.use('/sendMsg/processMms', formidableMiddleware());
+//app.use(formidableMiddleware({
+//  uploadDir: './userSendImg',
+//}));
+
 
 
 var authRouter = require('./routes/auth');

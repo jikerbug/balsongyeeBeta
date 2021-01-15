@@ -6,8 +6,25 @@ var auth = require('../lib/auth');
 var dbConn = require('../lib/dbConn');
 var mysql = require('mysql');
 
-
 var db = dbConn.balsongyeeDb(mysql);
+
+var fs = require('fs');
+var multer  = require('multer');
+var upload = multer({ 
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      var folderId = req.session.userId;   
+      var dir = `./userSendImg/${folderId}`;
+      if (!fs.existsSync(dir)){
+          fs.mkdirSync(dir);
+      }
+      cb(null, `userSendImg/${folderId}/`);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  })
+});
 
 
 router.get('/', function(req, res){
@@ -19,9 +36,11 @@ router.get('/', function(req, res){
 
   var userId = req.session.userId;
 
-  if(userId){
-    db.query('select cash from user where id = ?', [userId], function (err, results, fields) {
 
+  if(userId){
+    db.query('select cash,name from user where id = ?', [userId], function (err, results, fields) {
+
+      var name = results[0].name;
       var coin = results[0].cash;
       var sms = coin;
       var lms = parseInt(coin/3);
@@ -31,12 +50,28 @@ router.get('/', function(req, res){
   
       var header = template.header(feedback, auth.statusUI(req,res)); 
       var footer = template.footer(); 
-      var sidenav = template.sidenav("임지백", coin,sms,lms,mms);
-      res.render('sendMsg', {
-                header: header,
-                footer: footer,
-                sidenav: sidenav
-      });   
+      var sidenav = template.sidenav(name, coin,sms,lms,mms);
+      
+      var msgType = req.query.msgType;
+      if(!msgType || msgType == "smslms"){
+        res.render('sendMsg', {
+          header: header,
+          footer: footer,
+          sidenav: sidenav
+        });  
+      }else if(msgType == "mms"){
+        res.render('sendMsgMms', {
+          header: header,
+          footer: footer,
+          sidenav: sidenav
+        });  
+      }else{
+        res.render('sendMsg', {
+          header: header,
+          footer: footer,
+          sidenav: sidenav
+        });  
+      }
     });
   }else{
     var header = template.header(feedback, auth.statusUI(req,res)); 
@@ -47,19 +82,35 @@ router.get('/', function(req, res){
               sidenav: ""
     });   
   }
-  
 });
 
-router.post('/process', function(req, res){
+router.post('/processMms',upload.single('file') , function(req, res){
+
+ 
+  console.log(req.file);
+  console.log(req.body);
 
 
   if(req.body.passwd == '3456'){
 
     console.log(req.body.passwd);
     console.log(req.body.phonenumList);
+    
     processInputSendPermission(req, res);
 
+  }else{
+    res.send("잘못된 비밀번호입니다");
+  }
+  
+});
 
+
+router.post('/process', function(req, res){
+  if(req.body.passwd == '3456'){
+
+    console.log(req.body.passwd);
+    console.log(req.body.phonenumList);
+    processInputSendPermission(req, res);
   }else{
     res.send("잘못된 비밀번호입니다");
   }
@@ -153,11 +204,11 @@ function processSendList(req){
   //pList[2]에는 텍스트파일 입력들이 모여있음
 
   console.log(resultList);
-  processDbQuery(resultList, req.body.sender, req.body.msg, req.body.msgType, req.body.subject, req.session.userId);
+  processDbQuery(resultList, req.body.sender, req.body.msg, req.body.msgType, req.body.subject, req.session.userId, req.file);
 }
 
 
-function processDbQuery(resultList, sender, msg, msgType, subject, id) {
+function processDbQuery(resultList, sender, msg, msgType, subject, id, file) {
 
     if(msgType == "sms"){
 
@@ -198,11 +249,6 @@ function processDbQuery(resultList, sender, msg, msgType, subject, id) {
 
         })
       });  
-
-
-      
-      
-
     }else if(msgType == "lms"){
       `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, TYPE)
       VALUES ('[차세대MMS 전송테스트]', '수신 번호', '발신 번호', '0', NOW(), '5월 가
@@ -215,7 +261,7 @@ function processDbQuery(resultList, sender, msg, msgType, subject, id) {
         sqls += mysql.format(sql, item);
       });
 
-      //mms발송결과테이블처리
+      //lms발송결과테이블처리
 
       //대량 발송처리
       db.query(sqls,
@@ -224,8 +270,32 @@ function processDbQuery(resultList, sender, msg, msgType, subject, id) {
         console.log("발송완료");
       });
 
-    }else{
-      console.log("not sms and not lms ... fatal error")
+    }else if (msgType == "mms"){
+      `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, FILE_CNT,
+        FILE_PATH1, TYPE) VALUES ('[차세대MMS 전송테스트]', '수신 번호', '발신 번호', '0',
+        NOW(), '5월 가정의 달을 맞아 아래 기프트 상품 구매 시(10%할인)+(5%적립금)혜택을 드립
+        니다. 당사사정에 의해 변동/취소 가능', '1', 'D:\\UPLUSAGT\\image\\sample.jpg', '0');
+        `
+
+        var sql = `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, TYPE)
+      VALUES ('`+ subject + `', ?,'` + sender + `', '0', NOW(), '` + msg + `', '1', '`+ (__dirname + file.path) + `', '0');`;
+      var sqls = "";
+      resultList.forEach(function(item){
+        sqls += mysql.format(sql, item);
+      });
+
+      console.log(sqls);
+      //mms발송결과테이블처리
+
+      //대량 발송처리
+      
+      db.query(sqls,
+        function (error, results, fields) {
+        if (error) throw error;
+        console.log("발송완료");
+      });
+
+
     }
 
 }

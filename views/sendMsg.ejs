@@ -47,6 +47,7 @@
   
 
   <main id="main">
+    <input id="pageType" value="smslms" style="display: none;"></div>
 
     <div class="section-title" id="background-custom" style="font-weight: bold;">
       <h2>문자발송안내</h2>
@@ -73,11 +74,11 @@
               </span> 
 
 
-              <form class="php-email-form">
-              
+              <div class="php-email-form">
+
                 <textarea class="form-control" name="msg" id="msg" rows="16" style="width: 100%;"
-                data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력" ></textarea>
-                
+                  data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력" ></textarea>
+           
                 
                 <button type="button" class="btn btn-info">문자저장</button>
                 <button type="button" class="btn btn-info" onclick="showUserMsg()">내문자</button>
@@ -92,8 +93,8 @@
                   <div class="error-message"></div>
                   <div class="sent-message">문자발송 성공!</div>
                 </div>
-                <div class="text-center"><button type="submit" style="margin-bottom:10px;">발송</button></div>
-              </form>
+                <div class="text-center"><button class="submitButton" type="button" style="margin-bottom:10px;">발송</button></div>
+              </div>
             </div>
             <div style="margin-top: 50px;"></div>
             <button style="display: f;" type="button" class="btn btn-outline-info" id=showCollection onclick="showCollection()">문자모음 보기</button>
@@ -166,8 +167,8 @@
                   </div>
                   <div class="card-body">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="customFile" onchange="readExcel()">
-                      <label class="custom-file-label" for="customFile">파일 선택</label>
+                      <input type="file" class="custom-file-input" id="excelFile">
+                      <label class="custom-file-label" for="excelFile">파일 선택</label>
                     </div>
                   </div>
                 </div>
@@ -179,8 +180,8 @@
                   </div>
                   <div class="card-body">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="customFile" onchange="readText()">
-                      <label class="custom-file-label" for="customFile">파일 선택</label>
+                      <input type="file" class="custom-file-input" id="textFile">
+                      <label class="custom-file-label" for="textFile">파일 선택</label>
                     </div>
                   </div>
                 </div>
@@ -329,7 +330,7 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/excelAndSend.js"></script>
+  <script src="assets/js/fileAndSend.js"></script>
   <script src="assets/js/msgContent.js"></script>
   <script src="assets/js/cash.js"></script>
 

@@ -236,3 +236,23 @@ a.btn-layerClose:hover {
   remove the gap so it doesn't close
   */
 }
+
+
+/*---------------------선거문자-------------------*/
+
+#contentBox{
+  overflow-y: scroll;
+  height:400px;
+  text-align: center;
+  border: 0 none #FFF;
+  outline:none;
+
+}
+
+#contentBox img{
+  max-width:100%;
+  max-height:100%;
+  width: auto;
+  height: auto;
+}
+
