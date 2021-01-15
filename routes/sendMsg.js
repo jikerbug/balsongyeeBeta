@@ -14,11 +14,11 @@ var upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       var folderId = req.session.userId;   
-      var dir = `./userSendImg/${folderId}`;
+      var dir = `./routes/userSendImg/${folderId}`;
       if (!fs.existsSync(dir)){
           fs.mkdirSync(dir);
       }
-      cb(null, `userSendImg/${folderId}/`);
+      cb(null, `routes/userSendImg/${folderId}/`);
     },
     filename: function (req, file, cb) {
       cb(null, file.originalname);
@@ -277,8 +277,12 @@ function processDbQuery(resultList, sender, msg, msgType, subject, id, file) {
         니다. 당사사정에 의해 변동/취소 가능', '1', 'D:\\UPLUSAGT\\image\\sample.jpg', '0');
         `
 
+      // 'routes/userSendImg/mrimc/'이런식으로 path가 나오고 __dirname도 routes까지 나오니까 file
+
+      var filePathParsed = file.path.substring(6, file.path.length);
+      var filePath = __dirname + filePathParsed;
       var sql = `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, FILE_CNT, FILE_PATH1, TYPE)
-      VALUES ('`+ subject + `', ?,'` + sender + `', '0', NOW(), '` + msg + `', '1', '`+ (__dirname + file.path) + `', '0');`;
+      VALUES ('`+ subject + `', ?,'` + sender + `', '0', NOW(), '` + msg + `', '1', '`+ filePath + `', '0');`;
       var sqls = "";
       resultList.forEach(function(item){
         sqls += mysql.format(sql, item);
@@ -289,11 +293,11 @@ function processDbQuery(resultList, sender, msg, msgType, subject, id, file) {
 
       //대량 발송처리
       
-      db.query(sqls,
-        function (error, results, fields) {
-        if (error) throw error;
-        console.log("발송완료");
-      });
+      // db.query(sqls,
+      //   function (error, results, fields) {
+      //   if (error) throw error;
+      //   console.log("발송완료");
+      // });
 
 
     }

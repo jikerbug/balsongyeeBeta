@@ -123,7 +123,7 @@
     "expires": 1610777848004
   },
   {
-    "_id": "QJzItXBfAjE0_PbwjEWaR2si7LOPnJ-0",
+    "_id": "x3wdyZ_c_8A52Xi34Zr4vxRrj5dwJQls",
     "session": {
       "cookie": {
         "originalMaxAge": null,
@@ -131,9 +131,10 @@
         "httpOnly": true,
         "path": "/"
       },
+      "flash": {},
       "is_logined": true,
-      "userId": "wlqor98"
+      "userId": "mrimc"
     },
-    "expires": 1610782616299
+    "expires": 1610785904851
   }
 ]

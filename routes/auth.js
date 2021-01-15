@@ -96,7 +96,7 @@ router.post('/register_process', function (req, res) {
             // Store hash in your password DB.
 
             db.query(`INSERT INTO user
-            VALUES (?,?,?,?,?)`, [email,hash,0,id,name],
+            VALUES (?,?,?,?,?,?)`, [email,hash,0,id,name,0],
               function (error, results, fields) {
               if (error) throw error;
               console.log("회원가입이 완료되었습니다")
