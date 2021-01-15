@@ -277,7 +277,7 @@ function processDbQuery(resultList, sender, msg, msgType, subject, id, file) {
         니다. 당사사정에 의해 변동/취소 가능', '1', 'D:\\UPLUSAGT\\image\\sample.jpg', '0');
         `
 
-        var sql = `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, FILE_CNT, FILE_PATH1, TYPE)
+      var sql = `INSERT INTO MMS_MSG (SUBJECT, PHONE, CALLBACK, STATUS, REQDATE, MSG, FILE_CNT, FILE_PATH1, TYPE)
       VALUES ('`+ subject + `', ?,'` + sender + `', '0', NOW(), '` + msg + `', '1', '`+ (__dirname + file.path) + `', '0');`;
       var sqls = "";
       resultList.forEach(function(item){
