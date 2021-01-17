@@ -1,8 +1,6 @@
 //--------------------전송----------------------//
 var sendImg = new FormData();
 
-
-
 $(function($) {
   $('.php-email-form .submitButton').on("click",function() {
 
@@ -193,7 +191,7 @@ function readphoto(input) {
 
     var files = $('#photoFile')[0].files[0];
     sendImg.append('file',files);
-    console.log(sendImg.get('file'));
+    console.log(sendImg.get('file'));;
   }
 }
 
@@ -203,8 +201,53 @@ function deletephoto(){
     document.getElementById("photoFile").value = "";
     sendImg.delete('file');
   }
-  
 }
+
+
+
+function addPhotoFromPhotoList(obj){
+  var src;
+  var fileName;
+  var choice = obj.getAttribute('id');
+
+  
+  switch (choice) {
+    case 'sendImg1': src = 'assets/img/voteImg/1.jpg';fileName = '1.jpg';break;
+    case 'sendImg2': src = 'assets/img/voteImg/2.jpg';fileName = '2.jpg';break;
+    case 'sendImg3': src = 'assets/img/voteImg/3.jpg';fileName = '3.jpg';break;
+    case 'sendImg4': src = 'assets/img/voteImg/4.jpg';fileName = '4.jpg';break;
+  }  
+
+  $('html,body').animate({scrollTop:100}, 'slow');
+  $( "#sendImg" ).remove();
+  $('#contentBox').prepend(`<img src="${src}" alt="전송사진" id="sendImg" onclick="deletephoto()" 
+  onmouseover="$(this).fadeTo(100, 0.5)" onmouseout="$(this).fadeTo(100, 1.0);"/>`);
+
+  //파일 객체에 담는 로직 추가!
+
+  fetch(src)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.blob();
+  })
+  .then(myBlob => {
+    sendImg = new FormData();
+    //서버에서 blob으로 받은 파일을 fileObject로 변경
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    var file = new File([myBlob], fileName);
+    sendImg.append('file', file)
+    console.log(sendImg.get('file'))
+    
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+  });
+}
+
+
+
 
 //--------------------엑셀파일업로드----------------------//
 
@@ -275,3 +318,6 @@ function readExcel(input) {
   };
   reader.readAsBinaryString(input.files[0]);
 }
+
+
+

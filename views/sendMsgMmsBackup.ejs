@@ -27,7 +27,6 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
-  <link href="assets/css/mms.css" rel="stylesheet">
 
 
 
@@ -64,9 +63,9 @@
         
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-12">
-            <button style="display: f; margin-left:30%;" type="button" class="btn btn-outline-info" onclick="scrollDownToPhoto()">예시사진보기</button>
+            <img src="" onclick="test()">
 
-            
+            </button>
             <div class="phone-section">
               <input type="text" class="form-control" placeholder="제목 입력(최대 20자)" id="msgSubject" style="width: 100%;"/>
               <button type="button" class="btn btn-secondary" onclick="resetMsg()">다시쓰기</button>
@@ -180,7 +179,7 @@
               <div class="card-file">
                 <div class="card">
                   <div class="card-header">
-                      엑셀 파일(번호목록)
+                      엑셀 파일
                   </div>
                   <div class="card-body">
                     <div class="custom-file">
@@ -193,7 +192,7 @@
               <div class="card-file">
                 <div class="card">
                   <div class="card-header">
-                      텍스트 파일(번호목록)
+                      텍스트 파일
                   </div>
                   <div class="card-body">
                     <div class="custom-file">
@@ -254,8 +253,7 @@
                     <div class="form-group" id="area1">
                       <textarea class="form-control" id="textarea1" rows="8" onclick="put_msg_body(this.value)">
                       </textarea>
-                      <img src="assets/Img/voteImg/1.jpg" alt="전송사진" id="sendImg1" onclick="addPhotoFromPhotoList(this)" 
-                      onmouseover="$(this).fadeTo(100, 0.5)" onmouseout="$(this).fadeTo(100, 1.0);"/>
+                      <img src="assets/Img/voteImg/1.jpg"/>
                     </div>
                  
                   </div>
@@ -267,8 +265,7 @@
                     <div class="form-group" id="area2">
                       <textarea class="form-control" id="textarea2" rows="8" onclick="put_msg_body(this.value)">
                       </textarea>
-                      <img src="assets/Img/voteImg/2.jpg" alt="전송사진" id="sendImg2" onclick="addPhotoFromPhotoList(this)" 
-                      onmouseover="$(this).fadeTo(100, 0.5)" onmouseout="$(this).fadeTo(100, 1.0);"/>
+                      <img src="assets/Img/voteImg/2.jpg"/>
                     </div>
                   </div>
                 </div>
@@ -279,8 +276,7 @@
                     <div class="form-group" id="area3">
                       <textarea class="form-control" id="textarea3" rows="8" onclick="put_msg_body(this.value)">
                       </textarea>
-                      <img src="assets/Img/voteImg/3.jpg" alt="전송사진" id="sendImg3" onclick="addPhotoFromPhotoList(this)" 
-                      onmouseover="$(this).fadeTo(100, 0.5)" onmouseout="$(this).fadeTo(100, 1.0);"/>
+                      <img src="assets/Img/voteImg/3.jpg"/>
                     </div>
   
                   </div>
@@ -292,8 +288,7 @@
                     <div class="form-group" id="area4">
                       <textarea class="form-control" id="textarea4" rows="8" onclick="put_msg_body(this.value)">
                       </textarea>
-                      <img src="assets/Img/voteImg/4.jpg" alt="전송사진" id="sendImg4" onclick="addPhotoFromPhotoList(this)" 
-                      onmouseover="$(this).fadeTo(100, 0.5)" onmouseout="$(this).fadeTo(100, 1.0);"/>
+                      <img src="assets/Img/voteImg/4.jpg"/>
                     </div>
                   </div>
                 </div>
@@ -328,7 +323,6 @@
 
   </main><!-- End #main -->
   <%- footer %>
-  
 
   
 
@@ -349,9 +343,8 @@
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
   <script src="assets/js/fileAndSend.js"></script>
-  <script src="assets/js/msgMmsContent.js"></script>
+  <script src="assets/js/msgContent.js"></script>
   <script src="assets/js/cash.js"></script>
-  
 
   <!-- external module-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
@@ -370,11 +363,8 @@
                 minDate: new Date(),
             });
     });
-
    
   </script>
-
-
 
   
 
@@ -407,8 +397,8 @@
     //전송창에 있는 내문자 버튼 클릭했을때 동작 
     function showUserMsg(){
       document.getElementById("showCollection").innerHTML = "문자모음 숨기기"
-      $('#card-table').css("display","");
-      setUser(document.getElementById("userNav"));
+        $('#card-table').css("display","");
+        setUser(document.getElementById("userNav"));
     }
 
   </script>

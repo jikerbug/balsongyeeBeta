@@ -95,6 +95,16 @@ function setFirst(obj){
   document.getElementById("textarea2").value = firstList(2);
   document.getElementById("textarea3").value = firstList(3);
   document.getElementById("textarea4").value = firstList(4);
+  document.getElementById("textarea1").style.display  = "block";
+  document.getElementById("textarea2").style.display  = "block";
+  document.getElementById("textarea3").style.display  = "block";
+  document.getElementById("textarea4").style.display  = "block";
+  document.getElementById("sendImg1").style.display = "none";
+  document.getElementById("sendImg2").style.display = "none";
+  document.getElementById("sendImg3").style.display = "none";
+  document.getElementById("sendImg4").style.display = "none";
+ 
+  
   $(".nav").find(".active").removeClass("active");
   obj.className = "nav-link active"
 
@@ -105,6 +115,14 @@ function setSecond(obj){
   document.getElementById("textarea2").value = secondList(2);
   document.getElementById("textarea3").value = secondList(3);
   document.getElementById("textarea4").value = secondList(4);
+  document.getElementById("textarea1").style.display  = "block";
+  document.getElementById("textarea2").style.display  = "block";
+  document.getElementById("textarea3").style.display  = "block";
+  document.getElementById("textarea4").style.display  = "block";
+  document.getElementById("sendImg1").style.display = "none";
+  document.getElementById("sendImg2").style.display = "none";
+  document.getElementById("sendImg3").style.display = "none";
+  document.getElementById("sendImg4").style.display = "none";
   $(".nav").find(".active").removeClass("active");
   obj.className = "nav-link active"
 }
@@ -114,3 +132,34 @@ function setUser(obj){
   $(".nav").find(".active").removeClass("active");
   obj.className = "nav-link active"
 }
+
+
+/*------------------------------------MMS 사진관련!!!---------------------------------------*/ 
+
+function setVote(obj){
+  document.getElementById("textarea1").style.display  = "none";
+  document.getElementById("textarea2").style.display  = "none";
+  document.getElementById("textarea3").style.display  = "none";
+  document.getElementById("textarea4").style.display  = "none";
+  document.getElementById("sendImg1").style.display = "block";
+  document.getElementById("sendImg2").style.display = "block";
+  document.getElementById("sendImg3").style.display = "block";
+  document.getElementById("sendImg4").style.display = "block";
+  $(".nav").find(".active").removeClass("active");
+  obj.className = "nav-link active"
+}
+
+function scrollDownToPhoto(){
+  showPhoto();
+  $('html,body').animate({scrollTop:1000}, 'slow');
+}
+
+function showPhoto(){
+  document.getElementById("showCollection").innerHTML = "문자모음 숨기기"
+  $('#card-table').css("display","");
+  setVote(document.getElementById("voteNav"));
+}
+
+
+//function addPhoto(obj){는 fileAndSend에서 formdata를 활용해야하기 때문에 좀더 직관적이도록fileAndSend.js로 이전했음
+

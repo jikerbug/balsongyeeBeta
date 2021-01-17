@@ -21,7 +21,7 @@ var upload = multer({
       cb(null, `routes/userSendImg/${folderId}/`);
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname);
+      cb(null, 'userSendImg.jpg'); //이거 한글파일은 발송이 안됨!!
     }
   })
 });

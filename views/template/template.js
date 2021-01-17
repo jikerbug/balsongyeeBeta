@@ -3,18 +3,22 @@ module.exports = {
   header:function(alert='', authStatus=`<li><a href="/auth/login">로그인</a></li>
   <li><a href="/auth/register">회원가입</a></li>`){
     return `
+    
     <!-- ======= Header ======= -->
-
     
+    
+
     <header id="header" class="fixed-top">
-    
-      <div class="container-fluid d-flex justify-content-between align-items-center">
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-        <h2 class="logo"><a href="/"><img src="assets/img/logo2.svg" style="margin-bottom:7px"/> 발송이</a></h2>
-        <nav class="nav-menu d-none d-lg-block">
+    <div class="container" style="padding:0">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <nav class="nav-menu d-none d-lg-block" style="text-align: center">
+        
           <ul>
+            <li style="padding:0">
+            <h2 class="logo"><a href="/"><img src="assets/img/logo2.svg" style="margin-bottom:7px"/>
+            <span>발송이</span>
+            </a></h2>
+            </li>
             <li class="nav-item dropdown">
               <a class="dropdown" href="/userInfo/sendResult?msgType=sms" id="navbarDropdown">
                 발송결과
@@ -36,7 +40,8 @@ module.exports = {
             </li>
             <li class="nav-item dropdown">
               <a href="/sendMsg?msgType=smslms" id="navbarDropdown">
-                선거문자
+                선거문자    
+                <i class="bx bx-check-circle" style="color:red"></i>
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/sendMsg?msgType=smslms">선거 단문/장문</a>
@@ -45,20 +50,19 @@ module.exports = {
                 <a class="dropdown-item" href="/sendMsg?msgType=mms">의정부구 선거</a>
               </div>
             </li>
-            <li><a href="/userInfo/address">주소록</a></li>
+            <li><a href="/userInfo/address">전화번호목록</a></li>
             ${authStatus}
             <li><a href="/services">고객센터</a></li>
-            <li><a href="/userInfo/cash">충전</a></li>
-            
+            <li><a href="/userInfo/cash">충전</a></li>   
           </ul>
         </nav><!-- .nav-menu -->
 
         <div class="header-padding">
         </div>
-
       </div>
-
+      </div>
     </header><!-- End Header --> 
+    
     `
   },
   footer:function() {
@@ -83,7 +87,7 @@ module.exports = {
     </footer><!-- End  Footer -->`;
   },
   sidenav:function(name, coin, sms, lms, mms, logout="") {
-    return `
+    return this.layoutContainerColLeft(`
     <div class="sidenav">
     <p>${name} 고객님</p>
     <p>잔여건수</p>
@@ -102,13 +106,12 @@ module.exports = {
                 <div class="pop-conts">
                     <!--content //-->
                     <p class="ctxt mb20">
-                    현재 보여지는 잔여건수는 단문, 장문, 사진을 전송 할 수 있는 최대건수입니다.<br>
+                    현재 보여지는 잔여건수는 단문, 장문, 사진을 전송할 수 있는 최대건수입니다.<br>
                     각각의 건수가 충전되어 있는 것이 아니며 코인를 단문, 장문, 사진으로 환산해 놓은 건수입니다.<br>
                     1코인 = 단문 1건<br>
                     3코인 = 장문 1건<br>
                     6코인 = 포토 1건
                     </p>
-
                     <div class="btn-r">
                         <a href="#" class="btn-layerClose">Close</a>
                     </div>
@@ -117,11 +120,11 @@ module.exports = {
             </div>
         </div>
     </div>
-    </div>
-    `
+    </div>`) + this.sidenavRight();
+    
   },
   loginSidenav:function() {
-    return `
+    return this.layoutContainerColLeft(`
         <div class="loginSidenav">
 					<div class="card fat">
 						<div class="card-body">
@@ -155,9 +158,7 @@ module.exports = {
 							</form>
 						</div>
 					</div>
-        </div>  
-    `
-
+        </div>`)+ this.sidenavRight();
     },
     sendResultDetail:function(tuples) {
 
@@ -241,6 +242,64 @@ module.exports = {
 
       return sendResult;
       
+    },
+    sidenavRight:function() {
+      return this.layoutContainerColRight(`
+      <div class="sidenavRight">
+        <a href="/" class="icon-href">
+          <i class="bx bx-file"></i>
+          <p>080 거부번호</p>    
+        </a>
+        <a href="/" class="icon-href">
+          <i class="bx bx-phone"></i>
+          <p>발신번호 등록</p>
+        </a>
+        <a href="/" class="icon-href">
+          <i class="bx bx-credit-card"></i>
+          <p>결제/충전하기</p>
+        </a>
+        <a href="/" class="icon-href">
+          <i class="bx bx-support"></i>
+          <p>전화상담</p>
+        </a>
+        <a href="/" class="icon-href">
+          <i class="bx bx-user-voice"></i>
+          <p>선거홍보안내</p>
+        </a>
+        <a href="/" class="icon-href">
+          <i class="bx bxs-contact"></i>
+          <p>주소록 등록</p>
+        </a>
+      </div> 
+      `);
+    },
+    layoutContainerColLeft:function(html) {
+      return `
+      <div class="container" data-aos="fade-up">
+      <div class="row">
+        <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+        ${html}
+        </div>
+        <div class="col-lg-5 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+        
+        </div>
+        <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+        </div>
+      </div>
+      </div>
+      ` 
+    },layoutContainerColRight:function(html) {
+      return `
+      <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-9">    
+        </div>
+        <div class="col-lg-2">
+        ${html}
+        </div>
+      </div>
+      </div>
+      ` 
     }
     
   
