@@ -1,14 +1,27 @@
+//------------달력---------------------//
+$(function () {
+  //이렇게 넣으면 초는 00으로 세팅해준다
+  //마리아db의 date포맷 : 2021-01-11 12:04:45()
+        $('#datetimepicker1').datetimepicker({
+          format:'YYYY-MM-DD HH:mm',
+          minDate: new Date()
+        });
+});
+
+
+
 //--------------------전송----------------------//
 var sendImg = new FormData();
+
+
 
 $(function($) {
   $('.php-email-form .submitButton').on("click",function() {
 
     console.log(sendImg.get('file'));
 
-    var sender = document.getElementById("sender").value;
+    //페이지타입
     var pageType = document.getElementById("pageType").value;
-
     if(pageType == "smslms"){
       var msg = document.getElementById("msg").value;
     }else if(pageType == "mms"){
@@ -20,12 +33,67 @@ $(function($) {
       }
       console.log($('#photoFile')[0].files[0]);
     }
-    
+
+    //잔챙이들
+    var sender = document.getElementById("sender").value;
     var passwd = document.getElementById("passwd").value;
     var subject = document.getElementById("msgSubject").value;
+
+    //예약발송
+    var isReserveSend = document.getElementById("reserveSend").checked;
+    var reservedDate = document.getElementById("reservedData").value;
+    console.log(reservedDate);
+    if(isReserveSend){
+      if(!reservedDate){
+        alert("날짜를 지정해주세요");
+        return;
+      }
+    }else{
+      //체크를 안했으면 값을 보내면 안된다
+      reservedDate= "";
+    }
+
+    //분할발송
+    var isSplitSend = document.getElementById("splitSend").checked;
+    var splitMinutes = document.getElementById("splitMinutes").value;
+    var countPerSplit = document.getElementById("countPerSplit").value;
+
+    console.log(splitMinutes);
+    console.log(countPerSplit);
+    if(isSplitSend){
+      if(!splitMinutes && !countPerSplit){
+        alert('발송 간격과 간격당 건수를 입력해주세요');
+        return;
+      }else if(!splitMinutes){
+        alert('발송 간격을 입력해주세요');
+        return;
+      }else if(!countPerSplit){
+        alert('발송 간격당 건수를 입력해주세요');
+        return;
+      }
+      console.log(!Number.isInteger(+splitMinutes));
+      //string을 parseInt후에 isInterger하면 동작 안한다! 타입 분기할땐 +붙이기!
+      if(!Number.isInteger(+splitMinutes) || !Number.isInteger(+countPerSplit)){
+        alert('분할발송에는 숫자만 입력해주세요');
+        return;
+      }else{
+        if(+splitMinutes>120){
+          alert('발송 간격은 120분 이하로만 입력해주세요');
+          return;
+        }
+        if(+countPerSplit>10000){
+          alert('발송 건수는 1만 건 이하로만 입력해주세요');
+          return;
+        }
+      }
+    }else{
+      splitMinutes = "";
+      countPerSplit = "";
+    }
+
+
+    //메세지 타입 구하기
     var len = getTextLength(msg);
-
-
     var msgType;
 
     if(pageType == "mms"){
@@ -36,6 +104,7 @@ $(function($) {
       msgType = "sms";
     }
 
+    ///전화번호 목록(일반등록)
     var resultInfo = new Array();
     var listInfo = $('#phonenumList').find('option').map(function() {
       if(this.id == ""){
@@ -45,7 +114,7 @@ $(function($) {
     resultInfo.push(listInfo);
 
 
-
+    //전화번호 목록(파일 목록)
     var fileInfo = $('#phonenumList').find('option').map(function() {
       if(this.id != ""){
         return sendInfo[this.id]; //하나의 list로 합쳐지는 이유는 map의 특성때문인듯
@@ -89,6 +158,9 @@ $(function($) {
       data.append('msgType', msgType);
       data.append('subject', subject);
       data.append('sendCnt', sendCnt);
+      data.append('reservedDate', reservedDate);
+      data.append('splitMinutes', splitMinutes);
+      data.append('countPerSplit', countPerSplit);
       $.ajax({
         type : "POST",
         url : "/sendMsg/processMms",
@@ -119,7 +191,10 @@ $(function($) {
         "passwd" : passwd,
         "msgType": msgType,
         "subject": subject,
-        "sendCnt": sendCnt
+        "sendCnt": sendCnt,
+        'reservedDate': reservedDate,
+        'splitMinutes': splitMinutes,
+        'countPerSplit':countPerSplit
         },
         success: function(msg) {
           if (msg == 'OK') {
@@ -137,7 +212,7 @@ $(function($) {
 });
 
 
-//--------------------발송번호----------------------//
+//--------------------발송전화번호----------------------//
 var sendInfo = new Array(); 
 var id_key = 0;
 
@@ -286,7 +361,8 @@ function readExcel(input) {
             console.log(1);
             for(var i=0;i<count;i++){
               let values = Object.values(rows[i]);
-              if(Number.isInteger(parseInt(values[0]))){
+              //string을 parseInt후에 isInterger하면 동작 안한다! 타입 분기할땐 +붙이기!
+              if(Number.isInteger(+values[0])){
                   validCnt++;
                   excelGroup.push(values);
               }
@@ -296,7 +372,7 @@ function readExcel(input) {
             console.log(2);
             for(var i=0;i<count;i++){
               let values = Object.values(rows[i]);
-              if(Number.isInteger(parseInt(values[1]))){
+              if(Number.isInteger(+values[1])){
                   validCnt++;
                   excelGroup.push(values);
               }
@@ -318,6 +394,9 @@ function readExcel(input) {
   };
   reader.readAsBinaryString(input.files[0]);
 }
+
+
+/*-----------------------------------예약발송-----------------------------------*/
 
 
 
