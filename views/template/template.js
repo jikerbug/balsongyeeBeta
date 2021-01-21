@@ -95,29 +95,27 @@ module.exports = {
     <p href="#">사진 : ${mms}건</p>
     <a href="#layer2" class="btn-example">정보안내</a>
     <a href="/auth/logout" id="logout-button">로그아웃</a>
-   
-    <div class="dim-layer">
-        <div class="dimBg"></div>
-        <div id="layer2" class="pop-layer">
-            <div class="pop-container">
-                <div class="pop-conts">
-                    <!--content //-->
-                    <p class="ctxt mb20">
-                    현재 보여지는 잔여건수는 단문, 장문, 사진을 전송할 수 있는 최대건수입니다.<br>
-                    각각의 건수가 충전되어 있는 것이 아니며 코인를 단문, 장문, 사진으로 환산해 놓은 건수입니다.<br>
-                    1코인 = 단문 1건<br>
-                    3코인 = 장문 1건<br>
-                    6코인 = 포토 1건
-                    </p>
-                    <div class="btn-r">
-                        <a href="#" class="btn-layerClose">Close</a>
-                    </div>
-                    <!--// content-->
+    </div>`) +`<div class="dim-layer">
+    <div class="dimBg"></div>
+    <div id="layer2" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20">
+                현재 보여지는 잔여건수는 단문, 장문, 사진을 전송할 수 있는 최대건수입니다.<br>
+                각각의 건수가 충전되어 있는 것이 아니며 코인을 단문, 장문, 사진으로 환산해 놓은 건수입니다.
+                <p style="font-weight:bold;line-height:10px">1코인 = 단문 1건</p>
+                <p style="font-weight:bold;line-height:10px">3코인 = 장문 1건</p>
+                <p style="font-weight:bold;line-height:10px">6코인 = 포토 1건</p>
+                </p>
+                <div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
                 </div>
+                <!--// content-->
             </div>
         </div>
     </div>
-    </div>`) + this.sidenavRight();
+</div>`+ this.sidenavRight();
     
   },
   loginSidenav:function() {

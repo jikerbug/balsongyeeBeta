@@ -53,9 +53,8 @@
             <li>문자발송결과는 통신사 결과값을 기반으로 표시됩니다.</li>
             <li>단문 최대 26시간, 장문/포토 최대 49시간까지 결과값이 수신되지 않은 경우 실패(코인 환불)처리 됩니다.</li>
             <li>문자발송결과는 최대 60일간 보관됩니다.</li>
-            <li>상세보기를 클릭하면 각각의 발송문자에 대한 세부사항을 볼 수 있습니다.</li>
-            <li>성공 혹은 실패에 표시되지 않은 메세지는 발송 진행중입니다.</li>
             <li>실패시 실패사유는 아이디와 발송일을 이메일로 보내주시면 안내해드립니다.</li>
+            <li style="font-size:19px; text-decoration:underline">상세보기를 클릭하면 각각의 발송문자에 대한 세부사항과 진행상황을 볼 수 있습니다.</li>
         </ul>
       </div>
 
@@ -69,22 +68,16 @@
               <input type="checkbox"  aria-label="Checkbox for following text input">
             </th>
             <th scope="col">상세보기</th>
-            <th scope="col">발송일(요청 기준)</th>
+            <th scope="col">발송일</th>
             <th scope="col">메시지 내용</th>
             <th scope="col">유형</th>
             <th scope="col">발송건수</th>
-            <th scope="col">성공</th>
-            <th scope="col">실패</th>
-            <th scope="col">진행상황</th>
           </tr>
         </thead>
         <tbody>
           <%- sendResult %>
           <tr>
             <th scope="row">@</th>
-            <td>@</td>
-            <td>@</td>
-            <td>@</td>
             <td>@</td>
             <td>@</td>
             <td>@</td>

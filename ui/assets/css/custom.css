@@ -116,6 +116,8 @@
   ;*/
 
 
+
+
 .pop-layer .pop-container {
   padding: 20px 25px;
 }
@@ -138,7 +140,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 410px;
+  width: 420px;
   height: auto;
   background-color: #fff;
   border: 5px solid #3571B5;
@@ -355,10 +357,15 @@ div.info_txt ul li:hover{font-size:19px; text-decoration:underline}
   border-top: 1px solid #dee2e6;
 }
 
-
+/*페이지 넘기는거!*/
 .sendResultNav {
   display: flex;
   justify-content: center;
+}
+
+.sendResultNav #currentPageLink{
+  color: white;
+  background-color: darkcyan;
 }
 
 
