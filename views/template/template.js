@@ -5,9 +5,6 @@ module.exports = {
     return `
     
     <!-- ======= Header ======= -->
-    
-    
-
     <header id="header" class="fixed-top">
     <div class="container" style="padding:0">
     <div class="container-fluid d-flex justify-content-between align-items-center">
@@ -20,13 +17,13 @@ module.exports = {
             </a></h2>
             </li>
             <li class="nav-item dropdown">
-              <a class="dropdown" href="/userInfo/sendResult?msgType=sms" id="navbarDropdown">
+              <a class="dropdown" href="/sendResult?msgType=sms" id="navbarDropdown">
                 발송결과
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/userInfo/sendResult?msgType=sms">단문</a>
-                <a class="dropdown-item" href="/userInfo/sendResult?msgType=lms">장문</a>
-                <a class="dropdown-item" href="/userInfo/sendResult?msgType=mms">사진</a>
+                <a class="dropdown-item" href="/sendResult?msgType=sms">단문</a>
+                <a class="dropdown-item" href="/sendResult?msgType=lms">장문</a>
+                <a class="dropdown-item" href="/sendResult?msgType=mms">사진</a>
               </div>
             </li>
             <li class="nav-item dropdown">
@@ -159,89 +156,6 @@ module.exports = {
 						</div>
 					</div>
         </div>`)+ this.sidenavRight();
-    },
-    sendResultDetail:function(tuples) {
-
-
-      var form = function(date, msg, type, cnt, success, fail, status) {
-        return `<tr>
-        <th scope="row">1</th>
-        <td>${date}</td>
-        <td>${msg}</td>
-        <td>${type}</td>
-        <td>${cnt}</td>
-        <td>${success}</td>
-        <td>${fail}</td>
-        <td>${status}</td>
-        </tr>`
-      }
-
-      var sendResult = ``;
-
-      for(var i =0; i< tuples.length; i++){
-        var date = tuples[i].TR_SENDDATE;
-        var msg = tuples[i].TR_MSG;
-        var type = tuples[i].TR_MSGTYPE;
-        var cnt = "1개"
-        var success = "1개";
-        var fail = "0개";
-        var status = tuples[i].TR_SENDSTAT;
-        sendResult += form(date, msg, type, cnt, success, fail, status);
-      }
-      
-      return sendResult;
-      
-    },
-    sendResult:function(tuples,type) {
-
-      // yyyy-MM-dd 포맷으로 반환
-      var getFormatDate = function(date){
-        var year = date.getFullYear();              //yyyy
-        var month = (1 + date.getMonth());          //M
-        month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
-        var day = date.getDate();                   //d
-        day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-        var hours = date.getHours();
-        hours = hours >= 10 ? hours : '0' + hours;  
-        var minutes = date.getMinutes();
-        minutes = minutes >= 10 ? minutes : '0' + minutes; 
-        return  year + '-' + month + '-' + day + ' ' + hours + ':' + minutes;
-      }
-
-
-
-      var form = function(date, title, msgType, cnt, success, fail, status, sendResultIndex) {
-        return `<tr>
-        <th scope="col">
-              <input type="checkbox"  aria-label="Checkbox for following text input">
-        </th>
-        <td><a href="/userInfo/sendResult/detail/?msgType=sms&userSendIndex=${sendResultIndex}">상세보기</a></td>
-        <td>${date}</td>
-        <td>${title}</td>
-        <td>${msgType}</td>
-        <td>${cnt}</td>
-        <td>${success}</td>
-        <td>${fail}</td>
-        <td>${status}</td>
-        </tr>`
-      }
-
-      var sendResult = ``;
-
-      for(var i =0; i< tuples.length; i++){
-        var date = getFormatDate(tuples[i].TR_SENDDATE);
-        var title = tuples[i].userSendTitle;
-        var msgType = type;
-        var cnt = tuples[i].userSendCnt;
-        var success = cnt;
-        var fail = cnt - success;
-        var status = fail ? '진행중' : '완료';
-        var sendResultIndex = tuples[i].userSendIndex;
-        sendResult += form(date, title, msgType, cnt, success, fail, status,sendResultIndex);
-      }
-
-      return sendResult;
-      
     },
     sidenavRight:function() {
       return this.layoutContainerColRight(`

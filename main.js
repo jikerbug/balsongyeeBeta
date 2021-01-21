@@ -29,11 +29,12 @@ app.use('/auth/register', express.static('ui'));
 app.use('/sendMsg', express.static('ui'));
 
 app.use('/userInfo', express.static('ui'));
-app.use('/userInfo/sendResult', express.static('ui'));
+
 app.use('/userInfo/cash', express.static('ui'));
 app.use('/userInfo/myPage', express.static('ui'));
 
-app.use('/userInfo/sendResult/detail', express.static(__dirname + '/ui'));
+app.use('/sendResult', express.static('ui'));
+app.use('/sendResult/detail', express.static(__dirname + '/ui'));
 //dirname쓰는게 더 안전하다는데? 이건 조사해보기
 
 
@@ -71,12 +72,14 @@ var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var sendMsgRouter = require('./routes/sendMsg');
 var userInfoRouter = require('./routes/userInfo');
+var sendResultRouter = require('./routes/sendResult');
 
 
 ///이게 session뒤에 있어야 적용된다!!!
 app.use('/auth', authRouter); 
 app.use('/sendMsg', sendMsgRouter); 
 app.use('/userInfo', userInfoRouter); 
+app.use('/sendResult', sendResultRouter); 
 app.use('/', indexRouter); 
 
 

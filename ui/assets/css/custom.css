@@ -316,3 +316,49 @@ a.btn-layerClose:hover {
   box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2);
 }
 
+
+/*------------발송결과--------------*/
+div.info_txt{
+  position:relative; 
+  border:1px solid #ddd; 
+  padding:20px 0 12px 18px; 
+  margin:10px 0 30px 5%; 
+  font-size:15px; 
+  font-weight: bold;
+  background:#f1f1f1;
+  width: 90%;
+}
+div.info_txt ul li{line-height:25px;}
+div.info_txt ul li span.pd_l_12{padding-left:12px;text-align: left}
+div.info_txt a{display:inline-block;*zoom:1;*display:inline;}
+div.info_txt ul li:hover{font-size:19px; text-decoration:underline}
+
+.table-bordered th{
+
+  font-size: 15px;
+  height: 18px;
+}
+
+.table-bordered{
+  margin-left: 5%;
+  width: 90%;
+}
+
+.table-bordered td{
+  font-size: 15px;
+  height: 18px;
+}
+
+.table td, .table th {
+  padding: .1rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+
+.sendResultNav {
+  display: flex;
+  justify-content: center;
+}
+
+
