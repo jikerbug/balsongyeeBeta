@@ -28,8 +28,6 @@
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
 
-
-
   <!-- =======================================================
   * Template Name: Kelly - v3.0.0
   * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
@@ -114,6 +112,7 @@
             <button type="button" class="btn btn-outline-danger" onclick="deletePhonenum()">삭제</button>
             <button type="button" class="btn btn-outline-danger" onclick="deleteAll()">전체삭제</button>
             <button type="button" class="btn btn-outline-info" onclick="showInfo()" id="showInfo">명단확인</button>
+            <input type="button" value="팝업창 호출" onclick="showPopup();" />
 
             <select style="display: none" class="form-control" id="infoList" size="10" style="width: 250px;"></select>
 
@@ -191,13 +190,13 @@
                   </div> 
                 </div>
                 <div class="card-body">
-                  <div class="custom-file">
-                    <p>010-100-1000</p>
-                    <p>홍길동 010-100-1000</p>
-                    <p> 010-100-1000 홍길동</p>
-                    <p>- 기호는 생략가능합니다</p>
-                    <p>엑셀파일의 경우,</p>
-                    <p>앞자리 0이 생략되어도 정상발송됩니다</p>
+                  <div class="custom-file" style="font-weight:bold;">
+                    <p>파일 입력 번호는 5만건까지 가능합니다</p>
+                    <p>010-1000-1000</p>
+                    <p>홍길동 010-1000-1000</p>
+                    <p>010-1000-1000 홍길동</p>
+                    <p>- 기호 생략가능합니다(01010001000 형식)</p>
+                    <p>- 기호를 생략한 엑셀파일의 경우, <br>앞자리 0이 생략되어도 정상발송됩니다.<br>(1010001000형식)</p>
                   </div>
                 </div>
               </div>
@@ -331,6 +330,8 @@
   <script src="assets/js/fileAndSend.js"></script>
   <script src="assets/js/msgContent.js"></script>
   <script src="assets/js/cash.js"></script>
+  <script src="assets/w2ui/gridPopup.js"></script>
+  
 
   <!-- external module-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>

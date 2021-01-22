@@ -334,7 +334,6 @@ excelFile.addEventListener('change', event => {
 });
 
 
-
 function readExcel(input) {
   let reader = new FileReader();
   reader.onload = function () {
@@ -382,6 +381,10 @@ function readExcel(input) {
 
           console.log(rows)
           sendInfo.push(excelGroup);
+
+          if(count>20000){
+            alert('50000만건이 넘는 파일은 불러올 수 없습니다.')
+          }
         
           alert("전체: " + count + "건\n잘못된 번호: "+ (count - validCnt) + "건\n발송가능한 번호: " + validCnt+"건");
 
@@ -394,9 +397,5 @@ function readExcel(input) {
   };
   reader.readAsBinaryString(input.files[0]);
 }
-
-
-/*-----------------------------------예약발송-----------------------------------*/
-
 
 
