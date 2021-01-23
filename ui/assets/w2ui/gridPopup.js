@@ -1,10 +1,4 @@
-/*-----------------------------------폰목록 보여주기-----------------------------------*/
 
-
-function showPopup() 
-{ 
-  window.open("assets/w2ui/gridPopup.html", "a", "width=500, height=405, left=100, top=50"); 
-}
 
 
 var test = [
@@ -16,27 +10,57 @@ for(var i=2; i<50000;i++){
 }
 console.log('s');
 
-
-
 $(function () {
-  $('#grid').w2grid({
-      name: 'grid',
-      header: 'List of Names',
-      show : {
-          toolbar:true, 
-          footer:true
-      }, 
-      multiSearch:false,
-      searches : [
-        { field:"fname", caption:"ID", type:"int" },
-        { field:"lname", caption:"이름", type:"float" }
-    ],
-      columns: [
-          { field: 'fname', caption: 'First Name', size: '30%' },
-          { field: 'lname', caption: 'Last Name', size: '30%' },
+  groupList = localStorage.getItem('excelGroup');
+  groupType = localStorage.getItem('groupType');
+  groupList = JSON.parse(groupList);
+  console.log(groupList);
 
-      ],
-      records: test
-  });
+  if(groupType == "number"){
+    numberGrid(groupList)
+  }else if(groupType == "numberWithName"){
+    numberWithNameGrid(groupList)
+  }
+  
 });
+
+function numberWithNameGrid(groupList) {
+  $('#grid').w2grid({
+    name: 'grid',
+    header: 'List of Names',
+    show : {
+        toolbar:true, 
+        footer:true
+    }, 
+    multiSearch:false,
+    searches : [
+      { field:"phonenum",  caption:"전화번호", type:"text"},
+      { field:"name", caption:"이름", type:"text" }
+  ],
+    columns: [
+      { field: 'phonenum', caption: '전화번호', size: '30%' },
+      { field: 'name', caption: '이름', size: '30%' },
+    ],
+    records: groupList
+});
+}
+
+function numberGrid(groupList) {
+  $('#grid').w2grid({
+    name: 'grid',
+    header: 'List of Names',
+    show : {
+        toolbar:true, 
+        footer:true
+    }, 
+    multiSearch:false,
+    searches : [
+      { field:"phonenum", caption:"전화번호", type:"text" },
+  ],
+    columns: [
+        { field: 'phonenum', caption: '전화번호', size: '30%' },
+    ],
+    records: groupList
+});
+}
 
