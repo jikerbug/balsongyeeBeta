@@ -74,8 +74,9 @@ router.get('/', function(req, res){
 router.get('/detail', function(req, res){
 
   var msgType = req.query.msgType;
+  var userId = req.session.userId;
 
-  if(!msgType){
+  if(!msgType || !userId){
     res.redirect('/');
     return 0;
   }

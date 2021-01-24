@@ -47,7 +47,7 @@ module.exports = {
                 <a class="dropdown-item" href="/sendMsg?msgType=mms">의정부구 선거</a>
               </div>
             </li>
-            <li><a href="/userInfo/address">전화번호목록</a></li>
+            <li><a href="/address">전화번호목록</a></li>
             ${authStatus}
             <li><a href="/services">고객센터</a></li>
             <li><a href="/userInfo/cash">충전</a></li>   
@@ -59,6 +59,7 @@ module.exports = {
       </div>
       </div>
     </header><!-- End Header --> 
+    ${alert}
     
     `
   },

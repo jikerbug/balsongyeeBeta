@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 var template = require('../views/template/template.js');
@@ -64,17 +63,6 @@ router.post('/processPayment', function(req, res){
 
 
 
-
-
-router.get('/address', function(req, res){
-  var feedback = '';
-  var header = template.header(feedback, auth.statusUI(req,res)); 
-  var footer = template.footer(); 
-  res.render('address', {
-            header: header,
-            footer: footer
-          });    
-})
 
 router.get('/myPage', function(req, res){
   var feedback = '';

@@ -347,6 +347,7 @@
   <script src="assets/js/fileAndSend.js"></script>
   <script src="assets/js/msgMmsContent.js"></script>
   <script src="assets/js/cash.js"></script>
+  <script src="assets/js/calendar.js"></script>
   
 
   <!-- external module-->
@@ -393,29 +394,6 @@
       $('#card-table').css("display","");
       setUser(document.getElementById("userNav"));
     }
-
-  </script>
-
-  <script id="phonenumList">
-
-    function addPhonenum(){
-      var phonenum = document.getElementById("name").value;
-      if(phonenum.length > 10){
-        $('#phonenumList').append('<option value="'+ phonenum +'">'+ phonenum +'</option>');
-        console.log(phonenum);
-      }
-    }
-
-    function deletePhonenum(){
-      var sel = document.getElementById("phonenumList");
-      var val = sel.options[sel.selectedIndex].value;
-      $("#phonenumList option[value='"+val+"']").remove();
-    }
-
-    function deleteAll(){
-      $('#phonenumList').children('option').remove();
-    }
-
 
   </script>
 

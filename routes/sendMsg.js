@@ -160,8 +160,9 @@ function processCashCheck(req,res) {
 
 
 function processSendList(req){
-
-  var resultList = supportSendMsg.processPhonenum(req);
+  //TODO: phonenumList에 이름이 추가되어 있을때 분기처리 나중에 추가
+  var resultList = JSON.parse(req.body.phonenumList);
+  console.log(resultList);
 
   //분할발송시 -> processDbQuery를 여러번 수행하는 것으로 구현!
   var splitMinutes = req.body.splitMinutes;
@@ -180,7 +181,6 @@ function processSendList(req){
       }
     }else{console.log("발생할일 없지만 그냥 오류처리")}
   }else{
-    console.log(resultList);
     processDbQuery(resultList, req, 0, 0, '일반');
   }
 }

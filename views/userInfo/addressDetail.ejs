@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>발송이 - 문자발송 서비스</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.ico" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="assets/css/custom.css" rel="stylesheet">
+
+  <!--w2ui-->
+  <link rel="stylesheet" type="text/css" href="assets/css/w2ui-custom.rc1.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/w2ui/w2ui-1.5.rc1.min.js"></script>
+
+  <!-- =======================================================
+  * Template Name: Kelly - v2.1.0
+  * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <%- header %>
+  <div class="section-title" id="background-custom" style="font-weight: bold; background-image: 'assets/img/3.jpg'; height: 250px;">
+    <h2 style="width: 100px; margin-left: 46%;">주소록</h2>
+  </div>
+
+  <section id="contact" class="contact">
+    <div class="container" data-aos="fade-up">
+
+      
+
+      <div class="row">
+
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+          <h2 style="font-weight: bold;">그룹 전화번호목록</h2>
+          
+          <div id="addressGroup">
+            <div id="groupPhonenumListGrid" style="width: 100%; height: 300px;"></div>
+            <button class="w2ui-btn" onclick="removeRecord();">선택 삭제</button>
+            <button class="w2ui-btn" onclick="removeRecord();">변경사항 저장</button>
+          </div>
+          <div style="height: 20px;"></div>
+          <h2 style="font-weight: bold;">파일로 불러온 번호목록</h2>
+          
+          <div id="addressGroup">
+            <div id="grid" style="width: 100%; height: 300px;"></div>
+            <button type="button" class="btn btn-outline-secondary" onclick="addGroup()">
+              <i class="bx bx-plus" style="color:#336CCB"></i>그룹 목록에 추가
+            </button> 
+            <button class="w2ui-btn" onclick="removeRecord();">선택삭제</button>
+            <button class="w2ui-btn" onclick="removeRecord();">전부삭제</button>
+          </div>
+
+          
+        </div>
+        <div class="col-lg-4">
+          <div style="height: 45px;"></div>
+          
+
+          <div class="form-group">
+            <div class="card-file">
+              <div class="card">
+                <div class="card-header">
+                    번호 직접 입력하기
+                </div>
+                <div class="card-body">
+                  <div class="custom-file">
+                    <div class="form-group">
+                      <input type="text" name="phonenum" class="form-control" id="phonenum" placeholder="수신번호( - 기호 생략)" style="width: 190px"/>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="name" class="form-control" id="name" placeholder="이름" style="width: 190px"/>
+                    </div>
+                    <button type="button" class="btn btn-outline-secondary" onclick="addGroup()">
+                      <i class="bx bx-plus" style="color:#336CCB"></i>추가
+                    </button> 
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="height: 135px;"></div>
+            <div class="card-file">
+              <div class="card">
+                <div class="card-header">
+                    엑셀 파일로 번호 가져오기
+                </div>
+                <div class="card-body">
+                  <p style="font-size: small;">A열과 B열에 정보가 위치해야합니다.</p>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="excelFile">
+                    <label class="custom-file-label" for="excelFile">파일 선택</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-file">
+              <div class="card">
+                <div class="card-header">
+                    텍스트 파일로 번호 가져오기
+                </div>
+                <div class="card-body">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="textFile">
+                    <label class="custom-file-label" for="textFile">파일 선택</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-file-header">
+                  파일 입력 안내
+                </div> 
+              </div>
+              <div class="card-body">
+                <div class="custom-file" style="font-weight:bold;">
+                  <p>최대 5만건까지 불러올 수 있습니다.</p>
+                  <p>010-1000-1000</p>
+                  <p>홍길동 010-1000-1000</p>
+                  <p>010-1000-1000 홍길동</p>
+                  <p>- 기호 생략가능합니다(01010001000 형식)</p>
+                  <p>엑셀파일의 경우, - 기호를 생략했을때<br>앞자리 0이 생략되어도 정상처리됩니다.<br>(1010001000형식)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div>
+
+    
+
+
+
+    </div>
+  </section>
+
+  
+
+
+  <%- footer %>
+  <div id="preloader"></div>
+
+  <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="assets/vendor/counterup/counterup.min.js"></script>
+  <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/venobox/venobox.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/addressDetail.js"></script>
+
+  <!-- 엑셀 module-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+
+</body>
+
+</html>

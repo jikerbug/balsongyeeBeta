@@ -1,17 +1,60 @@
-//------------달력---------------------//
-$(function () {
-  //이렇게 넣으면 초는 00으로 세팅해준다
-  //마리아db의 date포맷 : 2021-01-11 12:04:45()
-        $('#datetimepicker1').datetimepicker({
-          format:'YYYY-MM-DD HH:mm',
-          minDate: new Date()
-        });
-});
+
+
+//-----------------일반 입력---------------------------//
+
+function isPhonenumValid(phonenum) {
+  //전화번호 형식인지 체크 //직접입력, 텍스트 입력시 쓸것!
+  phonenum = phonenum.replace(/[-]/g,"");
+  var regPhone = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+  //var regPhone = /^(01[016789]{1}|070)[0-9]{3,4}[0-9]{4}$/;
+  if( regPhone.test($.trim(phonenum)) ) {
+    return phonenum;
+  } else {
+    return null;
+  }
+}
+
+function addPhonenum(){
+  var phonenum = document.getElementById("name").value;
+  phonenum = isPhonenumValid(phonenum);
+  if(phonenum){
+    var listInfo = $('#phonenumList').find('option').map(function() {
+      if(this.id == ""){
+        return $(this).val();
+      } 
+    }).get();
+    var isUniq = true;
+    for(var i = 0; i< listInfo.length;i++){
+      if(listInfo[i] == phonenum){
+        alert('중복된 번호입니다');
+        isUniq = false;
+        return;
+      }
+    }
+    if(isUniq){
+      $('#phonenumList').append('<option value="'+ phonenum +'">'+ phonenum +'</option>');
+    }
+  }else{
+    //TODO : 이름 있으면 추가로직 필요
+    alert('전화번호 형식이 올바르지 않습니다.')
+  }
+}
+function deletePhonenum(){
+  var sel = document.getElementById("phonenumList");
+  var val = sel.options[sel.selectedIndex].value;
+  $("#phonenumList option[value='"+val+"']").remove();
+}
+
+function deleteAll(){
+  $('#phonenumList').children('option').remove();
+}
 
 
 
 //--------------------전송----------------------//
 var sendImg = new FormData();
+var sendInfo = new Array(); 
+var id_key = 0;
 
 function isSenderValid(sender) {
   //전화번호 형식인지 체크 
@@ -119,18 +162,9 @@ $(function($) {
       msgType = "sms";
     }
 
-    ///전화번호 목록(일반등록)
-    var resultInfo = new Array();
-    var listInfo = $('#phonenumList').find('option').map(function() {
-      if(this.id == ""){
-        return $(this).val();
-      } 
-    }).get();
-    resultInfo.push(listInfo);
 
-
-    //전화번호 목록(파일 목록)
-    var fileInfo = $('#phonenumList').find('option').map(function() {
+    //전화번호 목록(파일 목록부터)
+    var resultInfo = $('#phonenumList').find('option').map(function() {
       if(this.id != ""){
         return sendInfo[this.id]; //하나의 list로 합쳐지는 이유는 map의 특성때문인듯
         //$(this).val()는 그냥 값이라 값째로 리스트에 들어가고
@@ -138,22 +172,31 @@ $(function($) {
       }  
     }).get();
 
+    ///전화번호 목록(일반등록)
+    var listInfo = $('#phonenumList').find('option').map(function() {
+      if(this.id == ""){
+        return $(this).val();
+      } 
+    }).get();
+    console.log('console.log(listInfo);');
+    console.log(listInfo);
+    for(var i=0;i<listInfo.length;i++){
+      //TODO : 이름 있을경우 처리하는 동작
+      resultInfo.push(listInfo[i]);
+    }
+    console.log(resultInfo);
+
+    var sendCnt = resultInfo.length;
+
 
     //----------------------잔여 코인 여부확인--------------------------///
     // 잔여 코인을 value값을 통해 프론트엔드에서 확인하면, html값 조작을 통해 가짜로 처리할 수 있게된다! 절대금지!!
     //----------------------잔여 코인 여부확인--------------------------///
 
 
-    //이제 resultInfo는 리스트에 있는 번호랑, 파일에 있는 번호를 모두 포함한다!
-    var sendCnt = fileInfo.length + listInfo.length;
-    resultInfo.push(fileInfo);
-    
-    console.log(resultInfo[0]);
-    console.log(resultInfo[1]);
 
-    var  ferror = false;
-    if (ferror) return false;
-    else var str = $(this).serialize();
+    
+
 
     var this_form = $('.php-email-form');
     
@@ -224,39 +267,6 @@ $(function($) {
       });
     }
   });
-});
-
-
-//--------------------발송전화번호----------------------//
-var sendInfo = new Array(); 
-var id_key = 0;
-
-function showInfo(){
-  var sel = document.getElementById("phonenumList");
-  var id = sel.options[sel.selectedIndex].id;
-
-  var showInfo = document.getElementById("showInfo").innerHTML
-
-  if(showInfo == "명단확인"){
-
-    $('#infoList').children('option').remove();
-    for(var i =0; i < sendInfo[id].length;i++){     
-      $('#infoList').append('<option value="'+ sendInfo[id][i] +'">'+ sendInfo[id][i] +'</option>');
-    }
-    $('#infoList').css("display","");
-    document.getElementById("showInfo").innerHTML = "숨기기"
-
-  }else{
-    $('#infoList').css("display","none");
-    document.getElementById("showInfo").innerHTML = "명단확인"
-  }
-
-}
-
-// 업로드한 파일이름을 추가
-$(".custom-file-input").on("change", function() {
-  var fileName = $(this).val().split("\\").pop();
-  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
 });
 
 
@@ -341,6 +351,12 @@ function addPhotoFromPhotoList(obj){
 
 //--------------------엑셀파일업로드----------------------//
 
+// 업로드한 파일이름을 추가
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
 
 const excelFile = document.getElementById('excelFile');
 excelFile.addEventListener('change', event => {
@@ -379,12 +395,13 @@ function readExcel(input) {
           let keyheader = Object.keys(rows[0]);
           if(keyheader.length == 1){
             //폰번호만 있을때
-            rows = Array.from( 
-              rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
-            );
+            // rows = Array.from( 
+            //   rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
+            // );
             var setCnt = rows.length;
             var duplicatedCnt = count - setCnt;
             var validCnt = onlyPhonenumExcelCnt(setCnt, rows, excelGroup, gridListGroup);
+            setCnt = count;
           }else if(keyheader.length == 2){
             //이름, 폰번호가 있을때
             //우선 이름-번호인지 번호-이름인지 체크
@@ -444,9 +461,9 @@ function onlyPhonenumExcelCnt(count, rows, excelGroup, gridListGroup) {
     if(phonenum){
       validCnt++;
       excelGroup.push(phonenum);  
-      gridListGroup.push({ recid: i+1, phonenum: '0'+phonenum})
+      gridListGroup.push({ recid: i+1, phonenum: phonenum})
     }else{
-      gridListGroup.push({ recid: i+1, phonenum: "잘못된번호:" + values[0]})
+      gridListGroup.push({ recid: i+1, phonenum: "잘못된번호:" + values[0], w2ui: {style:"background-color:#FF99CC;"}})
     }
   }
   return validCnt;
@@ -471,9 +488,10 @@ function phonenumWithNameExcelCnt(count, rows, excelGroup, gridListGroup, phonen
     if(phonenum){
       validCnt++;
       excelGroup.push(phonenum);  
-      gridListGroup.push({ recid: i+1, phonenum: '0'+phonenum, name: values[nameIdx]})
+      gridListGroup.push({ recid: i+1, phonenum: phonenum, name: values[nameIdx]})
     }else{
-      gridListGroup.push({ recid: i+1, phonenum: "잘못된번호:" + values[phonenumIdx], name:values[nameIdx]})
+      gridListGroup.push({ recid: i+1, phonenum: "잘못된번호:" + values[phonenumIdx]
+      , name:values[nameIdx], w2ui: {style:"background-color:#FF99CC;"}})
     }
   }
   return validCnt;
@@ -493,30 +511,19 @@ function phonenumFormattingExcel(phonenum){
   phonenum = phonenum.replace(/[^0-9]/g,"");
   console.log(phonenum)
   if(phonenum.length== 10 && phonenum.charAt(0) == '1'){
-    return phonenum;
+    return '0'+phonenum;
   }else if(phonenum.length==11 && phonenum.charAt(0) == '0' && phonenum.charAt(1) == '1'){
-    return phonenum.substr(1);
+    return phonenum;
   }else{
     return null;
   }
 }
 
-function isPhonenumValid(phonenum) {
-  //전화번호 형식인지 체크 //직접입력, 텍스트 입력시 쓸것!
-  phonenum = phonenum.replace(/[-]/g,"");
-  var regPhone = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
-  //var regPhone = /^(01[016789]{1}|070)[0-9]{3,4}[0-9]{4}$/;
-  if( regPhone.test($.trim(phonenum)) ) {
-    return true;
-  } else {
-    return false;
-  }
-}
 
 
 
 
-/*-----------------------------------폰목록 보여주기-----------------------------------*/
+/*-----------------------------------엑셀&텍스트 - 폰목록 보여주기-----------------------------------*/
 localStorage.removeItem('excelGroup'); 
 //새로고침하면 지워주기
 
@@ -529,6 +536,29 @@ function showPopup()
   }
   
 }
+
+function showInfo(){
+  var sel = document.getElementById("phonenumList");
+  var id = sel.options[sel.selectedIndex].id;
+
+  var showInfo = document.getElementById("showInfo").innerHTML
+  var gridListGroup = new Array();
+  if(showInfo == "명단확인"){
+
+    $('#infoList').children('option').remove();
+    for(var i =0; i < sendInfo[id].length;i++){     
+      gridListGroup.push({ recid: i+1, phonenum: sendInfo[id][i]})
+    }
+    localStorage.setItem("excelGroup",JSON.stringify(gridListGroup));
+    showPopup();
+
+  }else{
+    $('#infoList').css("display","none");
+    document.getElementById("showInfo").innerHTML = "명단확인"
+  }
+}
+
+
 
 
 

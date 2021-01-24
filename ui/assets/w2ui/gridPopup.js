@@ -1,15 +1,4 @@
 
-
-
-var test = [
-  { recid: 1, fname: "Peter", lname: "Jeremia" }
-];
-for(var i=2; i<50000;i++){
-  var json = { recid: i, fname: "Peter", lname: "Jeremia"}
-  test.push(json);
-}
-console.log('s');
-
 $(function () {
   groupList = localStorage.getItem('excelGroup');
   groupType = localStorage.getItem('groupType');

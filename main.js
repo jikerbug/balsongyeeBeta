@@ -37,6 +37,9 @@ app.use('/sendResult', express.static('ui'));
 app.use('/sendResult/detail', express.static(__dirname + '/ui'));
 //dirname쓰는게 더 안전하다는데? 이건 조사해보기
 
+app.use('/address', express.static('ui'));
+app.use('/address/detail', express.static(__dirname + '/ui'));
+
 
 
 app.use('/', express.static('ui')); //static을 무조건 ui에서 가져오는 거다
@@ -58,21 +61,13 @@ app.use(session({
 
 app.use(flash());
 
-//form-data가져오는 (이미지 전송위해) 라이브러리 
-//왜인지모르겠지만 로그인 안되는 문제 발생 -> sendMsg/processMms에서만 쓰자 / 추후에 문제생기면 multiparty쓰기
-//const formidableMiddleware = require('express-formidable');
-//app.use('/sendMsg/processMms', formidableMiddleware());
-//app.use(formidableMiddleware({
-//  uploadDir: './userSendImg',
-//}));
-
-
 
 var authRouter = require('./routes/auth');
 var indexRouter = require('./routes/index');
 var sendMsgRouter = require('./routes/sendMsg');
 var userInfoRouter = require('./routes/userInfo');
 var sendResultRouter = require('./routes/sendResult');
+var addressRouter = require('./routes/address');
 
 
 ///이게 session뒤에 있어야 적용된다!!!
@@ -80,6 +75,7 @@ app.use('/auth', authRouter);
 app.use('/sendMsg', sendMsgRouter); 
 app.use('/userInfo', userInfoRouter); 
 app.use('/sendResult', sendResultRouter); 
+app.use('/address', addressRouter); 
 app.use('/', indexRouter); 
 
 
