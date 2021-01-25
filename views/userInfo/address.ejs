@@ -64,14 +64,18 @@
               <input type="text" name="groupName" class="form-control" id="groupName" placeholder="추가할 그룹이름" 
                 style="width: 220px" required/>            
             </div>
-            <button type="submit" class="btn btn-outline-dark" onclick="addGroup()">
+            <button type="submit" class="btn btn-outline-dark">
               <i class="bx bx-plus" style="color:#336CCB"></i>그룹추가
             </button>
           </form>
-          <div id="groupGrid" style="width: 100%; height: 250px;"></div>     
-          <button type="button" class="btn btn-outline-info" onclick="addGroup()">전화번호목록보기</button>
+          <div id="groupGrid" style="width: 100%; height: 250px;"></div>
+          <form action="/addressDetail" style="display: inline;" method="get" onsubmit="return groupNameCheck()">
+            <input id="groupNameToSend" name="groupNameToSend" type='text' value="" style="display:none;"/>
+            <input id="groupIdx" name="groupIdx" type='text' value="" style="display:none;"/>
+            <button type="submit" class="btn btn-outline-info" >전화번호목록보기</button>
+          </form>     
           <button type="button" class="btn btn-outline-danger" onclick="removeGroup();">선택삭제</button>  
-          <a href="/address/detail"><button type="button" class="btn btn-outline-danger">상세보기</button></a>  
+          <button type="button" class="btn btn-outline-danger">상세보기</button>
           <div style="height: 20px;"></div>      
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12">

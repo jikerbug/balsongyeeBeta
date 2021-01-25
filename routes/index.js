@@ -12,8 +12,11 @@ var db = dbConn.balsongyeeDb(mysql);
 
 
 router.get('/', function(req, res){
-
+  var flashMsg = req.flash();
   var feedback = '';
+  if(flashMsg.error){
+    feedback = '<script>alert("' + flashMsg.error + '")</script>';
+  }
 
   var header = template.header(feedback, auth.statusUI(req,res)); 
   var footer = template.footer(); 

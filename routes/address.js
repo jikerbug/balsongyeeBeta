@@ -32,16 +32,6 @@ router.get('/', function(req, res){
 });
 
 
-router.get('/detail', function(req, res){
-  var feedback = '';
-  var header = template.header(feedback, auth.statusUI(req,res)); 
-  var footer = template.footer(); 
-  res.render('addressDetail', {
-            header: header,
-            footer: footer
-          });    
-});
-
 
 router.post('/getGroups', function(req, res){
   var userId = req.session.userId;
@@ -54,7 +44,8 @@ router.post('/getGroups', function(req, res){
       for(var i =0; i<results.length; i++){
         var groupName = results[i].groupName;
         var count = results[i].count;
-        sendList.push({ recid: i+1, groupName: groupName, count: count })
+        var idx = results[i].idx;
+        sendList.push({ recid: idx, groupName: groupName, count: count })
       }
       res.json(sendList);
     }else{
@@ -82,9 +73,24 @@ router.post('/addGroup', function(req, res){
         }); 
       }
     }); 
-    
   }
-  
+});
+
+router.post('/deleteGroup', function(req, res){
+  var userId = req.session.userId;
+  var groupName = req.body.groupName;
+
+  if(userId){
+    db.query('delete from address where userId = ? and groupName = ?', [userId,groupName], function (err, results, fields) {
+      if(err) console.log("err : "+err);
+
+      if(results.affectedRows == 1){
+        res.send('OK');
+      }else{
+        res.send('삭제할 그룹이 없습니다');  
+      }
+    }); 
+  }
 });
 
 

@@ -3224,7 +3224,7 @@ w2utils.event = {
         msgDelete       : 'Are you sure you want to delete selected records?',
         msgNotJSON      : 'Returned data is not in valid JSON format.',
         msgAJAXerror    : 'AJAX error. See console for more details.',
-        msgRefresh      : 'Refreshing...',
+        msgRefresh      : '로딩중...',
         msgNeedReload   : 'Your remote data source record count has changed, reloading from the first record.',
         msgEmpty        : '', // if not blank, then it is message when server returns no records
 
@@ -5258,7 +5258,7 @@ w2utils.event = {
             var obj = this;
             this.unlock();
             setTimeout(function () {
-                if (obj.show.statusResponse) obj.status(w2utils.lang('서버응답시간:') + ' ' + ((new Date()).getTime() - obj.last.xhr_start)/1000 +' ' + w2utils.lang('초'));
+                if (obj.show.statusResponse) obj.status('로딩완료');
             }, 10);
             this.last.pull_more    = false;
             this.last.pull_refresh = true;
@@ -10048,7 +10048,8 @@ w2utils.event = {
                     if (this.show.statusRecordID && sel.length == 1) {
                         var tmp = sel[0];
                         if (typeof tmp == 'object') tmp = tmp.recid + ', '+ w2utils.lang('Column') +': '+ tmp.column;
-                        msgLeft = w2utils.lang('Record ID') + ': '+ tmp + ' ';
+                        msgLeft ='';
+                        //msgLeft = w2utils.lang('Record ID') + ': '+ tmp + ' ';
                     }
                 }
                 $('#grid_'+ this.name +'_footer .w2ui-footer-left').html(msgLeft);
@@ -17806,7 +17807,7 @@ var w2prompt = function (label, title, callBack) {
 
         msgNotJSON    : 'Returned data is not in valid JSON format.',
         msgAJAXerror  : 'AJAX error. See console for more details.',
-        msgRefresh    : 'Refreshing...',
+        msgRefresh    : '로딩중...',
         msgSaving     : 'Saving...',
 
         get: function (field, returnIndex) {

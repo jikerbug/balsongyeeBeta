@@ -5,7 +5,7 @@
 function isPhonenumValid(phonenum) {
   //전화번호 형식인지 체크 //직접입력, 텍스트 입력시 쓸것!
   phonenum = phonenum.replace(/[-]/g,"");
-  var regPhone = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+  var regPhone = /^(01[016789]{1})[0-9]{4}[0-9]{4}$/;
   //var regPhone = /^(01[016789]{1}|070)[0-9]{3,4}[0-9]{4}$/;
   if( regPhone.test($.trim(phonenum)) ) {
     return phonenum;
@@ -401,7 +401,7 @@ function readExcel(input) {
             var setCnt = rows.length;
             var duplicatedCnt = count - setCnt;
             var validCnt = onlyPhonenumExcelCnt(setCnt, rows, excelGroup, gridListGroup);
-            setCnt = count;
+            setCnt = count;//이건 주석처리 해야 중복제거 제대로 가능!
           }else if(keyheader.length == 2){
             //이름, 폰번호가 있을때
             //우선 이름-번호인지 번호-이름인지 체크
@@ -430,7 +430,6 @@ function readExcel(input) {
             var duplicatedCnt = count - setCnt;
             var validCnt = phonenumWithNameExcelCnt(setCnt, rows, excelGroup, gridListGroup, phonenumIdx)
           }
-          console.log(rows)
           sendInfo.push(excelGroup);
         
           alert(`전체: ${count}건\n발송가능한 번호: ${validCnt}건\n잘못된 번호: ${setCnt - validCnt}건\n중복된 번호: ${duplicatedCnt}건`);
@@ -440,7 +439,7 @@ function readExcel(input) {
           var info = "엑셀파일" + validCnt + "명";
           $('#phonenumList').append('<option id=' +id_key+ ' value="'+ info +'">'+ info +'</option>');
           id_key++;
-          console.log(sendInfo);
+          //console.log(sendInfo);
 
           if(confirm('불러온 명단을 확인하시겠습니까?')){
             showPopup();
@@ -509,7 +508,7 @@ function phonenumFormattingExcel(phonenum){
   //앞자리가 1로 시작하기만 하면된다!!
   //시간 좀 줄이기 위해 정규식은 패스 & 오타도 바로잡아준다 ex) .01071891476
   phonenum = phonenum.replace(/[^0-9]/g,"");
-  console.log(phonenum)
+  //console.log(phonenum)
   if(phonenum.length== 10 && phonenum.charAt(0) == '1'){
     return '0'+phonenum;
   }else if(phonenum.length==11 && phonenum.charAt(0) == '0' && phonenum.charAt(1) == '1'){

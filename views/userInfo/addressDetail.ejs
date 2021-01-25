@@ -31,7 +31,7 @@
   <!--w2ui-->
   <link rel="stylesheet" type="text/css" href="assets/css/w2ui-custom.rc1.css" />
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script type="text/javascript" src="assets/w2ui/w2ui-1.5.rc1.min.js"></script>
+  <script type="text/javascript" src="assets/w2ui/w2ui-1.5.rc1.js"></script>
 
   <!-- =======================================================
   * Template Name: Kelly - v2.1.0
@@ -58,23 +58,23 @@
         <div class="col-lg-1">
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12">
-          <h2 style="font-weight: bold;">그룹 전화번호목록</h2>
+          <h2 style="font-weight: bold;"><%- groupName %> 그룹 전화번호목록</h2>
+          <input style="display: none;" id="groupIdx" value="<%- groupIdx %>"/>
           
           <div id="addressGroup">
-            <div id="groupPhonenumListGrid" style="width: 100%; height: 300px;"></div>
-            <button class="w2ui-btn" onclick="removeRecord();">선택 삭제</button>
-            <button class="w2ui-btn" onclick="removeRecord();">변경사항 저장</button>
+            <div id="groupGrid" style="width: 100%; height: 300px;"></div>
+            <button type="button" class="btn btn-outline-danger" onclick="deleteRecord();">선택 삭제</button>
           </div>
           <div style="height: 20px;"></div>
           <h2 style="font-weight: bold;">파일로 불러온 번호목록</h2>
           
-          <div id="addressGroup">
-            <div id="grid" style="width: 100%; height: 300px;"></div>
+          <div id="fileGroup">
+            <div id="fileGrid" style="width: 100%; height: 300px;"></div>
             <button type="button" class="btn btn-outline-secondary" onclick="addGroup()">
               <i class="bx bx-plus" style="color:#336CCB"></i>그룹 목록에 추가
             </button> 
-            <button class="w2ui-btn" onclick="removeRecord();">선택삭제</button>
-            <button class="w2ui-btn" onclick="removeRecord();">전부삭제</button>
+            <button type="button" class="btn btn-outline-danger" onclick="removeLoadedRecord();">선택삭제</button>
+            <button type="button" class="btn btn-outline-danger" onclick="removeLoadedRecordAll();">전부삭제</button>
           </div>
 
           
@@ -91,15 +91,21 @@
                 </div>
                 <div class="card-body">
                   <div class="custom-file">
-                    <div class="form-group">
-                      <input type="text" name="phonenum" class="form-control" id="phonenum" placeholder="수신번호( - 기호 생략)" style="width: 190px"/>
-                    </div>
-                    <div class="form-group">
-                      <input type="text" name="name" class="form-control" id="name" placeholder="이름" style="width: 190px"/>
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary" onclick="addGroup()">
-                      <i class="bx bx-plus" style="color:#336CCB"></i>추가
-                    </button> 
+                    <form action="/addressDetail/addPhonenum" style="display: inline;" method="post"
+                    onsubmit="return directPhonenumCheck()" >
+                      <div class="form-group">
+                        <input type="text" name="phonenum" class="form-control" id="phonenum" placeholder="수신번호( - 기호 생략)" 
+                        style="width: 190px" required/>
+                      </div>
+                      <div class="form-group">
+                        <input type="text" name="name" class="form-control" id="name" placeholder="이름(생략가능)" style="width: 190px"/>
+                      </div>
+                      <input name="groupNameToSend" type='text' value="<%- groupName %>" style="display:none;"/>
+                      <input name="groupIdx" type='text' value="<%- groupIdx %>" style="display:none;"/>
+                      <button type="submit" class="btn btn-outline-secondary">
+                        <i class="bx bx-plus" style="color:#336CCB"></i>그룹 목록에 추가
+                      </button> 
+                    </form>
                   </div>
                 </div>
               </div>

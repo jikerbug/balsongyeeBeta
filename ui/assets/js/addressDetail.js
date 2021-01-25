@@ -1,28 +1,55 @@
 
-function removeGroup() {
-  w2ui.groupPhonenumListGrid.delete(true);
+function directPhonenumCheck() {
+  var phonenum = document.getElementById('phonenum').value;
+  var regPhone = /^(01[016789]{1})[0-9]{4}[0-9]{4}$/;
+  //var regPhone = /^(01[016789]{1}|070)[0-9]{4}[0-9]{4}$/;
+  if( regPhone.test(phonenum)) {
+    return true;
+  } else {
+    alert('전화번호 형식이 올바르지 않습니다.')
+    return false;
+  }
 }
 
-function addGroup() {
-  var g = w2ui['grid'].records.length;
-  w2ui['grid'].add( { recid: g + 1, groupName: 'Jin', count: 'Franson'} );
+function deleteRecord() {
+  var selection = w2ui['groupGrid'].getSelection()
+  selection = Number.parseInt(selection[0])
+  var record = w2ui['groupGrid'].get(selection);
+
+  var groupIdx = document.getElementById('groupIdx').value;
+  w2ui.groupGrid.delete(this);
+  $.ajax({
+    type: "POST",
+    url: "/addressDetail/deletePhonenum",
+    data : {
+      "groupIdx": groupIdx,
+      "phonenum": record.phonenum
+    },
+    success: function(msg) {
+      if (msg == 'OK') {
+        alert('삭제가 완료되었습니다.');
+      } else {
+        alert(msg);
+      }
+    }
+  });
 }
 
 
 
 $(function () {
-  groupList = localStorage.getItem('excelGroup');
-  groupList = JSON.parse(groupList);
 
-  numberWithNameGrid(groupList)
-  groupPhonenumListGrid([])
-  
+  var groupIdx = document.getElementById('groupIdx').value;
+  groupGrid(groupIdx);
+
+  fileGrid([])
   
 });
 
-function groupPhonenumListGrid(groupList) {
-  $('#groupPhonenumListGrid').w2grid({
+function groupGrid(groupIdx) {
+  $('#groupGrid').w2grid({
     name: 'groupGrid',
+    url  : `/addressDetail/getPhonenumList?groupIdx=${groupIdx}`,
     header: 'List of Names',
     style: 'font-size:16px',
     show : {
@@ -33,18 +60,17 @@ function groupPhonenumListGrid(groupList) {
     searches : [
       { field:"phonenum",  caption:"전화번호", type:"text"},
       { field:"name", caption:"이름", type:"text" }
-  ],
+    ],
     columns: [
       { field: 'phonenum', caption: '전화번호', size: '30%' },
       { field: 'name', caption: '이름', size: '30%' },
-    ],
-    records: groupList
+    ]
 });
 }
 
-function numberWithNameGrid(groupList) {
-  $('#grid').w2grid({
-    name: 'grid',
+function fileGrid(groupList) {
+  $('#fileGrid').w2grid({
+    name: 'fileGrid',
     header: 'List of Names',
     show : {
         toolbar:true, 
@@ -69,7 +95,7 @@ function numberWithNameGrid(groupList) {
 function isPhonenumValid(phonenum) {
   //전화번호 형식인지 체크 //직접입력, 텍스트 입력시 쓸것!
   phonenum = phonenum.replace(/[-]/g,"");
-  var regPhone = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+  var regPhone = /^(01[016789]{1})[0-9]{4}[0-9]{4}$/;
   //var regPhone = /^(01[016789]{1}|070)[0-9]{3,4}[0-9]{4}$/;
   if( regPhone.test($.trim(phonenum)) ) {
     return phonenum;
@@ -184,7 +210,7 @@ function readExcel(input) {
             var setCnt = rows.length;
             var duplicatedCnt = count - setCnt;
             var validCnt = onlyPhonenumExcelCnt(setCnt, rows, excelGroup, gridListGroup);
-            setCnt = count;
+            setCnt = count; //되돌릴때는 이거 주석처리
           }else if(keyheader.length == 2){
             //이름, 폰번호가 있을때
             //우선 이름-번호인지 번호-이름인지 체크
@@ -213,7 +239,6 @@ function readExcel(input) {
             var duplicatedCnt = count - setCnt;
             var validCnt = phonenumWithNameExcelCnt(setCnt, rows, excelGroup, gridListGroup, phonenumIdx)
           }
-          console.log(rows)
           sendInfo.push(excelGroup);
         
           alert(`전체: ${count}건\n발송가능한 번호: ${validCnt}건\n잘못된 번호: ${setCnt - validCnt}건\n중복된 번호: ${duplicatedCnt}건`);
@@ -223,7 +248,7 @@ function readExcel(input) {
           var info = "엑셀파일" + validCnt + "명";
           $('#phonenumList').append('<option id=' +id_key+ ' value="'+ info +'">'+ info +'</option>');
           id_key++;
-          console.log(sendInfo);
+          //console.log(sendInfo);
 
           if(confirm('불러온 명단을 확인하시겠습니까?')){
             showPopup();
@@ -291,7 +316,6 @@ function phonenumFormattingExcel(phonenum){
   //앞자리가 1로 시작하기만 하면된다!!
   //시간 좀 줄이기 위해 정규식은 패스 & 오타도 바로잡아준다 ex) .01071891476
   phonenum = phonenum.replace(/[^0-9]/g,"");
-  console.log(phonenum)
   if(phonenum.length== 10 && phonenum.charAt(0) == '1'){
     return '0'+phonenum;
   }else if(phonenum.length==11 && phonenum.charAt(0) == '0' && phonenum.charAt(1) == '1'){

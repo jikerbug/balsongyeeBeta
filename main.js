@@ -38,7 +38,7 @@ app.use('/sendResult/detail', express.static(__dirname + '/ui'));
 //dirname쓰는게 더 안전하다는데? 이건 조사해보기
 
 app.use('/address', express.static('ui'));
-app.use('/address/detail', express.static(__dirname + '/ui'));
+app.use('/addressDetail', express.static(__dirname + '/ui'));
 
 
 
@@ -68,6 +68,7 @@ var sendMsgRouter = require('./routes/sendMsg');
 var userInfoRouter = require('./routes/userInfo');
 var sendResultRouter = require('./routes/sendResult');
 var addressRouter = require('./routes/address');
+var addressDetailRouter = require('./routes/addressDetail');
 
 
 ///이게 session뒤에 있어야 적용된다!!!
@@ -76,6 +77,7 @@ app.use('/sendMsg', sendMsgRouter);
 app.use('/userInfo', userInfoRouter); 
 app.use('/sendResult', sendResultRouter); 
 app.use('/address', addressRouter); 
+app.use('/addressDetail', addressDetailRouter); 
 app.use('/', indexRouter); 
 
 

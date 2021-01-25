@@ -60,7 +60,6 @@ module.exports = {
       </div>
     </header><!-- End Header --> 
     ${alert}
-    
     `
   },
   footer:function() {
