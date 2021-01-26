@@ -17,7 +17,7 @@ const db = lowdb(adapter);
 
 
 //use:사용자의 요청이 있을때마다 실행하도록 약속되어있음
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true, limit: '50mb'}));
 
 //app.use(helmet());
 

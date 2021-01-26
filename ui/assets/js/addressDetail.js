@@ -1,38 +1,62 @@
 
-var wrongNumList = [];
+var wrongNumList = [];//얘는 3번째 그리드에 넣는 값임!
+
 //파일을 넘겨줘서 입력해야 중복이 적다. setList는 그냥 중복 몇개인지 확인용이고
-//어차피 db에서 중복처리 해줄것이다! (primaryKey니까);
-var fileGridList;
+//어차피 db에서 중복처리 해줄것이다! (primaryKey니까); 
+var resultList;
 
 ///!!!!!!!!!!!!!!!!!!!!!!!!!request entity too large 때문에 ajax후 refresh로 구현하기로 하자!
 
 $("#btn-addfileList").on('click', (function(e) {
 	e.preventDefault();
   if(!phonenumListCheck()) return;
+
+  console.log(resultList);
   
-  document.getElementById("phonenumList").value = JSON.stringify(fileGridList)
+  document.getElementById("phonenumList").value = JSON.stringify(resultList)
 	$('#addfileList')[0].submit();
-  })
+})
+  
 );
+
+
+var getDups = (arr) => {
+  var foundOnce = new Set();
+  var foundTwice = new Set();
+  arr.forEach((item) => {
+    if (foundOnce.has(item.phonenum)) {
+      foundTwice.add(item.phonenum);
+    }
+    foundOnce.add(item.phonenum);
+  });
+  console.log(foundTwice);
+  return foundTwice;
+};
 
 function phonenumListCheck() {
 
-  fileGridList = w2ui['fileGrid'].records;
+  var fileGridList = w2ui['fileGrid'].records;
+  if(fileGridList.length == 0){
+    alert('추가할 번호가 없습니다.')
+    return false;
+  }
   var groupGridList = w2ui['groupGrid'].records;
 
-  mergedList = groupGridList.concat(fileGridList);
-  setList = Array.from(
-    mergedList.reduce((m, t) => m.set(t.phonenum, t), new Map()).values()
-  );
+  var mergedList = groupGridList.concat(fileGridList);
+  var dupSet = getDups(mergedList);
+  resultList = fileGridList.filter(item => !dupSet.has(item.phonenum));
 
+  console.log(dupSet);
+ 
   var fileCnt = fileGridList.length;
-  var mergedCnt = mergedList.length;
-  var setCnt = setList.length;
-  var duplicatedCnt = mergedCnt - setCnt;
-  var validCnt = fileCnt-duplicatedCnt;
+  var validCnt = resultList.length;
+  var duplicatedCnt = dupSet.size; 
+  //duplicatedCnt는 종류의 개수이다. 따라서 불러온 목록중 중복된 번호가 추가로 지워졌다면 cnt에 포함되지 않는다.
+  //따라서 아래와 같이 계산한다. (validCnt = fileCnt - duplicatedCnt - fromFileDupCnt)
+  var fromFileDupCnt = fileCnt - validCnt - duplicatedCnt
 
-  if(confirm(`전체: ${fileCnt}건\n등록 가능한 번호: ${validCnt}건\n그룹과 중복된 번호: ${
-    duplicatedCnt}건\n그룹에 번호를 등록하시겠습니까?`)){
+  if(confirm(`전체: ${fileCnt}건\n등록 가능한 번호: ${validCnt}건\n그룹 목록과 중복된 번호: ${
+    duplicatedCnt}건\n불러온 목록중 중복된 번호: ${fileCnt - validCnt - duplicatedCnt}건\n그룹에 번호를 등록하시겠습니까?`)){
     return true;
   }else{
     return false;
@@ -197,13 +221,13 @@ function readExcel(input) {
           let keyheader = Object.keys(rows[0]);
           if(keyheader.length == 1){
             //폰번호만 있을때
-            // rows = Array.from( 
-            //   rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
-            // );
+            rows = Array.from( 
+              rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
+            );
             var setCnt = rows.length;
             var duplicatedCnt = count - setCnt;
             var validCnt = onlyPhonenumExcelCnt(setCnt, rows, excelGroup, fileGridList);
-            setCnt = count; //되돌릴때는 이거 주석처리
+            // setCnt = count; //되돌릴때는 이거 주석처리
           }else if(keyheader.length == 2){
             //이름, 폰번호가 있을때
             //우선 이름-번호인지 번호-이름인지 체크
@@ -233,15 +257,20 @@ function readExcel(input) {
             var validCnt = phonenumWithNameExcelCnt(setCnt, rows, excelGroup, fileGridList, phonenumIdx)
           }
         
-          alert(`전체: ${count}건\n발송가능한 번호: ${validCnt}건\n잘못된 번호: ${setCnt - validCnt}건\n중복된 번호: ${duplicatedCnt}건`);
+          alert(`전체: ${count}건\n등록가능한 번호: ${validCnt}건\n잘못된 번호: ${setCnt - validCnt}건\n중복된 번호: ${duplicatedCnt}건`);
           
           //console.log(fileGridList);
           w2ui['fileGrid'].add(fileGridList);
           w2ui['wrongGrid'].add(wrongNumList);
+          wrongNumList = [];//이렇게 해줘야 기존 것이 중복해서 추가되는일 없음!
       });
   };
   reader.readAsBinaryString(input.files[0]);
 }
+
+///하단의 두 grid 추가시 순서 맞춰주기 위함! (삭제 기능 구현위해서 recid다 달라야한다!)
+var fileRecid = 1;
+var wrongRecid = 1;
 
 function onlyPhonenumExcelCnt(count, rows, excelGroup, fileGridList) {
   var validCnt = 0;
@@ -253,9 +282,9 @@ function onlyPhonenumExcelCnt(count, rows, excelGroup, fileGridList) {
     if(phonenum){
       validCnt++;
       excelGroup.push(phonenum);  
-      fileGridList.push({ recid: i+1, phonenum: phonenum, name: "이름없음"})
+      fileGridList.push({ recid: fileRecid++, phonenum: phonenum, name: "이름없음"})
     }else{
-      wrongNumList.push({ recid: i+1, phonenum: "잘못된번호:" + values[0],w2ui: {style:"background-color:#FF99CC;"}})
+      wrongNumList.push({ recid: wrongRecid++, phonenum: "잘못된번호:" + values[0], name:"이름없음", w2ui: {style:"background-color:#FF99CC;"}})
     }
   }
   return validCnt;
@@ -277,9 +306,9 @@ function phonenumWithNameExcelCnt(count, rows, excelGroup, fileGridList, phonenu
     if(phonenum){
       validCnt++;
       excelGroup.push(phonenum);  
-      fileGridList.push({ recid: i+1, phonenum: phonenum, name: values[nameIdx]});
+      fileGridList.push({ recid: fileRecid++, phonenum: phonenum, name: values[nameIdx]});
     }else{
-      wrongNumList.push({ recid: i+1, phonenum: "잘못된번호:" + values[phonenumIdx]
+      wrongNumList.push({ recid: wrongRecid++, phonenum: "잘못된번호:" + values[phonenumIdx]
       , name:values[nameIdx], w2ui: {style:"background-color:#FF99CC;"}});
     }
   }

@@ -12,3 +12,6 @@ var fileGridList = w2ui['fileGrid'].records;
 
 
   wrongNumList대신에 spamList를 추가하면 되는거다!!
+
+  ///
+음,,,, 아니면!! addressDetail에서 중복제거할때 사용했던 filter를 써보 좋을듯!

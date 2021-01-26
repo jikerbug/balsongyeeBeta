@@ -107,7 +107,7 @@ router.post('/addPhonenum', function(req, res){
       if(results[0].userId == id){
         db.query('insert into addressDetail(groupIdx, phonenum, name, addedDate) values(?,?,?,NOW())', [groupIdx, phonenum, name], function (err, results, fields) {
           if(err){
-            console.log("err : "+err);
+            console.log("err but just designed dup restrict logic: "+err);
             err += "";
             var errType = err.split(' ')[1];
             if(errType == 'ER_DUP_ENTRY:'){
@@ -148,18 +148,40 @@ router.post('/deletePhonenum', function(req, res){
 
 router.post('/addPhonenumList', function(req, res){
   var id = req.session.userId;
+  var groupIdx = req.body.groupIdx;
   var resultList = JSON.parse(req.body.phonenumList);
-  
-  console.log(resultList);
 
 
   if(!id){
     res.redirect('/');
-    return;
   }
 
+  db.query('select userId from address where idx = ?', [groupIdx], function (err, results, fields) {
+    if(err) console.log("err : "+err);
+    if(results[0]){
+      if(results[0].userId == id){
+          var sql = `INSERT INTO addressDetail(groupIdx, phonenum, name, addedDate)
+          VALUES (${groupIdx},?,?,NOW());`;
+                    
+          var sqls = "";
+          resultList.forEach(function(item){
+            sqls += mysql.format(sql, [item.phonenum, item.name]);
+          });
 
-  
+          console.log(sqls);
+          db.query(sqls,
+            function (err, results, fields) {
+            if (err) console.log("err but just designed dup restrict logic: "+err);
+            console.log("입력완료");
+            res.redirect(`/addressDetail?groupIdx=${groupIdx}`);
+          });
+      }else{
+        res.redirect('/');
+      }
+    }else{
+      res.redirect('/');
+    }
+  });
 });
 
 
