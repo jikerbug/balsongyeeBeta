@@ -43,23 +43,18 @@ function removeGroup(){
   }
 }
 
-function groupNameCheck() {
+function groupIdxCheck() {
   var selection = w2ui['groupGrid'].getSelection()
   selection = Number.parseInt(selection[0])
   
   if(selection){
     var record = w2ui['groupGrid'].get(selection);
-    var groupNameToSend = record.groupName;
-    
     var groupIdx = record.recid;
     groupIdx = groupIdx.toString();
-    document.getElementById("groupNameToSend").value = groupNameToSend;
     document.getElementById("groupIdx").value = groupIdx;
     return true;
   }else{
     alert('그룹을 선택해주세요')
     return false;
   }
-
-
 }

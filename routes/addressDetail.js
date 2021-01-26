@@ -12,17 +12,17 @@ var db = dbConn.balsongyeeDb(mysql);
 
 router.get('/', function(req, res){
   var id = req.session.userId;
-  var groupName = req.query.groupNameToSend;
   var groupIdx = req.query.groupIdx;
 
 
-  if(id && groupName && groupIdx){//그룹명이 있어야한다
-    db.query('select userId from address where idx = ?', [groupIdx], function (err, results, fields) {
+  if(id && groupIdx){//그룹식별idx가 있어야한다
+    db.query('select * from address where idx = ?', [groupIdx], function (err, results, fields) {
       if(err) console.log("err : "+err);
       //없으면 null이 아니라 빈 리스트 리턴해주는 구나...
       if(results[0]){
         if(results[0].userId == id){
           var flashMsg = req.flash();
+          var groupName = results[0].groupName;
           var feedback = '';
           if(flashMsg.error){
             feedback = '<script>alert("' + flashMsg.error + '")</script>';
@@ -64,7 +64,7 @@ router.post('/getPhonenumList', function(req, res){
     if(err) console.log("err : "+err);
     if(results[0]){
       if(results[0].userId == id){
-        db.query('select * from addressDetail where groupIdx = ? order by addedDate desc', [groupIdx], function (err, results, fields) {
+        db.query('select * from addressDetail where groupIdx = ? order by addedDate', [groupIdx], function (err, results, fields) {
           if(err) console.log("err : "+err);
           //없으면 null이 아니라 빈 리스트 리턴해주는 구나...
           if(results.length){//없으면 0이나와서 아래의 else문으로...
@@ -90,7 +90,6 @@ router.post('/getPhonenumList', function(req, res){
 router.post('/addPhonenum', function(req, res){
   var id = req.session.userId;
   var groupIdx = req.body.groupIdx;
-  var groupName = req.body.groupNameToSend;
   var phonenum = req.body.phonenum;
   var name = req.body.name;
   if(!name){
@@ -115,7 +114,7 @@ router.post('/addPhonenum', function(req, res){
               req.flash('error', '이미 존재하는 번호입니다.')
             }
           } 
-          res.redirect(`/addressDetail?groupNameToSend=${groupName}&groupIdx=${groupIdx}`);
+          res.redirect(`/addressDetail?groupIdx=${groupIdx}`);
         });  
       }else{
         res.redirect('/');
@@ -146,6 +145,22 @@ router.post('/deletePhonenum', function(req, res){
   }
 });
 
+
+router.post('/addPhonenumList', function(req, res){
+  var id = req.session.userId;
+  var resultList = JSON.parse(req.body.phonenumList);
+  
+  console.log(resultList);
+
+
+  if(!id){
+    res.redirect('/');
+    return;
+  }
+
+
+  
+});
 
 
 

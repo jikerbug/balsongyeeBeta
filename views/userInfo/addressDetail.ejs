@@ -70,12 +70,20 @@
           
           <div id="fileGroup">
             <div id="fileGrid" style="width: 100%; height: 300px;"></div>
-            <button type="button" class="btn btn-outline-secondary" onclick="addGroup()">
-              <i class="bx bx-plus" style="color:#336CCB"></i>그룹 목록에 추가
-            </button> 
+            <form id='addfileList' action="/addressDetail/addPhonenumList" style="display: inline;" method="post">
+              <input name="groupIdx" type='text' value="<%- groupIdx %>" style="display:none;"/>
+              <input type="hidden" id="phonenumList" name="phonenumList" value="" />
+              <button id="btn-addfileList" type="submit" class="btn btn-outline-secondary">
+                <i class="bx bx-plus" style="color:#336CCB"></i>그룹 목록에 추가
+              </button> 
+            </form>
             <button type="button" class="btn btn-outline-danger" onclick="removeLoadedRecord();">선택삭제</button>
             <button type="button" class="btn btn-outline-danger" onclick="removeLoadedRecordAll();">전부삭제</button>
           </div>
+
+          <div style="height: 20px;"></div>
+          <h2 style="font-weight: bold;">잘못된 번호목록</h2>
+          <div id="wrongGrid" style="width: 100%; height: 300px;"></div>
 
           
         </div>
@@ -100,7 +108,6 @@
                       <div class="form-group">
                         <input type="text" name="name" class="form-control" id="name" placeholder="이름(생략가능)" style="width: 190px"/>
                       </div>
-                      <input name="groupNameToSend" type='text' value="<%- groupName %>" style="display:none;"/>
                       <input name="groupIdx" type='text' value="<%- groupIdx %>" style="display:none;"/>
                       <button type="submit" class="btn btn-outline-secondary">
                         <i class="bx bx-plus" style="color:#336CCB"></i>그룹 목록에 추가
