@@ -125,6 +125,14 @@ function processCashCheck(req,res) {
   var id = req.session.userId
 
   var resultList = JSON.parse(req.body.phonenumList);
+
+  var sendAddressGroup = JSON.parse(req.body.sendAddressGroup);
+  if(sendAddressGroup.length > 0){
+    console.log('그룹이 왔어요~');
+    //여기서 디비에서 다 꺼내와서 어쩌구 하면 너무 오래걸릴듯,,,,
+    //일단 그룹에 몇명있는지만 파악하고, 그걸로 코인을 차감한 뒤에
+    //이때 중복될 경우에는, 코인을 다시 충전해주자
+  }
   
   resultList = Array.from( 
     resultList.reduce((m, t) => m.set(t, t), new Map()).values()

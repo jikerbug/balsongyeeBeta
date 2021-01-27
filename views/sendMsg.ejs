@@ -28,6 +28,12 @@
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
 
+  <!--w2ui-->
+  <link rel="stylesheet" type="text/css" href="assets/css/w2ui-custom.rc1.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/w2ui/w2ui-1.5.rc1.js"></script>
+
+
   <!-- =======================================================
   * Template Name: Kelly - v3.0.0
   * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
@@ -113,10 +119,9 @@
             <button type="button" class="btn btn-outline-danger" onclick="deletePhonenum()">삭제</button>
             <button type="button" class="btn btn-outline-danger" onclick="deleteAll()">전체삭제</button>
             <button type="button" class="btn btn-outline-info" onclick="showInfo()" id="showInfo">명단확인</button>
-            <div type="button" style='height: 100px;'></div>
-            <input type="button" style='width: 153px;'class="btn btn-outline-info" value="주소록 불러오기" onclick="showPopup();" />
-
-            <div style="margin-top: 50px;"></div>
+            <div style="margin-top: 33px;"></div>
+            <div id="groupGrid" style="width: 100%; height: 200px; "></div>
+            <div style="margin-top: 10px;"></div>
 
             <div class="form-check mb-2">
               <input class="form-check-input" type="checkbox" id="reserveSend">
@@ -133,7 +138,6 @@
                 </div> 
               </div> 
             </div>
-
             <div class="form-check mb-2">
               <input class="form-check-input" type="checkbox" id="splitSend">
               <label class="form-check-label" for="termSend">
@@ -151,8 +155,6 @@
                 건씩 
               </div>
             </div>
-
-
           </div>
 
           <div class="col-lg-4">
@@ -185,7 +187,7 @@
                   </div>
                 </div>
               </div>
-              <div class="card">
+              <div class="card" id="fileInputInfo">
                 <div class="card-header">
                   <div class="card-file-header">
                     파일 입력 안내
@@ -194,18 +196,15 @@
                 <div class="card-body">
                   <div class="custom-file" style="font-weight:bold;">
                     <p>최대 5만건까지 불러올 수 있습니다.</p>
-                    <p>010-1000-1000</p>
-                    <p>홍길동 010-1000-1000</p>
-                    <p>010-1000-1000 홍길동</p>
-                    <p>- 기호 생략가능합니다(01010001000 형식)</p>
-                    <p>엑셀파일의 경우, - 기호를 생략했을때<br>앞자리 0이 생략되어도 정상처리됩니다.<br>(1010001000형식)</p>
+                    <p>010-xxxx-xxxx</p>
+                    <p>홍길동 010-xxxx-xxxx</p>
+                    <p>010-xxxx-xxxx 홍길동</p>
+                    <p>- 기호 생략가능합니다(010xxxxxxxx 형식)</p>
+                    <p>엑셀파일의 경우, - 기호를 생략했을때<br>앞자리 0이 생략되어도 정상처리됩니다.<br>(10xxxxxxxx형식)</p>
                       
                   </div>
                 </div>
               </div>
-
-                  
-              
             </div>
           </div>
           
@@ -318,7 +317,6 @@
   <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
   <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>

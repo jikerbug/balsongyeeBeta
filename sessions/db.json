@@ -15,30 +15,6 @@
     "expires": 1611757801208
   },
   {
-    "_id": "LYSM5kRMxur4a3FUU6CP6Hr-LyPknEGP",
-    "session": {
-      "cookie": {
-        "originalMaxAge": null,
-        "expires": null,
-        "httpOnly": true,
-        "path": "/"
-      }
-    },
-    "expires": 1611754701050
-  },
-  {
-    "_id": "j6so8FwP5N4AWNTh7Zf7oFVKyqolhJzZ",
-    "session": {
-      "cookie": {
-        "originalMaxAge": null,
-        "expires": null,
-        "httpOnly": true,
-        "path": "/"
-      }
-    },
-    "expires": 1611755436469
-  },
-  {
     "_id": "vHbvvK8zHQkIKxSgmROl2REb-1zZhfy2",
     "session": {
       "cookie": {
@@ -90,7 +66,7 @@
       "is_logined": true,
       "userId": "wlqor98"
     },
-    "expires": 1611837286854
+    "expires": 1611844077656
   },
   {
     "_id": "ecW-nyWiXHoxKPgqE5LcJ44kVhpWIotc",

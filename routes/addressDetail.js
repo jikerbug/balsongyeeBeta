@@ -104,6 +104,7 @@ router.post('/addPhonenum', function(req, res){
     if(err) console.log("err : "+err);
     if(results[0]){
       if(results[0].userId == id){
+        var addressCnt = results[0].count
         db.query('insert into addressDetail(groupIdx, phonenum, name) values(?,?,?)', [groupIdx, phonenum, name], function (err, results, fields) {
           if(err){
             console.log("err but just designed dup restrict logic: "+err);
@@ -113,7 +114,7 @@ router.post('/addPhonenum', function(req, res){
               req.flash('error', '이미 존재하는 번호입니다.')
             }
           }else{
-            db.query('update address set count = ? where idx= ?', [results[0].count + 1,groupIdx], function (err, results, fields) {
+            db.query('update address set count = ? where idx= ?', [addressCnt + 1,groupIdx], function (err, results, fields) {
               res.redirect(`/addressDetail?groupIdx=${groupIdx}`);
             });
           } 

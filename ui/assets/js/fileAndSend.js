@@ -54,6 +54,7 @@ function deleteAll(){
 //--------------------전송----------------------//
 var sendImg = new FormData();
 var sendInfo = new Array(); 
+var sendAddressGroup = new Array();
 var id_key = 0;
 
 function isSenderValid(sender) {
@@ -73,8 +74,14 @@ $(function($) {
   $('.php-email-form .submitButton').on("click",function() {
 
     //------------------------엑셀파일끼리 중복제거는 서버에서 진행!!------------//
+    var sendlen = document.getElementById("phonenumList").length;
+    if(sendlen == 0){
+      alert('발송할 번호를 추가해주세요');
+      return;
+    }
 
-    console.log(sendImg.get('file'));
+    console.log(sendAddressGroup);
+    //console.log(sendImg.get('file'));
 
     //페이지타입
     var pageType = document.getElementById("pageType").value;
@@ -215,6 +222,7 @@ $(function($) {
       data.append('reservedDate', reservedDate);
       data.append('splitMinutes', splitMinutes);
       data.append('countPerSplit', countPerSplit);
+      data.append('sendAddressGroup', JSON.stringify(sendAddressGroup));
       $.ajax({
         type : "POST",
         url : "/sendMsg/processMms",
@@ -248,7 +256,8 @@ $(function($) {
         "sendCnt": sendCnt,
         'reservedDate': reservedDate,
         'splitMinutes': splitMinutes,
-        'countPerSplit':countPerSplit
+        'countPerSplit':countPerSplit,
+        'sendAddressGroup':JSON.stringify(sendAddressGroup)
         },
         success: function(msg) {
           if (msg == 'OK') {
@@ -529,32 +538,87 @@ function showPopup()
   } catch(e){
     alert( "팝업차단 설정을 풀어주세요." ); 
   }
-  
+}
+
+function showPopupAddressDetail() 
+{           
+  try { 
+    window.open("assets/w2ui/gridPopupAddressDetail.html", "a", "width=500, height=405, left=100, top=50").focus();  
+  } catch(e){
+    alert( "팝업차단 설정을 풀어주세요." ); 
+  }
 }
 
 function showInfo(){
   var sel = document.getElementById("phonenumList");
   var id = sel.options[sel.selectedIndex].id;
 
-  var showInfo = document.getElementById("showInfo").innerHTML
   var gridListGroup = new Array();
-  if(showInfo == "명단확인"){
 
-    $('#infoList').children('option').remove();
+  if(Number.isInteger(+id)){
     for(var i =0; i < sendInfo[id].length;i++){     
       gridListGroup.push({ recid: i+1, phonenum: sendInfo[id][i]})
     }
     localStorage.setItem("excelGroup",JSON.stringify(gridListGroup));
     showPopup();
-
   }else{
-    $('#infoList').css("display","none");
-    document.getElementById("showInfo").innerHTML = "명단확인"
+    var groupIdxUrl = id.split('-')[0];
+    console.log(groupIdxUrl);
+    localStorage.setItem("groupIdxUrl",groupIdxUrl);
+    showPopupAddressDetail();
   }
 }
 
 
+/*-----------------------------grid관련-----------------------*/
+
+function showAddress() {
+  document.getElementById('groupGrid').style.display = "";
+}
 
 
+$('#groupGrid').w2grid({
+  name: 'groupGrid',
+  url  : '/address/getGroups',
+  header: 'List of Names',
+  style: 'font-size:16px',
+  show : {
+      toolbar:true, 
+      footer:true
+  }, 
+  multiSearch:false,
+  searches : [
+    { field:"groupName",  caption:"그룹명", type:"text"},
+    { field:"count", caption:"인원수", type:"text" }
+  ],
+  columns: [
+    { field: 'groupName', caption: '그룹명', size: '60%' },
+    { field: 'count', caption: '인원수', size: '40%' },
+  ]
+});
+
+w2ui.groupGrid.on('click', function(event) {
+  event.onComplete = function () {
+      var selection = w2ui['groupGrid'].getSelection();//언제나 하나만 리턴한다.리스트로 받을 걱정 ㄴㄴ
+      selection = Number.parseInt(selection[0]);
+      if(selection){ 
+        var record = w2ui['groupGrid'].get(selection);
+        
+        if(confirm(`${record.groupName}의 전화번호목록을 가져오시겠습니까?`)){
+          if(record.count > 0){
+            var info = `${record.groupName} 그룹 ${record.count}명`;
+            $('#phonenumList').append(`<option id="${record.recid}-${record.groupName}" value="${info}">${info}</option>`);
+            sendAddressGroup.push(record.recid);
+            console.log(sendAddressGroup);
+          }else{
+            alert('가져올 전화번호가 없습니다.')
+          }
+          
+        }
+      
+      }
+      
+  }
+});
 
 

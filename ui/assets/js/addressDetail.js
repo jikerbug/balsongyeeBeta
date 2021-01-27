@@ -107,7 +107,6 @@ $(function () {
 
   var groupIdxUrl = document.getElementById('groupIdx').value;
   groupGrid(groupIdxUrl);
-
   fileGrid();
   wrongGrid();
 });

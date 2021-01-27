@@ -27,9 +27,10 @@ function removeGroup(){
     alert('삭제할 그룹을 선택해주세요');
     return;
   }
-  if(confirm('등록된 전화번호가 전부 삭제됩니다. 삭제하시겠습니까?')){
+  var record = w2ui['groupGrid'].get(selection);//언제나 하나만 리턴한다.리스트로 받을 걱정 ㄴㄴ
+  if(confirm(`${record.groupName}에 등록된 전화번호가 전부 삭제됩니다. 삭제하시겠습니까?`)){
     /////address삭제시 ON DELETE CASCADE에의해, addressDetail에 등록되었던 튜플 전부삭제된다
-    var record = w2ui['groupGrid'].get(selection);
+    
     w2ui.groupGrid.delete(this);
     $.ajax({
       type: "POST",
