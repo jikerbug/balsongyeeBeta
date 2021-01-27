@@ -72,6 +72,8 @@ function isSenderValid(sender) {
 $(function($) {
   $('.php-email-form .submitButton').on("click",function() {
 
+    //------------------------엑셀파일끼리 중복제거는 서버에서 진행!!------------//
+
     console.log(sendImg.get('file'));
 
     //페이지타입

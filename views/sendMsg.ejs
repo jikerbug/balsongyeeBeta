@@ -52,6 +52,7 @@
       <p>1. 로그인 2. 080번호 발급 완료 3. 발신번호 등록 완료 4. 발송코인 충전 5. 발송</p>
       <p>90자 이하는 단문발송, 90자 초과는 장문발송됩니다</p>
       <p>장문 입력시 메세지를 먼저 입력하시고 제목을 입력해주세요</p>
+      <p>중복된 번호가 발송될 경우, 한번만 발송되며 코인도 한번만 차감됩니다</p>
       <a href="" class="btn-about">O8O번호 발급</a>
       <a href="" class="btn-about">발신번호 등록</a>
     </div>
@@ -112,7 +113,8 @@
             <button type="button" class="btn btn-outline-danger" onclick="deletePhonenum()">삭제</button>
             <button type="button" class="btn btn-outline-danger" onclick="deleteAll()">전체삭제</button>
             <button type="button" class="btn btn-outline-info" onclick="showInfo()" id="showInfo">명단확인</button>
-            <input type="button" class="btn btn-outline-info" value="마지막 추가 파일 명단확인" onclick="showPopup();" />
+            <div type="button" style='height: 100px;'></div>
+            <input type="button" style='width: 153px;'class="btn btn-outline-info" value="주소록 불러오기" onclick="showPopup();" />
 
             <div style="margin-top: 50px;"></div>
 

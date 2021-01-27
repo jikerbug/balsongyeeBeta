@@ -89,14 +89,14 @@ router.get('/', function(req, res){
 
 router.post('/processMms',upload.single('file') , function(req, res){
 
-  console.log(req.file);
-  console.log(req.body);
+  //console.log(req.file);
+  //console.log(req.body);
 
 
   if(req.body.passwd == '3456'){
 
     console.log(req.body.passwd);
-    console.log(req.body.phonenumList);
+    //console.log(req.body.phonenumList);
     processCashCheck(req, res);
 
   }else{
@@ -108,9 +108,7 @@ router.post('/processMms',upload.single('file') , function(req, res){
 
 router.post('/process', function(req, res){
   if(req.body.passwd == '3456'){
-
     console.log(req.body.passwd);
-    console.log(req.body.phonenumList);
     processCashCheck(req, res);
   }else{
     res.send("잘못된 비밀번호입니다");
@@ -122,14 +120,21 @@ router.post('/process', function(req, res){
 /////처리함수
 function processCashCheck(req,res) {
 
-
   var msgType = req.body.msgType
   var sendCnt = req.body.sendCnt
   var id = req.session.userId
 
+  var resultList = JSON.parse(req.body.phonenumList);
+  
+  resultList = Array.from( 
+    resultList.reduce((m, t) => m.set(t, t), new Map()).values()
+  );
+ 
+  var oldSendCnt = sendCnt;
+  sendCnt = resultList.length;
+  var dupNum = oldSendCnt-sendCnt
 
-  console.log(sendCnt + "명에게 " + msgType +"를 전송합니다");
-
+  console.log(sendCnt + "명에게 " + msgType +"를 전송합니다." + dupNum + "명 중복입니다.");
   //결제처리
   if(msgType =="sms"){
     var price = 1;
@@ -152,17 +157,16 @@ function processCashCheck(req,res) {
       db.query('update user set cash= ? where id = ?', [currentCash-priceCash, id], function(err, results, fields) {
         if(err) console.log("err : "+err);
         res.send("OK");//꼭 ok로 보내야함
-        processSendList(req);
+        processSendList(req,resultList);
       })
     }   
   }); 
 }
 
 
-function processSendList(req){
+function processSendList(req,resultList){
   //TODO: phonenumList에 이름이 추가되어 있을때 분기처리 나중에 추가
-  var resultList = JSON.parse(req.body.phonenumList);
-  console.log(resultList);
+  
 
   //분할발송시 -> processDbQuery를 여러번 수행하는 것으로 구현!
   var splitMinutes = req.body.splitMinutes;

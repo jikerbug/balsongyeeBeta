@@ -62,13 +62,12 @@ router.post('/addGroup', function(req, res){
     db.query('select groupName,count from address where userId = ? and groupName = ?', [userId,groupName], function (err, results, fields) {
       if(err) console.log("err : "+err);
       //없으면 null이 아니라 빈 리스트 리턴해주는 구나...
-      if(results.length){//있으면 중복이라 추가안해준다
+      if(results.length){//있으면 중복이라 추가안해준다. 0이어야 해준다
         req.flash('error', '이미 존재하는 그룹명입니다')
         res.redirect('/address')
       }else{
         db.query('insert into address(userId,groupName,count) values(?,?,?)', [userId, groupName, 0], function (err, results, fields) {
           if(err) console.log("err : "+err);
-          //없으면 null이 아니라 빈 리스트 리턴해주는 구나...
           res.redirect('/address')
         }); 
       }
@@ -78,16 +77,17 @@ router.post('/addGroup', function(req, res){
 
 router.post('/deleteGroup', function(req, res){
   var userId = req.session.userId;
-  var groupName = req.body.groupName;
+  var groupIdx = req.body.groupIdx;
 
   if(userId){
-    db.query('delete from address where userId = ? and groupName = ?', [userId,groupName], function (err, results, fields) {
+    db.query('delete from address where idx = ?', [groupIdx], function (err, results, fields) {
       if(err) console.log("err : "+err);
 
       if(results.affectedRows == 1){
         res.send('OK');
+        //아하!! costraint에 의해서 fk가 사라지면 따라서 사라지는 cascading옵션을 줘서 번호 삭제 처리하면 됨!
       }else{
-        res.send('삭제할 그룹이 없습니다');  
+        res.send('삭제할 그룹이 없습니다');  //사실 여기에 올일은 없을것이긴 함
       }
     }); 
   }

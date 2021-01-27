@@ -1,11 +1,8 @@
 
 var wrongNumList = [];//얘는 3번째 그리드에 넣는 값임!
 
-//파일을 넘겨줘서 입력해야 중복이 적다. setList는 그냥 중복 몇개인지 확인용이고
-//어차피 db에서 중복처리 해줄것이다! (primaryKey니까); 
+//파일을 넘겨줘서 입력해야 중복이 적다. setList는 그냥 중복 몇개인지 확인용이고 
 var resultList;
-
-///!!!!!!!!!!!!!!!!!!!!!!!!!request entity too large 때문에 ajax후 refresh로 구현하기로 하자!
 
 $("#btn-addfileList").on('click', (function(e) {
 	e.preventDefault();
@@ -40,23 +37,29 @@ function phonenumListCheck() {
     alert('추가할 번호가 없습니다.')
     return false;
   }
+
+  if(fileGridList.length >1000){
+    alert('등록하는 번호가 많을경우 입력이 완료되기 까지 시간이 다소 걸릴 수 있습니다.\n바로 목록이 업데이트 되지 않는다면 잠시 기다린 뒤에 홈페이지를 새로고침 해주세요');
+  }
+
   var groupGridList = w2ui['groupGrid'].records;
+
+  /*------------중복처리----------------*/
+  //만약에 파일들 불러온것끼리 중복되는 것이 있다면 그것들까지 삭제되어버린다.
+  //따라서 파일을 불러온 다음에는, 한번씩만 처리할 수 있도록 하자!!
 
   var mergedList = groupGridList.concat(fileGridList);
   var dupSet = getDups(mergedList);
   resultList = fileGridList.filter(item => !dupSet.has(item.phonenum));
 
-  console.log(dupSet);
+  console.log(groupGridList);
  
   var fileCnt = fileGridList.length;
   var validCnt = resultList.length;
   var duplicatedCnt = dupSet.size; 
-  //duplicatedCnt는 종류의 개수이다. 따라서 불러온 목록중 중복된 번호가 추가로 지워졌다면 cnt에 포함되지 않는다.
-  //따라서 아래와 같이 계산한다. (validCnt = fileCnt - duplicatedCnt - fromFileDupCnt)
-  var fromFileDupCnt = fileCnt - validCnt - duplicatedCnt
 
   if(confirm(`전체: ${fileCnt}건\n등록 가능한 번호: ${validCnt}건\n그룹 목록과 중복된 번호: ${
-    duplicatedCnt}건\n불러온 목록중 중복된 번호: ${fileCnt - validCnt - duplicatedCnt}건\n그룹에 번호를 등록하시겠습니까?`)){
+    duplicatedCnt}건\n그룹에 번호를 등록하시겠습니까?`)){
     return true;
   }else{
     return false;
@@ -192,6 +195,13 @@ excelFile.addEventListener('change', event => {
 
 
 function readExcel(input) {
+
+  var fileGridList = w2ui['fileGrid'].records;
+  if(fileGridList.length > 0){
+    alert('한번에 하나의 파일만 불러올 수 있습니다.\n현재 불러온 번호를 그룹에 추가한 뒤에 다른 파일을 불러와주세요');
+    return;
+  }
+
   let reader = new FileReader();
   reader.onload = function () {
       let data = reader.result;
