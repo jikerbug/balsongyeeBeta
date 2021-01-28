@@ -30,22 +30,11 @@ router.get('/', function(req, res){
         if(err) console.log("err : "+err);
 
         //slice는 범위 넘어가도 오류없이 범위 내의 것들만 처리해준다!
-        if(results){
-          var resultPage = results.slice((pageNum-1)*20, pageNum*20);
-          var sendResult = sendResultTemplate.sendResult(resultPage);
-          var sendResultPageLinks = sendResultTemplate.sendResultPageLinks(results.length, msgType,pageNum);
-        }else{
-          var sendResult = '';
-          var sendResultPageLinks = '';
-        }
         
-
         res.render('sendResult', {
           header: header,
           footer: footer,
-          title: "단문 발송결과",
-          sendResult: sendResult,
-          sendResultPageLinks: sendResultPageLinks
+          title: "단문 발송결과"
         });         
       });    
     }else if(msgType !="lms"){
@@ -76,15 +65,22 @@ router.get('/detail', function(req, res){
   var msgType = req.query.msgType;
   var id = req.session.userId;
 
+  
+
   if(!msgType || !id){
     res.redirect('/');
     return 0;
   }
 
+  var sendDate = req.query.sendDate; //이거는 sendMonth로 리팩터 해야될듯,,,,
+  var date = new Date(sendDate); 
+  var sendYYYYMM = (date.getFullYear()) *100 + date.getMonth()+1;
+  var userSendIndex = req.query.userSendIndex;
+
   if(msgType =="sms"){
-    var userSendIndex = req.query.userSendIndex;
-    var thisDate = req.query.thisDate; //이거는 sendMonth로 리팩터 해야될듯,,,,
-    db.query('select * from userSendResult where userId = ? and userSendIndex = ?', [id,userSendIndex], function (err, resultsFromSC_TRAN, fields) {
+    
+    
+    db.query('select * from userSendResult where userSendIndex = ?', [userSendIndex], function (err, resultsFromSC_TRAN, fields) {
       var msg = resultsFromSC_TRAN[0].TR_MSG; 
       var callback = resultsFromSC_TRAN[0].TR_CALLBACK;
       var sendDate = resultsFromSC_TRAN[0].TR_SENDDATE;
@@ -94,7 +90,7 @@ router.get('/detail', function(req, res){
       var footer = template.footer();  
       res.render('sendResultDetail', {
                 userSendIndex: userSendIndex,
-                thisDate: thisDate,
+                sendYYYYMM: sendYYYYMM,
                 header: header,
                 footer: footer,
                 msgContent: msgContent,
@@ -111,34 +107,61 @@ router.get('/detail', function(req, res){
 
 router.post('/getResultDetailList', function(req, res){
   var userSendIndex = req.query.userSendIndex;
-  var thisDate = req.query.thisDate;
+  var sendYYYYMM = req.query.sendYYYYMM;
   var userId = req.session.userId;
   if(userId){
     console.log(userId);
   }
+
   
   var resultDetailList = []
-  db.query('select * from SC_TRAN where userId = ? and userSendIndex = ?', [userId,userSendIndex], function (err, resultsFromSC_TRAN, fields) {
+  db.query('select * from SC_TRAN where userSendIndex = ?', [userSendIndex], function (err, resultsFromSC_TRAN, fields) {
     if(err) console.log("err : "+err);
-    console.log(resultsFromSC_TRAN);
+    
+ 
     if(resultsFromSC_TRAN){
+      var status;
       for(var i=0;i<resultsFromSC_TRAN.length;i++){
-        resultDetailList.push({recid:i+1, phonenum:resultsFromSC_TRAN[i].TR_PHONE, status: resultsFromSC_TRAN[i].TR_SENDSTAT});
+        status = '진행중'
+        resultDetailList.push({recid:i+1, phonenum:resultsFromSC_TRAN[i].TR_PHONE, status: status});
       }
     }
 
-    db.query(`select * from SC_LOG_${thisDate} where userId = ? and userSendIndex = ?`, [userId,userSendIndex], function (err, resultsFromSC_LOG, fields) {
+    db.query(`select * from SC_LOG_${sendYYYYMM} where userSendIndex = ?`, [userSendIndex], function (err, resultsFromSC_LOG, fields) {
       if(resultsFromSC_LOG){
+        var status;
         for(var i=0;i<resultsFromSC_LOG.length;i++){
-          resultDetailList.push({recid:i+1, phonenum:resultsFromSC_LOG[i].TR_PHONE, status: resultsFromSC_LOG[i].TR_SENDSTAT});
+          status = (resultsFromSC_LOG[i].TR_SENDSTAT == '06') ? '완료' : '실패'
+          resultDetailList.push({recid:i+resultsFromSC_TRAN.length, phonenum:resultsFromSC_LOG[i].TR_PHONE, status: status});
         }
       }
       res.json(resultDetailList);
     }); 
   }); 
-  
+});
 
+router.post('/getResultList', function(req, res){
 
+  var userId = req.session.userId;
+  if(userId){
+    console.log(userId);
+  }
+
+  var resultList = []
+  db.query('select * from userSendResult where userId = ? order by TR_SENDDATE desc', [userId], function (err, results, fields) {
+    var jsonData;
+    var sendDate;
+    if(results){
+      for(var i=0;i<results.length;i++){
+        sendDate = sendResultTemplate.getFormatDate(results[i].TR_SENDDATE)
+        jsonData = {recid:results[i].userSendIndex, sendDate:sendDate, msg: results[i].TR_MSG,
+          sendType: results[i].sendType,count:results[i].userSendCnt}
+        resultList.push(jsonData);
+      }
+    }
+    res.json(resultList);
+
+  });
 });
 
 

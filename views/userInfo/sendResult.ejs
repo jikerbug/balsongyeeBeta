@@ -28,6 +28,11 @@
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
 
+  <!--w2ui-->
+  <link rel="stylesheet" type="text/css" href="assets/css/w2ui-custom.rc1.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/w2ui/w2ui-1.5.rc1.js"></script>
+
   <!-- =======================================================
   * Template Name: Kelly - v2.1.0
   * Template URL: https://bootstrapmade.com/kelly-free-bootstrap-cv-resume-html-template/
@@ -58,40 +63,19 @@
         </ul>
       </div>
 
+     
+      <div id="resultGrid" style="width: 90%; height: 470px; margin-left:5%"></div>
+      <form action="/sendResult/detail" style="display: inline;margin-left:5%;" method="get" onsubmit="return userSendIndexCheck()">
+        <input id="userSendIndex" name="userSendIndex" type='text' value="" style="display:none;"/>
+        <input id="sendDate" name="sendDate" type='text' value="" style="display:none;"/>
+        <input id="msgType" name="msgType" type='text' value="" style="display:none;"/>
+        <button type="submit" class="btn btn-outline-info" >상세보기</button>
+      </form>  
+      <button type="button" class="btn btn-outline-danger" onclick="removeGroup();">선택삭제</button>  
+
+    
+
       
-
-
-      <table class="table table-bordered" style="text-align: center;">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">
-              <input type="checkbox"  aria-label="Checkbox for following text input">
-            </th>
-            <th scope="col">상세보기</th>
-            <th scope="col">발송일</th>
-            <th scope="col">메시지 내용</th>
-            <th scope="col">유형</th>
-            <th scope="col">발송건수</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%- sendResult %>
-          <tr>
-            <th scope="row">@</th>
-            <td>@</td>
-            <td>@</td>
-            <td>@</td>
-            <td>@</td>
-            <td>@</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <nav aria-label="Page navigation example" class="sendResultNav">
-        <ul class="pagination">
-          <%- sendResultPageLinks %>
-        </ul>
-      </nav>
 
 
     </div>
@@ -105,7 +89,6 @@
   <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
   <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
@@ -117,6 +100,7 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/sendResult.js"></script>
 
 </body>
 

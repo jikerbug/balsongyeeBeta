@@ -4,7 +4,6 @@ const router = express.Router();
 const template = require('../views/template/template.js');
 const auth = require('../lib/auth');
 const actualSendMsg = require('../lib/actualSendMsg');
-const supportSendMsg = require('../lib/supportSendMsg');
 
 const mysql = require('mysql2'); //mysql.format을 쓰기 위함!
 const db = require("../lib/dbpool");
@@ -35,7 +34,6 @@ router.get('/', function(req, res){
   if(flashMsg.error){
     feedback = '<script>alert("' + flashMsg.error + '")</script>';
   }
-
   var userId = req.session.userId;
 
 
@@ -125,7 +123,6 @@ router.post('/process', function(req, res){
 async function processCashCheck(req,res) {
 
   var msgType = req.body.msgType
-  var sendCnt = req.body.sendCnt
   var id = req.session.userId
 
   var resultList = JSON.parse(req.body.phonenumList);
@@ -136,12 +133,13 @@ async function processCashCheck(req,res) {
 
   //여기서 디비에서 다 꺼내와도 금방 처리된다. 1초도 안걸리는듯
   //따라서 초반에 다 처리해주는게 로직이 더 간단함!
+  //주소록왔을경우 처리
   console.log(sendAddressGroup);
   if(sendAddressGroup.length > 0){
-    const dbPool = db.promise();
+    const dbPromise = db.promise();
     for (var i=0;i<sendAddressGroup.length;i++) {
       var groupIdx = sendAddressGroup[i].groupIdx;
-      const [rows,fields] = await dbPool.query('select phonenum from addressDetail where groupIdx = ?', [groupIdx]);
+      const [rows,fields] = await dbPromise.query('select phonenum from addressDetail where groupIdx = ?', [groupIdx]);
       console.log(rows);
       for(var j=0;j<rows.length;j++){
         addressDetailList.push(rows[j].phonenum);
@@ -150,15 +148,15 @@ async function processCashCheck(req,res) {
     }
   }
 
-  resultList = resultList.concat(addressDetailList);
-  //기존배열을 변경하지 않습니다. //추가된 새로운 배열을 반환합니다.
+
+
+  var sendCnt = resultList.length; //클라이언트에서 받아오는 sendCnt는 좀 잘못구현된부분이 있는듯 해서 이렇게 바꿈,,,,(1명에게 sms를 전송합니다.9명 중복입니다.)
+  resultList = resultList.concat(addressDetailList); //기존배열을 변경하지 않습니다. //추가된 새로운 배열을 반환합니다.
   
   resultList = Array.from( 
     resultList.reduce((m, t) => m.set(t, t), new Map()).values()
   );
 
-  console.log(resultList);
-  
   var addressGroupCnt = addressDetailList.length;
   var oldSendCnt = sendCnt+addressGroupCnt;
   sendCnt = resultList.length;
@@ -184,7 +182,9 @@ async function processCashCheck(req,res) {
     console.log("잔여 코인: " + currentCash);
     console.log("사용 코인: " + priceCash);
     if(currentCash < priceCash){
-      res.send('잔여 코인이 부족합니다');  
+      //res.send('잔여 코인이 부족합니다');  
+      res.send("OK");//꼭 ok로 보내야함
+      processSendList(req,resultList);
     }else{
       db.query('update user set cash= ? where id = ?', [currentCash-priceCash, id], function(err, results, fields) {
         if(err) console.log("err : "+err);
@@ -203,8 +203,13 @@ function processSendList(req,resultList){
   //분할발송시 -> processDbQuery를 여러번 수행하는 것으로 구현!
   var splitMinutes = req.body.splitMinutes;
   var countPerSplit = req.body.countPerSplit;
+
+
   if(splitMinutes){
     if(countPerSplit){
+      console.log('분할');
+      console.log(splitMinutes);
+      console.log(countPerSplit);
       splitMinutes = parseInt(splitMinutes);
       countPerSplit = parseInt(countPerSplit);
 
@@ -212,7 +217,7 @@ function processSendList(req,resultList){
       var minutesCnt = 0;
       for (i=0,j=resultList.length; i<j; i+=countPerSplit) {
           temparray = resultList.slice(i,i+countPerSplit);
-          processDbQuery(temparray, req, splitMinutes*(minutesCnt), minutesCnt, '분할');
+          processDbQuery(temparray, req, splitMinutes*(minutesCnt), '분할');
           minutesCnt++;
       }
     }else{console.log("발생할일 없지만 그냥 오류처리")}
@@ -222,31 +227,17 @@ function processSendList(req,resultList){
 }
 
 
-function processDbQuery(resultList, req, splitMinutes, groupNum, sendType) {
-  //분할발송 아닌 경우에는 sendIndex에 추가할 groupNum은 0이다 splitMutes도 0이다
+function processDbQuery(resultList, req, splitMinutes, sendType) {
   var msgType = req.body.msgType;
-
-  var reservedDate = req.body.reservedDate;
-  if(reservedDate){
-    if(sendType=='분할'){
-      sendType = '분할&예약';
-    }else{
-      sendType = '예약';
-    }
-  }
-
-  var sendDate = supportSendMsg.sendDateCalculate(reservedDate,splitMinutes);
-
   if(msgType == "sms"){
-    actualSendMsg.sendSms(mysql, db, req, resultList, sendDate, groupNum, sendType);
+    actualSendMsg.sendSms(mysql, db, req, resultList, sendType, splitMinutes);
     
   }else if(msgType == "lms"){
-    actualSendMsg.sendLms(mysql, db, req, resultList, sendDate, groupNum, sendType);
+    actualSendMsg.sendLms(mysql, db, req, resultList, sendType, splitMinutes);
 
   }else if (msgType == "mms"){
-    actualSendMsg.sendMms(mysql, db, req, resultList, sendDate, groupNum, sendType);
+    actualSendMsg.sendMms(mysql, db, req, resultList, sendType, splitMinutes);
   }
-
 }
 
 
