@@ -53,9 +53,10 @@ function deleteAll(){
 
 //--------------------전송----------------------//
 var sendImg = new FormData();
-var sendInfo = new Array(); 
-var sendAddressGroup = new Array();
-var id_key = 0;
+var sendInfo = new Array(); //파일을 그룹별로 모아놓아서 그룹별로 손쉽게 삭제할 수 있도록 하기위함 -> 전송할때는 resultInfo로, 하나로 다 합쳐줌
+//일반 입력은 전송할때, html에서 직접 불러옴(listInfo)
+var sendAddressGroup = new Array(); //그룹 idx, 인원수 모아놓는 배열
+var id_key = 0; //엑셀파일 식별하는데에 사용
 
 function isSenderValid(sender) {
   //전화번호 형식인지 체크 
@@ -608,7 +609,7 @@ w2ui.groupGrid.on('click', function(event) {
           if(record.count > 0){
             var info = `${record.groupName} 그룹 ${record.count}명`;
             $('#phonenumList').append(`<option id="${record.recid}-${record.groupName}" value="${info}">${info}</option>`);
-            sendAddressGroup.push(record.recid);
+            sendAddressGroup.push({groupIdx:record.recid, count:record.count});
             console.log(sendAddressGroup);
           }else{
             alert('가져올 전화번호가 없습니다.')

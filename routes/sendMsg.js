@@ -1,19 +1,18 @@
 
-var express = require('express');
-var router = express.Router();
-var template = require('../views/template/template.js');
-var auth = require('../lib/auth');
-var dbConn = require('../lib/dbConn');
-var actualSendMsg = require('../lib/actualSendMsg');
-var supportSendMsg = require('../lib/supportSendMsg');
-var mysql = require('mysql');
+const express = require('express');
+const router = express.Router();
+const template = require('../views/template/template.js');
+const auth = require('../lib/auth');
+const actualSendMsg = require('../lib/actualSendMsg');
+const supportSendMsg = require('../lib/supportSendMsg');
 
-var db = dbConn.balsongyeeDb(mysql);
+const mysql = require('mysql2'); //mysql.format을 쓰기 위함!
+const db = require("../lib/dbpool");
 
-var fs = require('fs');
-var multer  = require('multer');
-const { send } = require('process');
-var upload = multer({ 
+
+const fs = require('fs');
+const multer  = require('multer');
+const upload = multer({ 
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       var folderId = req.session.userId;   
@@ -42,7 +41,12 @@ router.get('/', function(req, res){
 
   if(userId){
     db.query('select cash,name from user where id = ?', [userId], function (err, results, fields) {
+      if(err) console.log('/sendMsg/ err :' + err);
 
+      if(!results){
+        res.redirect('/');
+        return;
+      }
       var name = results[0].name;
       var coin = results[0].cash;
       var sms = coin;
@@ -118,7 +122,7 @@ router.post('/process', function(req, res){
 
 
 /////처리함수
-function processCashCheck(req,res) {
+async function processCashCheck(req,res) {
 
   var msgType = req.body.msgType
   var sendCnt = req.body.sendCnt
@@ -127,22 +131,42 @@ function processCashCheck(req,res) {
   var resultList = JSON.parse(req.body.phonenumList);
 
   var sendAddressGroup = JSON.parse(req.body.sendAddressGroup);
+  var addressDetailList = new Array();
+
+
+  //여기서 디비에서 다 꺼내와도 금방 처리된다. 1초도 안걸리는듯
+  //따라서 초반에 다 처리해주는게 로직이 더 간단함!
+  console.log(sendAddressGroup);
   if(sendAddressGroup.length > 0){
-    console.log('그룹이 왔어요~');
-    //여기서 디비에서 다 꺼내와서 어쩌구 하면 너무 오래걸릴듯,,,,
-    //일단 그룹에 몇명있는지만 파악하고, 그걸로 코인을 차감한 뒤에
-    //이때 중복될 경우에는, 코인을 다시 충전해주자
+    const dbPool = db.promise();
+    for (var i=0;i<sendAddressGroup.length;i++) {
+      var groupIdx = sendAddressGroup[i].groupIdx;
+      const [rows,fields] = await dbPool.query('select phonenum from addressDetail where groupIdx = ?', [groupIdx]);
+      console.log(rows);
+      for(var j=0;j<rows.length;j++){
+        addressDetailList.push(rows[j].phonenum);
+      }
+      var groupIdx = sendAddressGroup[i].groupIdx  
+    }
   }
+
+  resultList = resultList.concat(addressDetailList);
+  //기존배열을 변경하지 않습니다. //추가된 새로운 배열을 반환합니다.
   
   resultList = Array.from( 
     resultList.reduce((m, t) => m.set(t, t), new Map()).values()
   );
- 
-  var oldSendCnt = sendCnt;
+
+  console.log(resultList);
+  
+  var addressGroupCnt = addressDetailList.length;
+  var oldSendCnt = sendCnt+addressGroupCnt;
   sendCnt = resultList.length;
   var dupNum = oldSendCnt-sendCnt
 
   console.log(sendCnt + "명에게 " + msgType +"를 전송합니다." + dupNum + "명 중복입니다.");
+
+
   //결제처리
   if(msgType =="sms"){
     var price = 1;

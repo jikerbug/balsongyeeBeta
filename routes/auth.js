@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
 var saltRounds = 12;
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
 
 var dbConn = require('../lib/dbConn');

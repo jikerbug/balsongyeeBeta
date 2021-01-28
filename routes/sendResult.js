@@ -5,7 +5,7 @@ var sendResultTemplate = require('../views/template/sendResult.js');
 var auth = require('../lib/auth');
 var sendResultDetail = require('../lib/sendResultDetail');
 var dbConn = require('../lib/dbConn');
-var mysql = require('mysql');
+var mysql = require('mysql2');
 
 var db = dbConn.balsongyeeDb(mysql);
 

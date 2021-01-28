@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var template = require('../views/template/template.js');
 var auth = require('../lib/auth');
-var mysql = require('mysql');
+var mysql = require('mysql2');
 var dbConn = require('../lib/dbConn');
 
 var db = dbConn.balsongyeeDb(mysql);
