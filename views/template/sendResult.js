@@ -142,7 +142,7 @@ module.exports = {
       <td>${status}</td>
       </tr>`
     },
-    msgContent:function(msg, subject, callback){
+    msgContent:function(msg, subject, callback,sendDate){
       return `
       <div class="phone-section">
         <input type="text" class="form-control" value="${subject}"/>
@@ -151,6 +151,7 @@ module.exports = {
             data-rule="required">${msg}</textarea>
         </div>
         <input type="text" class="form-control" value="발신번호 : ${callback}"/>
+        <input type="text" class="form-control" value="발송일 : ${this.getFormatDate(sendDate)}"/>
       </div>
             `;
     },sendResultPageLinks:function(resultLength,msgType, currentPageNum) {
