@@ -13,7 +13,6 @@ $("#btn-addfileList").on('click', (function(e) {
   document.getElementById("phonenumList").value = JSON.stringify(resultList)
 	$('#addfileList')[0].submit();
 })
-  
 );
 
 
@@ -104,22 +103,27 @@ function deleteRecord() {
 }
 
 $(function () {
-
   var groupIdxUrl = document.getElementById('groupIdx').value;
-  groupGrid(groupIdxUrl);
+  $.ajax({
+    type : "post",
+    url : `/addressDetail/getPhonenumList?groupIdx=${groupIdxUrl}`,
+    dataType: 'json',
+    success: function(groupDetailList) {
+      groupGrid(groupDetailList);
+    }
+  });
   fileGrid();
   wrongGrid();
 });
 
-function groupGrid(groupIdxUrl) {
+function groupGrid(groupDetailList) {
   $('#groupGrid').w2grid({
     name: 'groupGrid',
-    url  : `/addressDetail/getPhonenumList?groupIdx=${groupIdxUrl}`,
     header: 'List of Names',
     style: 'font-size:16px',
     show : {
         toolbar:true, 
-        footer:true
+        footer:true,
     }, 
     multiSearch:false,
     searches : [
@@ -129,7 +133,8 @@ function groupGrid(groupIdxUrl) {
     columns: [
       { field: 'phonenum', caption: '전화번호', size: '30%' },
       { field: 'name', caption: '이름', size: '30%' },
-    ]
+    ],
+    records:groupDetailList
 });
 }
 
@@ -139,7 +144,8 @@ function fileGrid() {
     header: 'List of Names',
     show : {
         toolbar:true, 
-        footer:true
+        footer:true,
+        selectColumn:true
     }, 
     multiSearch:false,
     searches : [
@@ -152,6 +158,29 @@ function fileGrid() {
     ],
     records: []
 });
+}
+
+
+function removeLoadedRecord() {
+    var selectionList = w2ui['fileGrid'].getSelection();
+    //selection은 recid로 리턴한다!!
+  
+    console.log(selectionList);
+  
+    if(!selectionList.length){
+      alert('삭제할 번호를 선택해주세요');
+      return;
+    }
+    if(confirm(`선택한 번호를 삭제하시겠습니까?`)){
+      w2ui.fileGrid.delete(this);
+    }
+}
+
+function removeLoadedRecordAll() {
+  w2ui['fileGrid'].selectAll();
+  if(confirm(`불러온 번호를 전부 삭제하시겠습니까?`)){
+    w2ui.fileGrid.delete(this);
+  }
 }
 
 

@@ -4900,6 +4900,7 @@ w2utils.event = {
             this.last.scrollLeft        = 0;
             this.last.selection.indexes = [];
             this.last.selection.columns = {};
+            
             // -- clear all search field
             this.searchClose();
             // apply search
@@ -7820,24 +7821,6 @@ w2utils.event = {
                     '</tr>';
             }
             var url = (typeof this.url != 'object' ? this.url : this.url.get);
-            // devider
-            if ((url && obj.show.skipRecords) || obj.show.saveRestoreState) {
-                col_html += '<tr style="pointer-events: none"><td colspan="2"><div style="border-top: 1px solid #ddd;"></div></td></tr>';
-            }
-            // skip records
-            if (url && obj.show.skipRecords) {
-                col_html +=
-                        '<tr><td colspan="2" style="padding: 0px">'+
-                        '    <div style="cursor: pointer; padding: 2px 8px; cursor: default">'+ w2utils.lang('Skip') +
-                        '        <input type="text" style="width: 60px" value="'+ this.offset +'" '+
-                        '            onkeydown="if ([48,49,50,51,52,53,54,55,56,57,58,13,8,46,37,39].indexOf(event.keyCode) == -1) { event.preventDefault() }"'+
-                        '            onkeypress="if (event.keyCode == 13) { '+
-                        '               w2ui[\''+ obj.name +'\'].skip(this.value); '+
-                        '               jQuery(\'.w2ui-overlay\')[0].hide(); '+
-                        '            }"/> '+ w2utils.lang('Records')+
-                        '    </div>'+
-                        '</td></tr>';
-            }
             col_html += "</tbody></table></div>";
             this.toolbar.get('w2ui-column-on-off').html = col_html;
         },

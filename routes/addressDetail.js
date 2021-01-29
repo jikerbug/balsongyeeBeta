@@ -218,3 +218,40 @@ router.post('/addPhonenumList', function(req, res){
 
 
 module.exports = router; 
+
+
+
+
+// router.post('/deleteResult', function(req, res){
+//   var userId = req.session.userId;
+//   var selectionList = req.body.selectionList;
+//   console.log(selectionList)
+
+
+
+//   if(userId){
+//     var isDeleted = deleteResult(selectionList,userId);
+   
+//     if(isDeleted){
+//       res.send('OK');
+//     }else{
+//       res.send('삭제할 발송결과가 없습니다');  //사실 여기에 올일은 없을것이긴 함
+//     }
+//   }
+// });
+
+// async function deleteResult(selectionList, userId) {
+//   var isDeleted = false;
+//   for(var i=0; i<selectionList.length;i++){
+//     await db.query('delete from userSendResult where userSendIndex = ? and userId = ?', [selectionList[i],userId], function (err, results, fields) {
+//       if(err) console.log("err : "+err);
+      
+//       if(isRe)
+//       if(results.affectedRows == 1){
+//         isDeleted = true;
+//       }
+//     }); 
+//   }
+
+//   return isDeleted
+// }

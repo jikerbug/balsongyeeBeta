@@ -1,19 +1,29 @@
+
 $(function () {
-  resultGrid();
+  $.ajax({
+    type : "get",
+    url : `/sendResult/getResultList`,
+    dataType: 'json',
+    success: function(resultList) {
+      resultGrid(resultList);
+    }
+  });
+  
 });
 
-function resultGrid() {
+function resultGrid(resultList) {
 
   $('#resultGrid').w2grid({
     name: 'resultGrid',
-    url  : `/sendResult/getResultList`,
     header: 'List of Names',
     style: 'font-size:16px;text-align:center',
     show : {
         toolbar:true, 
-        footer:true
+        footer:true,
+        selectColumn:true
     }, 
     multiSearch:false,
+    multiSelect : true,
     searches : [
       { field:"sendDate", caption:"발송일", type:"text" },
       { field:"msg", caption:"메세지 내용", type:"text" },
@@ -25,7 +35,8 @@ function resultGrid() {
       { field:"msg", caption:"메세지 내용", size: '30%'},
       { field:"sendType", caption:"유형", size: '20%'},
       { field:"count", caption:"발송건수", size: '20%'},
-    ]
+    ],
+    records:resultList
   });
 }
 
@@ -47,5 +58,36 @@ function userSendIndexCheck() {
   }else{
     alert('발송결과를 선택해주세요')
     return false;
+  }
+}
+
+
+function removeResult(){
+  var selectionList = w2ui['resultGrid'].getSelection();
+  //selection은 recid로 리턴한다!!
+
+  console.log(selectionList);
+
+  if(!selectionList.length){
+    alert('삭제할 발송결과를 선택해주세요');
+    return;
+  }
+  if(confirm(`전송이 완료되지 않은 문자가 포함될경우 전송이 취소됩니다. 삭제하시겠습니까?`)){
+    /////address삭제시 ON DELETE CASCADE에의해, addressDetail에 등록되었던 튜플 전부삭제된다
+    w2ui.resultGrid.delete(this);
+    $.ajax({
+      type: "POST",
+      url: "/sendResult/deleteResult",
+      data : {
+        "selectionList": selectionList
+      },
+      success: function(msg) {
+        if (msg == 'OK') {
+          alert('삭제가 완료되었습니다.');
+        } else {
+          alert(msg);
+        }
+      }
+    });
   }
 }

@@ -5,19 +5,26 @@ $(function () {
   var userSendIndex = document.getElementById('userSendIndex').value;
   var sendYYYYMM = document.getElementById('sendYYYYMM').value;
 
-  resultGrid(userSendIndex,sendYYYYMM);
+  $.ajax({
+    type : "get",
+    url : `/sendResult/getResultDetailList?userSendIndex=${userSendIndex}&sendYYYYMM=${sendYYYYMM}`,
+    dataType: 'json',
+    success: function(resultDetailList) {
+      resultGrid(resultDetailList);
+    }
+  });
+  
 });
 
-function resultGrid(userSendIndex,sendYYYYMM) {
+function resultGrid(resultDetailList) {
 
   $('#resultGrid').w2grid({
     name: 'resultGrid',
-    url  : `/sendResult/getResultDetailList?userSendIndex=${userSendIndex}&sendYYYYMM=${sendYYYYMM}`,
     header: 'List of Names',
     style: 'font-size:16px',
     show : {
         toolbar:true, 
-        footer:true
+        footer:true,
     }, 
     multiSearch:false,
     searches : [
@@ -27,6 +34,7 @@ function resultGrid(userSendIndex,sendYYYYMM) {
     columns: [
       { field:"status", caption:"진행상황", size: '50%'},
       { field:"phonenum", caption:"수신번호", size: '50%'},
-    ]
+    ],
+    records:resultDetailList
   });
 }

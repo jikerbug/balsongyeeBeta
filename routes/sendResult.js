@@ -105,12 +105,15 @@ router.get('/detail', function(req, res){
 });
 
 
-router.post('/getResultDetailList', function(req, res){
+router.get('/getResultDetailList', function(req, res){
   var userSendIndex = req.query.userSendIndex;
   var sendYYYYMM = req.query.sendYYYYMM;
   var userId = req.session.userId;
-  if(userId){
-    console.log(userId);
+
+
+  if(!userId){
+    res.redirect('/');
+    return 0;
   }
 
   
@@ -131,8 +134,8 @@ router.post('/getResultDetailList', function(req, res){
       if(resultsFromSC_LOG){
         var status;
         for(var i=0;i<resultsFromSC_LOG.length;i++){
-          status = (resultsFromSC_LOG[i].TR_SENDSTAT == '06') ? '완료' : '실패'
-          resultDetailList.push({recid:i+resultsFromSC_TRAN.length, phonenum:resultsFromSC_LOG[i].TR_PHONE, status: status});
+          status = (resultsFromSC_LOG[i].TR_RSLTSTAT == '06') ? '완료' : '실패'
+          resultDetailList.push({recid:i+resultsFromSC_TRAN.length+1, phonenum:resultsFromSC_LOG[i].TR_PHONE, status: status});
         }
       }
       res.json(resultDetailList);
@@ -140,12 +143,14 @@ router.post('/getResultDetailList', function(req, res){
   }); 
 });
 
-router.post('/getResultList', function(req, res){
+router.get('/getResultList', function(req, res){
 
   var userId = req.session.userId;
-  if(userId){
-    console.log(userId);
+  if(!userId){
+    res.redirect('/');
+    return 0;
   }
+
 
   var resultList = []
   db.query('select * from userSendResult where userId = ? order by TR_SENDDATE desc', [userId], function (err, results, fields) {
@@ -164,7 +169,24 @@ router.post('/getResultList', function(req, res){
   });
 });
 
+router.post('/deleteResult', function(req, res){
+  var userId = req.session.userId;
+  var selectionList = req.body.selectionList;
+  console.log(selectionList)
 
+  if(userId){
+    res.send('OK'); 
+
+    for(var i=0; i<selectionList.length;i++){
+      db.query('delete from userSendResult where userSendIndex = ? and userId = ?', [selectionList[i],userId], function (err, results, fields) {
+        if(err) console.log("err : "+err);     
+      
+      }); 
+    }
+  }else{
+    res.send('잘못된 사용자 접근입니다.')
+  }
+});
 
 
 
