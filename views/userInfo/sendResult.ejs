@@ -69,7 +69,7 @@
       <form action="/sendResult/detail" style="display: inline;margin-left:5%;" method="get" onsubmit="return userSendIndexCheck()">
         <input id="userSendIndex" name="userSendIndex" type='text' value="" style="display:none;"/>
         <input id="sendDate" name="sendDate" type='text' value="" style="display:none;"/>
-        <input id="msgType" name="msgType" type='text' value="" style="display:none;"/>
+        <input id="msgType" name="msgType" type='text' value="<%- msgType %>" style="display:none;"/>
         <button type="submit" class="btn btn-outline-info" >상세보기</button>
       </form>  
       <button type="button" class="btn btn-outline-danger" onclick="removeResult();">선택삭제</button>  

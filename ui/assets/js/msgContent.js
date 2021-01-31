@@ -109,8 +109,55 @@ function setSecond(obj){
   obj.className = "nav-link active"
 }
 
-function setUser(obj){
-  
-  $(".nav").find(".active").removeClass("active");
-  obj.className = "nav-link active"
+function saveUserMsg() {
+  if(confirm('입력한 문자를 내문자 목록에 저장하시겠습니까?')){
+    var msg = document.getElementById("msg").value;
+    if(!msg){
+      alert('입력한 문자내용이 없습니다.')
+      return;
+    }
+    $.ajax({
+      type: "POST",
+      url: "/userInfo/saveMyMsg",
+      data : {
+      "msg" : msg
+      },
+      success: function(msg) {
+        if(msg == 'OK'){
+          alert('내 문자가 저장되었습니다.');
+          showUserMsg();
+        }
+      }
+    });
+  }
 }
+
+
+function showUserMsg(){
+  document.getElementById("showCollection").innerHTML = "문자모음 숨기기"
+  $('#card-table').css("display","");
+  var userNav = document.getElementById("userNav");
+
+  $.ajax({
+    type: "get",
+    url: "/userInfo/getMyMsg",
+    dataType: 'json',
+    success: function(myMsgList) {
+      console.log(myMsgList);
+      for(var i=0;i<4;i++){
+        if(myMsgList[i]){
+          document.getElementById(`textarea${i+1}`).value = myMsgList[i].userMsg;
+        }else{//총 길이가 4개가 안되면 undefined뜰것임
+          document.getElementById(`textarea${i+1}`).value = '';
+        }
+        
+      }
+      
+      $(".nav").find(".active").removeClass("active");
+      userNav.className = "nav-link active"
+      $('html,body').animate({scrollTop:1000}, 'slow');
+    }
+  });
+}
+
+

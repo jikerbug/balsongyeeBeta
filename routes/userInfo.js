@@ -72,7 +72,44 @@ router.get('/myPage', function(req, res){
             header: header,
             footer: footer
           });    
-})
+});
+
+router.post('/saveMyMsg', function(req, res){
+  var msg = req.body.msg;
+  var userId = req.session.userId;
+  console.log(msg);
+
+  db.query('insert into myMsg values(null,?,?)', [userId,msg], function (err, results, fields) {
+    if(err) console.log(err);
+    res.send('OK');
+  });  
+
+  
+});
+
+
+router.get('/getMyMsg', function(req, res){
+  
+  var userId = req.session.userId;
+
+  db.query('select userMsg from myMsg where userId = ? order by idx desc', [userId], function (err, results, fields) {
+    if(err) console.log('/sendMsg/ err :' + err);
+
+    var myMsgList = []
+    var i;
+    for(i=0; i<results.length;i++){
+      myMsgList.push(results[i]);
+    }
+    //myMsg는 총 4개만 유지할 수 있도록 하자.
+    res.json(myMsgList);
+  });
+});
+
+
+
+
+
+
 
 
 

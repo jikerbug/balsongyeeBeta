@@ -49,7 +49,7 @@ router.post('/getGroups', function(req, res){
       }
       res.json(sendList);
     }else{
-      res.json([{ recid: 1, groupName: "주소록이 없습니다.", count: "" }])
+      res.json([{ recid: 1, groupName: "주소록이 없습니다.", count: "" }]);
     }
   });  
 });

@@ -4,10 +4,11 @@ $(function () {
   //sendType에 따라 다르게 보여주는 것은 mms에서만 필요하겠네...! var sendType;
   var userSendIndex = document.getElementById('userSendIndex').value;
   var sendYYYYMM = document.getElementById('sendYYYYMM').value;
+  var msgType = document.getElementById('msgType').value;
 
   $.ajax({
     type : "get",
-    url : `/sendResult/getResultDetailList?userSendIndex=${userSendIndex}&sendYYYYMM=${sendYYYYMM}`,
+    url : `/sendResult/getResultDetailList?userSendIndex=${userSendIndex}&sendYYYYMM=${sendYYYYMM}&msgType=${msgType}`,
     dataType: 'json',
     success: function(resultDetailList) {
       resultGrid(resultDetailList);

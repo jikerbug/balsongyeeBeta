@@ -364,10 +364,12 @@
 
   <script id="msg-handler">
     function put_msg_body(msg){
-
+      if(confirm('문자 내용을 입력창에 복사하시겠습니까?')){
       document.getElementById("msgMms").value = msg;
       bytesHandler(document.getElementById("msgMms"))
+      }
     }
+
 
     function resetMsg(){
       document.getElementById("msgMms").value = "";

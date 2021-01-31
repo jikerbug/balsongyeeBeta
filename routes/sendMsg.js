@@ -50,8 +50,7 @@ router.get('/', function(req, res){
       var sms = coin;
       var lms = parseInt(coin/3);
       var mms = parseInt(coin/6);
-  
-      console.log(coin);
+
   
       var header = template.header(feedback, auth.statusUI(req,res)); 
       var footer = template.footer(); 
@@ -182,7 +181,7 @@ async function processCashCheck(req,res) {
     console.log("잔여 코인: " + currentCash);
     console.log("사용 코인: " + priceCash);
     if(currentCash < priceCash){
-      //res.send('잔여 코인이 부족합니다');  
+      //res.send('잔여 코인이 부족합니다');  //많이 보내는거 테스트 가능하게 이렇게 만든거!
       res.send("OK");//꼭 ok로 보내야함
       processSendList(req,resultList);
     }else{
@@ -222,19 +221,15 @@ function processSendList(req,resultList){
       }
     }else{console.log("발생할일 없지만 그냥 오류처리")}
   }else{
-    processDbQuery(resultList, req, 0, 0, '일반');
+    processDbQuery(resultList, req, 0, '일반');
   }
 }
 
 
 function processDbQuery(resultList, req, splitMinutes, sendType) {
   var msgType = req.body.msgType;
-  if(msgType == "sms"){
-    actualSendMsg.sendSms(mysql, db, req, resultList, sendType, splitMinutes);
-    
-  }else if(msgType == "lms"){
-    actualSendMsg.sendLms(mysql, db, req, resultList, sendType, splitMinutes);
-
+  if(msgType == "sms" || msgType == "lms"){
+    actualSendMsg.sendSmsLms(mysql, db, req, resultList, sendType, splitMinutes, msgType);
   }else if (msgType == "mms"){
     actualSendMsg.sendMms(mysql, db, req, resultList, sendType, splitMinutes);
   }

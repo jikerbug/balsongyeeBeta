@@ -106,6 +106,9 @@ $(function($) {
     }
     var passwd = document.getElementById("passwd").value;
     var subject = document.getElementById("msgSubject").value;
+    if(!subject){
+      subject = '제목없음';
+    }
 
     //예약발송
     var isReserveSend = document.getElementById("reserveSend").checked;

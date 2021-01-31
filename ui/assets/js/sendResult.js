@@ -1,8 +1,11 @@
 
 $(function () {
+
+  var msgType = document.getElementById('msgType').value;
+
   $.ajax({
     type : "get",
-    url : `/sendResult/getResultList`,
+    url : `/sendResult/getResultList?msgType=${msgType}`,
     dataType: 'json',
     success: function(resultList) {
       resultGrid(resultList);
@@ -48,10 +51,8 @@ function userSendIndexCheck() {
     var record = w2ui['resultGrid'].get(selection);
     var userSendIndex = record.recid;
     var sendDate = record.sendDate;
-    var msgType = 'sms';
     userSendIndex = userSendIndex.toString();
     document.getElementById("userSendIndex").value = userSendIndex;
-    document.getElementById("msgType").value = msgType;
     document.getElementById("sendDate").value = sendDate;
     
     return true;
