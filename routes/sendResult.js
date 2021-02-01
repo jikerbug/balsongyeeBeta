@@ -44,8 +44,8 @@ router.get('/', function(req, res){
       res.render('sendResult', {
         header: header,
         footer: footer,
-        title: "장문 발송결과",
-        sendResult: "sendResult"
+        title: "사진 발송결과",
+        msgType: "mms"
       });  
     }
   }else{
@@ -73,32 +73,42 @@ router.get('/detail', function(req, res){
   var sendYYYYMM = (date.getFullYear()) *100 + date.getMonth()+1;
   var userSendIndex = req.query.userSendIndex;
 
-  if(msgType =="sms" || "lms"){
-    db.query('select * from userSendResult where userSendIndex = ?', [userSendIndex], function (err, results, fields) {
-      var msg = results[0].TR_MSG; 
-      var callback = results[0].TR_CALLBACK;
-      var sendDate = results[0].TR_SENDDATE;
 
-      var title = "제목없음(단문발송)";
-      if(msgType =='lms'){
-        title = results[0].userSendTitle;
-      }
-      var msgContent = sendResultTemplate.msgContent(msg, title, callback,sendDate);
-      var feedback ='';
-      var header = template.header(feedback, auth.statusUI(req,res)); 
-      var footer = template.footer();  
-      res.render('sendResultDetail', {
-                userSendIndex: userSendIndex,
-                sendYYYYMM: sendYYYYMM,
-                header: header,
-                footer: footer,
-                msgContent: msgContent,
-                msgType : msgType
-              }); 
-    }); 
-  }else if(msgType =="mms"){
+  db.query('select * from userSendResult where userSendIndex = ?', [userSendIndex], function (err, results, fields) {
+    var msg = results[0].TR_MSG; 
+    var callback = results[0].TR_CALLBACK;
+    var sendDate = results[0].TR_SENDDATE;
 
-  }
+    var title = "제목없음(단문발송)";
+    if(msgType !='sms'){
+      title = results[0].userSendTitle;
+    }
+    var msgContent;
+    if(msgType =='mms'){
+      var filePath = results[0].FILE_PATH1;
+
+      //절대경로로 저장되어있는 것을, static 폴더 지정된 ui안의 폴더인 userSendImg로 시작하게, /를 쓰게 바꾸는 작업!
+      filePath = filePath.split('userSendImg')[1];
+      filePath = 'userSendImg\\'+ filePath;
+      filePath = filePath.replace(/[\\]/g,"/");
+      msgContent = sendResultTemplate.mmsContent(msg, title, callback,sendDate,filePath);
+    }else{
+      msgContent = sendResultTemplate.msgContent(msg, title, callback,sendDate);
+    }
+
+    var feedback ='';
+    var header = template.header(feedback, auth.statusUI(req,res)); 
+    var footer = template.footer();  
+    res.render('sendResultDetail', {
+              userSendIndex: userSendIndex,
+              sendYYYYMM: sendYYYYMM,
+              header: header,
+              footer: footer,
+              msgContent: msgContent,
+              msgType : msgType
+            }); 
+  }); 
+  
 
 });
 
@@ -140,7 +150,7 @@ router.get('/getResultDetailList', function(req, res){
         res.json(resultDetailList);
       }); 
     }); 
-  }else if(msgType == 'lms'){
+  }else if(msgType == 'lms' || msgType == 'mms'){
     db.query('select * from MMS_MSG where userSendIndex = ?', [userSendIndex], function (err, resultsMMS, fields) {
       if(err) console.log("err : "+err);
       
@@ -164,7 +174,6 @@ router.get('/getResultDetailList', function(req, res){
       //   res.json(resultDetailList);
       // }); 
     }); 
-
   }
   
 });
@@ -183,37 +192,19 @@ router.get('/getResultList', function(req, res){
   var resultList = [];
   var jsonData;
   var sendDate;
-  if(msgType == 'sms' || msgType =='lms'){
-    db.query(`select * from userSendResult where userId = ? and msgType = '${msgType}' order by TR_SENDDATE desc`, [userId], function (err, results, fields) {
-      if(results){
-        for(var i=0;i<results.length;i++){
-          sendDate = sendResultTemplate.getFormatDate(results[i].TR_SENDDATE)
-          jsonData = {recid:results[i].userSendIndex, sendDate:sendDate, msg: results[i].userSendTitle,
-            sendType: results[i].sendType,count:results[i].userSendCnt}
-          resultList.push(jsonData);
-        }
+ 
+  db.query(`select * from userSendResult where userId = ? and msgType = '${msgType}' order by processDate desc`, [userId], function (err, results, fields) {
+    if(results){
+      for(var i=0;i<results.length;i++){
+        sendDate = sendResultTemplate.getFormatDate(results[i].TR_SENDDATE);
+        processDate = results[i].processDate;
+        jsonData = {recid:results[i].userSendIndex, processDate:processDate,sendDate:sendDate, msg: results[i].userSendTitle,
+          sendType: results[i].sendType,count:results[i].userSendCnt}
+        resultList.push(jsonData);
       }
-      res.json(resultList);
-    });
-  }else if(msgType == 'mms'){
-    db.query('select * from mmsSendResult where userId = ? order by REQDATE desc', [userId], function (err, results, fields) {
-      if(results){
-        for(var i=0;i<results.length;i++){
-          sendDate = sendResultTemplate.getFormatDate(results[i].REQDATE)
-          jsonData = {recid:results[i].mmsSendIndex, sendDate:sendDate, msg: results[i].MSG,
-            sendType: results[i].sendType,count:results[i].userSendCnt}
-          resultList.push(jsonData);
-        }
-      }
-      res.json(resultList);
-    });
-
-  }else if(msgType == 'mms'){
-
-  }
-
-  
-  
+    }
+    res.json(resultList);
+  });
 });
 
 router.post('/deleteResult', function(req, res){

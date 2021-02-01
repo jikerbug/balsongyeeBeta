@@ -25,5 +25,22 @@ module.exports = {
         <input type="text" class="form-control" value="발송일 : ${this.getFormatDate(sendDate)}"/>
       </div>
             `;
+    },mmsContent:function (msg, subject, callback,sendDate,filePath) {
+
+      console.log(filePath);
+      return `
+      <div class="phone-section">
+        <input type="text" class="form-control" value="${subject}"/>
+        <div class="php-email-form">
+          <div id="contentBox">
+            <img src="${filePath}" alt="전송사진" id="sendImg"/>
+            <textarea class="form-control" name="msg" id="msg" rows="16" style="width: 100%;"
+            data-rule="required">${msg}</textarea>
+          </div>
+        </div>
+        <input type="text" class="form-control" value="발신번호 : ${callback}"/>
+        <input type="text" class="form-control" value="발송일 : ${this.getFormatDate(sendDate)}"/>
+      </div>
+            `;
     }
 }

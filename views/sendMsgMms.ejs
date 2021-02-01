@@ -29,6 +29,12 @@
   <link href="assets/css/custom.css" rel="stylesheet">
   <link href="assets/css/mms.css" rel="stylesheet">
 
+  <!--w2ui-->
+  <link rel="stylesheet" type="text/css" href="assets/css/w2ui-custom.rc1.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/w2ui/w2ui-1.5.rc1.js"></script>
+
+
 
 
   <!-- =======================================================
@@ -54,6 +60,7 @@
       <h2>문자발송안내(사진)</h2>
       <p>1. 로그인 2. 080번호 발급 완료 3. 발신번호 등록 완료 4. 발송코인 충전 5. 발송</p>
       <p>등록된 사진을 삭제하시려면 사진을 클릭해주세요</p>
+      <p>중복된 번호가 입력될 경우, 한번만 발송되며 코인도 한번만 차감됩니다</p>
       <a href="" class="btn-about">O8O번호 발급</a>
       <a href="" class="btn-about">발신번호 등록</a>
     </div>
@@ -64,9 +71,6 @@
         
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-12">
-            <button style="display: f; margin-left:30%;" type="button" class="btn btn-outline-info" onclick="scrollDownToPhoto()">예시사진보기</button>
-
-            
             <div class="phone-section">
               <input type="text" class="form-control" placeholder="제목 입력(최대 20자)" id="msgSubject" style="width: 100%;"/>
               <button type="button" class="btn btn-secondary" onclick="resetMsg()">다시쓰기</button>
@@ -105,20 +109,6 @@
           </div>
     
           <div class="col-lg-3">
-            <div class="card-file" style="width: 100%;">
-              <div class="card">
-                <div class="card-header">
-                    사진 파일
-                </div>
-                <div class="card-body">
-                  <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="photoFile">
-                    <label class="custom-file-label" for="photoFile">사진 선택</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div class="form-inline">
               <div class="form-group">
                 <input type="text" name="phonenum" class="form-control" id="name" placeholder="수신번호( - 기호 생략)" 
@@ -131,6 +121,11 @@
             <button type="button" class="btn btn-outline-danger" onclick="deletePhonenum()">삭제</button>
             <button type="button" class="btn btn-outline-danger" onclick="deleteAll()">전체삭제</button>
             <button type="button" class="btn btn-outline-info" onclick="showInfo()" id="showInfo">명단확인</button>
+
+            <div style="margin-top: 33px;"></div>
+            <div id="groupGrid" style="width: 100%; height: 200px; "></div>
+            <div style="margin-top: 10px;"></div>
+
 
             <select style="display: none" class="form-control" id="infoList" size="10" style="width: 250px;"></select>
 
@@ -151,7 +146,6 @@
                 </div> 
               </div> 
             </div>
-
             <div class="form-check mb-2">
               <input class="form-check-input" type="checkbox" id="splitSend">
               <label class="form-check-label" for="termSend">
@@ -175,6 +169,21 @@
 
           <div class="col-lg-4">
             <div class="form-group">
+              <div class="card-file">
+                <div class="card">
+                  <div class="card-header">
+                      사진 파일
+                      <button type="button" style="font-size: 0.8em;padding: 3px, 6px;"
+                      class="btn btn-info" onclick="scrollDownToPhoto()">사진보기</button>
+                  </div>
+                  <div class="card-body">
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="photoFile">
+                      <label class="custom-file-label" for="photoFile">사진 선택</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="card-file">
                 <div class="card">
                   <div class="card-header">
@@ -209,12 +218,12 @@
                 </div>
                 <div class="card-body">
                   <div class="custom-file">
-                    <p>010-100-1000</p>
-                    <p>홍길동 010-100-1000</p>
-                    <p> 010-100-1000 홍길동</p>
-                    <p>- 기호는 생략가능합니다</p>
-                    <p>엑셀파일의 경우,</p>
-                    <p>앞자리 0이 생략되어도 정상발송됩니다</p>
+                    <p>최대 5만건까지 불러올 수 있습니다.</p>
+                    <p>010-xxxx-xxxx</p>
+                    <p>홍길동 010-xxxx-xxxx</p>
+                    <p>010-xxxx-xxxx 홍길동</p>
+                    <p>- 기호 생략가능합니다(010xxxxxxxx 형식)</p>
+                    <p>엑셀파일의 경우, - 기호를 생략했을때<br>앞자리 0이 생략되어도 정상처리됩니다.<br>(10xxxxxxxx형식)</p>
                   </div>
                 </div>
               </div>         
@@ -332,7 +341,6 @@
   <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
   <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
@@ -389,14 +397,6 @@
       }
       
     }
-
-    //전송창에 있는 내문자 버튼 클릭했을때 동작 
-    function showUserMsg(){
-      document.getElementById("showCollection").innerHTML = "문자모음 숨기기"
-      $('#card-table').css("display","");
-      setUser(document.getElementById("userNav"));
-    }
-
   </script>
 
 </body>

@@ -28,16 +28,18 @@ function resultGrid(resultList) {
     multiSearch:false,
     multiSelect : true,
     searches : [
+      { field:"processDate", caption:"발송요청일", type:"text" },
       { field:"sendDate", caption:"발송일", type:"text" },
       { field:"msg", caption:"메세지 내용", type:"text" },
       { field:"sendType", caption:"유형", type:"text" },
       { field:"count", caption:"발송건수", type:"text" },
     ],
     columns: [
+      { field:"processDate", caption:"발송요청일", size: '20%'},
       { field:"sendDate", caption:"발송일", size: '20%'},
       { field:"msg", caption:"메세지 내용", size: '30%'},
-      { field:"sendType", caption:"유형", size: '20%'},
-      { field:"count", caption:"발송건수", size: '20%'},
+      { field:"sendType", caption:"유형", size: '10%'},
+      { field:"count", caption:"발송건수", size: '10%'},
     ],
     records:resultList
   });

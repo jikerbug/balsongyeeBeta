@@ -15,14 +15,15 @@ const upload = multer({
   storage: multer.diskStorage({
     destination: function (req, file, cb) {
       var folderId = req.session.userId;   
-      var dir = `./routes/userSendImg/${folderId}`;
+      var dir = `./ui/userSendImg/${folderId}`;
       if (!fs.existsSync(dir)){
           fs.mkdirSync(dir);
       }
-      cb(null, `routes/userSendImg/${folderId}/`);
+      cb(null, `ui/userSendImg/${folderId}/`);
     },
     filename: function (req, file, cb) {
-      cb(null, 'userSendImg.jpg'); //이거 한글파일은 발송이 안됨!!
+      var id = Math.random().toString(36).substring(3); 
+      cb(null, `img${id}.jpg`); //이거 한글파일은 발송이 안됨!!
     }
   })
 });
