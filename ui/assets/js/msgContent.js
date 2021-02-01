@@ -124,7 +124,7 @@ function saveUserMsg() {
       },
       success: function(msg) {
         if(msg == 'OK'){
-          alert('내 문자가 저장되었습니다.');
+          alert('내 문자가 저장되었습니다.\n내 문자는 최신순으로 4개까지 저장됩니다.');
           showUserMsg();
         }
       }

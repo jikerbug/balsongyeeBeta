@@ -87,7 +87,7 @@
                 data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력" ></textarea>
                 </div>
                 
-                <button type="button" class="btn btn-info">문자저장</button>
+                <button type="button" class="btn btn-info" onclick="saveUserMsg()">문자저장</button>
                 <button type="button" class="btn btn-info" onclick="showUserMsg()">내문자</button>
                 <button type="button" class="btn btn-info">특수문자</button>
                 <button type="button" class="btn btn-info">이름추가</button>
@@ -249,7 +249,7 @@
                 <a class="nav-link active" id="voteNav" onclick="setVote(this)">선거문자</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="userNav" onclick="setUser(this)">내 문자</a>
+                <a class="nav-link" id="userNav" onclick="showUserMsg(this)">내 문자</a>
               </li>
             </ul>
           </div>

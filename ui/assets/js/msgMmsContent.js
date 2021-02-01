@@ -64,6 +64,7 @@ function bytesHandlerMms(obj){
 
 /*---------------------------------------메세지 콘텐츠(문자)------------------------------------*/
 
+
 function firstList(choice){
   if(choice === 1){
     return '기분좋은 아침입니다.\n\n한결같은 믿음과 성원에\n\n다시한번 감사의 마음을 전해드리며,\n\n오늘도 기분 좋은 하루되시길 기원합니다.'
@@ -103,8 +104,6 @@ function setFirst(obj){
   document.getElementById("sendImg2").style.display = "none";
   document.getElementById("sendImg3").style.display = "none";
   document.getElementById("sendImg4").style.display = "none";
- 
-  
   $(".nav").find(".active").removeClass("active");
   obj.className = "nav-link active"
 
@@ -127,10 +126,63 @@ function setSecond(obj){
   obj.className = "nav-link active"
 }
 
-function setUser(obj){
-  
-  $(".nav").find(".active").removeClass("active");
-  obj.className = "nav-link active"
+function saveUserMsg() {
+  if(confirm('입력한 문자를 내문자 목록에 저장하시겠습니까?')){
+    var msg = document.getElementById("msg").value;
+    if(!msg){
+      alert('입력한 문자내용이 없습니다.')
+      return;
+    }
+    $.ajax({
+      type: "POST",
+      url: "/userInfo/saveMyMsg",
+      data : {
+      "msg" : msg
+      },
+      success: function(msg) {
+        if(msg == 'OK'){
+          alert('내 문자가 저장되었습니다.\n내 문자는 최신순으로 4개까지 저장됩니다.');
+          showUserMsg();
+        }
+      }
+    });
+  }
+}
+
+
+function showUserMsg(){
+  document.getElementById("textarea1").style.display  = "block";
+  document.getElementById("textarea2").style.display  = "block";
+  document.getElementById("textarea3").style.display  = "block";
+  document.getElementById("textarea4").style.display  = "block";
+  document.getElementById("sendImg1").style.display = "none";
+  document.getElementById("sendImg2").style.display = "none";
+  document.getElementById("sendImg3").style.display = "none";
+  document.getElementById("sendImg4").style.display = "none";
+  document.getElementById("showCollection").innerHTML = "문자모음 숨기기"
+  $('#card-table').css("display","");
+  var userNav = document.getElementById("userNav");
+
+  $.ajax({
+    type: "get",
+    url: "/userInfo/getMyMsg",
+    dataType: 'json',
+    success: function(myMsgList) {
+      console.log(myMsgList);
+      for(var i=0;i<4;i++){
+        if(myMsgList[i]){
+          document.getElementById(`textarea${i+1}`).value = myMsgList[i].userMsg;
+        }else{//총 길이가 4개가 안되면 undefined뜰것임
+          document.getElementById(`textarea${i+1}`).value = '';
+        }
+        
+      }
+      
+      $(".nav").find(".active").removeClass("active");
+      userNav.className = "nav-link active"
+      $('html,body').animate({scrollTop:1000}, 'slow');
+    }
+  });
 }
 
 
