@@ -1,6 +1,6 @@
 
 $(function () {
-  groupList = localStorage.getItem('excelGroup');
+  groupList = localStorage.getItem('fileGroup');
   groupType = localStorage.getItem('groupType');
   groupList = JSON.parse(groupList);
   console.log(groupList);

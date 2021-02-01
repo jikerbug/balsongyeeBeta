@@ -379,86 +379,94 @@ function readExcel(input) {
   reader.onload = function () {
       let data = reader.result;
       let workBook = XLSX.read(data, { type: 'binary' });
-      var excelGroup = new Array();
-      var gridListGroup = new Array();
+      
       workBook.SheetNames.forEach(function (sheetName) {
-          console.log('SheetName: ' + sheetName);
-          let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName], {header:['zeroCol','oneCol']});
-          //이 형식 또는 그냥 전화번호만 있는 형식으로 받기
-          
-          //console.log(rows);
-          var count = rows.length;
-
-          if(count>50000){
-            alert('50000건이 넘는 파일은 불러올 수 없습니다.')
-            return;
-          }
-          if(count > 10000){
-            alert('10000건 이상 불러올 경우 로딩이 길어질 수 있습니다. 잠시만 기다려주세요')
-          }
-
-          //중복은 set사용해서 제거하자
-          //스팸제거도 가능할지?...
-          var spamCnt = 0;
-
-          let keyheader = Object.keys(rows[0]);
-          if(keyheader.length == 1){
-            //폰번호만 있을때
-            // rows = Array.from( 
-            //   rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
-            // );
-            var setCnt = rows.length;
-            var duplicatedCnt = count - setCnt;
-            var validCnt = onlyPhonenumExcelCnt(setCnt, rows, excelGroup, gridListGroup);
-            setCnt = count;//이건 주석처리 해야 중복제거 제대로 가능!
-          }else if(keyheader.length == 2){
-            //이름, 폰번호가 있을때
-            //우선 이름-번호인지 번호-이름인지 체크
-            var testValues;
-            var phonenumIdx;
-            for(var i = 0; i< rows.length;i++){
-              testValues = Object.values(rows[i]);
-              if(phonenumFormattingExcel(testValues[0])){
-                phonenumIdx = 0;
-                break;
-              }else if(phonenumFormattingExcel(testValues[1])){
-                phonenumIdx = 1;
-                break;
-              }
-            }
-            if(phonenumIdx == 0){
-              rows = Array.from( 
-                rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
-              );
-            }else if(phonenumIdx == 1){
-              rows = Array.from( 
-                rows.reduce((m, t) => m.set(t.oneCol, t), new Map()).values()
-              );
-            }
-            var setCnt = rows.length;
-            var duplicatedCnt = count - setCnt;
-            var validCnt = phonenumWithNameExcelCnt(setCnt, rows, excelGroup, gridListGroup, phonenumIdx)
-          }
-          sendInfo.push(excelGroup);
+        console.log('SheetName: ' + sheetName);
+        let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName], {header:['zeroCol','oneCol']});
+        //이 형식 또는 그냥 전화번호만 있는 형식으로 받기
         
-          alert(`전체: ${count}건\n발송가능한 번호: ${validCnt}건\n잘못된 번호: ${setCnt - validCnt}건\n중복된 번호: ${duplicatedCnt}건`);
-
-          localStorage.setItem("excelGroup",JSON.stringify(gridListGroup));
-
-          var info = "엑셀파일" + validCnt + "명";
-          $('#phonenumList').append('<option id=' +id_key+ ' value="'+ info +'">'+ info +'</option>');
-          id_key++;
-          //console.log(sendInfo);
-
-          if(confirm('불러온 명단을 확인하시겠습니까?')){
-            showPopup();
-          }
+        //console.log(rows);
+        fileProcess(rows, 'excel');
       });
   };
   reader.readAsBinaryString(input.files[0]);
 }
 
-function onlyPhonenumExcelCnt(count, rows, excelGroup, gridListGroup) {
+function fileProcess(rows, fileType) {
+  var fileGroup = new Array(); 
+  var gridListGroup = new Array();
+  var count = rows.length;
+  if(count>50000){
+    alert('50000건이 넘는 파일은 불러올 수 없습니다.')
+    return;
+  }
+  if(count > 10000){
+    alert('10000건 이상 불러올 경우 로딩이 길어질 수 있습니다. 잠시만 기다려주세요')
+  }
+
+  //중복은 set사용해서 제거하자
+  //스팸제거도 가능할지?...
+  var spamCnt = 0;
+
+  let keyheader = Object.keys(rows[0]);
+  if(keyheader.length == 1){
+    //폰번호만 있을때
+    // rows = Array.from( 
+    //   rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
+    // );
+    var setCnt = rows.length;
+    var duplicatedCnt = count - setCnt;
+    var validCnt = onlyPhonenumExcelCnt(setCnt, rows, fileGroup, gridListGroup);
+    setCnt = count;//이건 주석처리 해야 중복제거 제대로 가능!
+  }else if(keyheader.length == 2){
+    //이름, 폰번호가 있을때
+    //우선 이름-번호인지 번호-이름인지 체크
+    var testValues;
+    var phonenumIdx;
+    for(var i = 0; i< rows.length;i++){
+      testValues = Object.values(rows[i]);
+      if(phonenumFormattingExcel(testValues[0])){
+        phonenumIdx = 0;
+        break;
+      }else if(phonenumFormattingExcel(testValues[1])){
+        phonenumIdx = 1;
+        break;
+      }
+    }
+    if(phonenumIdx == 0){
+      rows = Array.from( 
+        rows.reduce((m, t) => m.set(t.zeroCol, t), new Map()).values()
+      );
+    }else if(phonenumIdx == 1){
+      rows = Array.from( 
+        rows.reduce((m, t) => m.set(t.oneCol, t), new Map()).values()
+      );
+    }
+    var setCnt = rows.length;
+    var duplicatedCnt = count - setCnt;
+    var validCnt = phonenumWithNameExcelCnt(setCnt, rows, fileGroup, gridListGroup, phonenumIdx)
+  }
+  sendInfo.push(fileGroup);
+
+  alert(`전체: ${count}건\n발송가능한 번호: ${validCnt}건\n잘못된 번호: ${setCnt - validCnt}건\n중복된 번호: ${duplicatedCnt}건`);
+
+  localStorage.setItem("fileGroup",JSON.stringify(gridListGroup));
+
+  var info = "엑셀파일" + validCnt + "명";
+  if(fileType == 'text'){
+    info = "텍스트파일" + validCnt + "명";
+  }
+  $('#phonenumList').append('<option id=' +id_key+ ' value="'+ info +'">'+ info +'</option>');
+  id_key++;
+  //console.log(sendInfo);
+
+  if(confirm('불러온 명단을 확인하시겠습니까?')){
+    showPopup();
+  }
+  
+}
+
+function onlyPhonenumExcelCnt(count, rows, fileGroup, gridListGroup) {
   var validCnt = 0;
   localStorage.setItem("groupType","number");
   var phonenum;
@@ -468,7 +476,7 @@ function onlyPhonenumExcelCnt(count, rows, excelGroup, gridListGroup) {
    
     if(phonenum){
       validCnt++;
-      excelGroup.push(phonenum);  
+      fileGroup.push(phonenum);  
       gridListGroup.push({ recid: i+1, phonenum: phonenum})
     }else{
       gridListGroup.push({ recid: i+1, phonenum: "잘못된번호:" + values[0], w2ui: {style:"background-color:#FF99CC;"}})
@@ -477,7 +485,7 @@ function onlyPhonenumExcelCnt(count, rows, excelGroup, gridListGroup) {
   return validCnt;
 }
 
-function phonenumWithNameExcelCnt(count, rows, excelGroup, gridListGroup, phonenumIdx) {
+function phonenumWithNameExcelCnt(count, rows, fileGroup, gridListGroup, phonenumIdx) {
   var validCnt = 0;
   localStorage.setItem("groupType","numberWithName");
 
@@ -495,7 +503,7 @@ function phonenumWithNameExcelCnt(count, rows, excelGroup, gridListGroup, phonen
     phonenum = phonenumFormattingExcel(values[phonenumIdx]);
     if(phonenum){
       validCnt++;
-      excelGroup.push(phonenum);  
+      fileGroup.push(phonenum);  
       gridListGroup.push({ recid: i+1, phonenum: phonenum, name: values[nameIdx]})
     }else{
       gridListGroup.push({ recid: i+1, phonenum: "잘못된번호:" + values[phonenumIdx]
@@ -527,12 +535,48 @@ function phonenumFormattingExcel(phonenum){
   }
 }
 
+/*-----------------------------------텍스트 파일 가져오기-----------------------------------*/
 
+const textFile = document.getElementById('textFile');
+textFile.addEventListener('change', event => {
+  readText(event.target);
+  console.log("read Text");
+});
 
+function readText(input) {
+  var file = input.files[0];
 
+  var reader = new FileReader();
+  reader.onload = function () {
+      var output = reader.result;
+      output = output.replace(/ +(?= )/g,''); //여러개의 공백이 있다면, 하나의 공백으로 바꿔준다
+      const allLines = output.split(/\r\n|\n/);
+      // Reading line by line
+
+      var rows = [];
+      var row;
+      var rowList;
+      var zeroCol;
+      var oneCol;
+      allLines.forEach((line) => {
+        rowList = line.split(' ');
+        zeroCol =rowList[0];
+        if(rowList[1]){
+          oneCol = rowList[1];
+        }else{
+          oneCol = '';
+        }
+        row = {'zeroCol':zeroCol,'oneCol':oneCol}
+        rows.push(row);
+      });
+      console.log(rows);
+      fileProcess(rows,'text');
+  };
+  reader.readAsText(file, /* optional */ "utf-8");
+}
 
 /*-----------------------------------엑셀&텍스트 - 폰목록 보여주기-----------------------------------*/
-localStorage.removeItem('excelGroup'); 
+localStorage.removeItem('fileGroup'); 
 //새로고침하면 지워주기
 
 function showPopup() 
@@ -563,7 +607,7 @@ function showInfo(){
     for(var i =0; i < sendInfo[id].length;i++){     
       gridListGroup.push({ recid: i+1, phonenum: sendInfo[id][i]})
     }
-    localStorage.setItem("excelGroup",JSON.stringify(gridListGroup));
+    localStorage.setItem("fileGroup",JSON.stringify(gridListGroup));
     showPopup();
   }else{
     var groupIdxUrl = id.split('-')[0];
