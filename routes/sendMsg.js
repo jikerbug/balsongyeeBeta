@@ -36,6 +36,8 @@ router.get('/', function(req, res){
     feedback = '<script>alert("' + flashMsg.error + '")</script>';
   }
   var userId = req.session.userId;
+  var msgType = req.query.msgType;
+  var pageType = req.query.pageType;
 
 
   if(userId){
@@ -57,35 +59,34 @@ router.get('/', function(req, res){
       var footer = template.footer(); 
       var sidenav = template.sidenav(name, coin,sms,lms,mms);
       
-      var msgType = req.query.msgType;
+      var phoneSection = template.phoneSection(pageType,msgType);
+    
       if(!msgType || msgType == "smslms"){
         res.render('sendMsg', {
           header: header,
           footer: footer,
-          sidenav: sidenav
+          sidenav: sidenav,
+          phoneSection:phoneSection
         });  
       }else if(msgType == "mms"){
         res.render('sendMsgMms', {
           header: header,
           footer: footer,
-          sidenav: sidenav
+          sidenav: sidenav,
+          phoneSection:phoneSection
         });  
       }else{
         res.render('sendMsg', {
           header: header,
           footer: footer,
-          sidenav: sidenav
+          sidenav: sidenav,
+          phoneSection:phoneSection
         });  
       }
     });
   }else{
-    var header = template.header(feedback, auth.statusUI(req,res)); 
-    var footer = template.footer(); 
-    res.render('sendMsg', {
-              header: header,
-              footer: footer,
-              sidenav: ""
-    });   
+    req.flash('error', '로그인 후 이용해주세요')
+    res.redirect('/auth/login');
   }
 });
 

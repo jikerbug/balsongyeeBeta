@@ -71,38 +71,7 @@
         
         <div class="row">
           <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="phone-section">
-              <input type="text" class="form-control" placeholder="제목 입력(최대 20자)" id="msgSubject" style="width: 100%;"/>
-              <button type="button" class="btn btn-secondary" onclick="resetMsg()">다시쓰기</button>
-              <span style="text-align: right">
-                
-                <span class="bytesMms">0/2000bytes</span>
-              </span> 
-
-
-              <div class="php-email-form">
-
-                <div id="contentBox">
-                  <textarea class="form-control" name="msg" id="msgMms" rows="16" style="width: 100%;"
-                data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력" ></textarea>
-                </div>
-                
-                <button type="button" class="btn btn-info" onclick="saveUserMsg()">문자저장</button>
-                <button type="button" class="btn btn-info" onclick="showUserMsg()">내문자</button>
-                <button type="button" class="btn btn-info">특수문자</button>
-                <button type="button" class="btn btn-info">이름추가</button>
-                <input type="text" class="form-control" placeholder="발신번호" id="sender" style="margin-top: 10px; width: 100%;"/>
-                <input type="text" class="form-control" placeholder="무료거부" style="margin-top: 10px; width: 100%;"/>
-                <input type="text" class="form-control" name="passwd" id="passwd" placeholder="비밀번호" style="margin-top: 10px;width: 100%;"/>
-              
-                <div class="mb-3">
-                  <div class="loading">로딩중...</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">문자발송 성공!</div>
-                </div>
-                <div class="text-center"><button class="submitButton" type="button" style="margin-bottom:10px;">발송</button></div>
-              </div>
-            </div>
+            <%- phoneSection %>
             <div style="margin-top: 50px;"></div>
             <button style="display: f;" type="button" class="btn btn-outline-info" id=showCollection onclick="showCollection()">문자모음 숨기기</button>
 
@@ -356,6 +325,7 @@
   <script src="assets/js/msgMmsContent.js"></script>
   <script src="assets/js/cash.js"></script>
   <script src="assets/js/calendar.js"></script>
+  <script src="assets/js/voteMsg.js"></script>
   
 
   <!-- external module-->

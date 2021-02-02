@@ -27,24 +27,24 @@ module.exports = {
               </div>
             </li>
             <li class="nav-item dropdown">
-              <a class="dropdown" href="/sendMsg?msgType=smslms" id="navbarDropdown">
+              <a class="dropdown" href="/sendMsg?msgType=smslms&pageType=stan" id="navbarDropdown">
                 문자전송
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/sendMsg?msgType=smslms">단문/장문</a>
-                <a class="dropdown-item" href="/sendMsg?msgType=mms">사진</a>
+                <a class="dropdown-item" href="/sendMsg?msgType=smslms&pageType=stan">단문/장문</a>
+                <a class="dropdown-item" href="/sendMsg?msgType=mms&pageType=stan">사진</a>
               </div>
             </li>
             <li class="nav-item dropdown">
-              <a href="/sendMsg?msgType=smslms" id="navbarDropdown">
+              <a href="/sendMsg?msgType=smslms&pageType=vote" id="navbarDropdown">
                 선거문자    
                 <i class="bx bx-check-circle" style="color:red"></i>
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/sendMsg?msgType=smslms">선거 단문/장문</a>
-              <a class="dropdown-item" href="/sendMsg?msgType=mms">선거 사진</a>
+              <a class="dropdown-item" href="/sendMsg?msgType=smslms&pageType=vote">선거 단문/장문</a>
+              <a class="dropdown-item" href="/sendMsg?msgType=mms&pageType=vote">선거 사진</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/sendMsg?msgType=mms">의정부구 선거</a>
+                <a class="dropdown-item" href="/sendMsg?msgType=mms&pageType=vote">의정부구 선거</a>
               </div>
             </li>
             <li><a href="/address">주소록 등록</a></li>
@@ -166,7 +166,7 @@ module.exports = {
           <i class="bx bx-phone"></i>
           <p>발신번호 등록</p>
         </a>
-        <a href="/" class="icon-href">
+        <a href="/userInfo/cash" class="icon-href">
           <i class="bx bx-credit-card"></i>
           <p>결제/충전하기</p>
         </a>
@@ -178,7 +178,7 @@ module.exports = {
           <i class="bx bx-user-voice"></i>
           <p>선거홍보안내</p>
         </a>
-        <a href="/" class="icon-href">
+        <a href="/address" class="icon-href">
           <i class="bx bxs-contact"></i>
           <p>주소록 등록</p>
         </a>
@@ -212,13 +212,85 @@ module.exports = {
       </div>
       </div>
       ` 
+    },
+    phoneSection:function(pageType,msgType){
+
+      var voteItem ='';
+      var voteInfo = '';
+      if(pageType == "vote"){
+        voteItem = '[선거운동정보]\n\n\n\n\n\n\ -기호 O번 OOO-\n\n불법수집정보신고 번호 118'
+        voteInfo = '<button type="button" class="btn btn-secondary" onclick="showVoteInfo()">선거문자안내</button>'
+      }
+
+      if(msgType == 'mms'){
+        return `
+        <div class="phone-section">
+          <input type="text" class="form-control" placeholder="제목 입력(최대 20자)" id="msgSubject" style="width: 100%;"/>
+          ${voteInfo}
+          <button type="button" class="btn btn-secondary" onclick="resetMsg()">다시쓰기</button>
+          <span style="text-align: right">
+            
+            <span class="bytesMms">0/2000bytes</span>
+          </span> 
+          <div class="php-email-form">
+            <div id="contentBox">
+              <textarea class="form-control" name="msg" id="msgMms" rows="16" style="width: 100%;"
+            data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력" >${voteItem}</textarea>
+            </div>
+            
+            <button type="button" class="btn btn-info" onclick="saveUserMsg()">문자저장</button>
+            <button type="button" class="btn btn-info" onclick="showUserMsg()">내문자</button>
+            <button type="button" class="btn btn-info">특수문자</button>
+            <button type="button" class="btn btn-info">이름추가</button>
+            
+            <input type="text" class="form-control" placeholder="발신번호" id="sender" style="margin-top: 10px; width: 100%;"/>
+            <input type="text" class="form-control" placeholder="무료거부" style="margin-top: 10px; width: 100%;"/>  
+            <input type="text" class="form-control" name="passwd" id="passwd" placeholder="비밀번호" style="margin-top: 10px;width: 100%;"/>
+          
+            <div class="mb-3">
+              <div class="loading">로딩중...</div>
+              <div class="error-message"></div>
+              <div class="sent-message">문자발송 성공!</div>
+            </div>
+            <div class="text-center"><button class="submitButton" type="button" style="margin-bottom:10px;">발송</button></div>
+          </div>  
+        </div>
+        `
+      }else{
+        return `
+        <div class="phone-section">
+          <input type="text" class="form-control" placeholder="장문발송 제목(최대 20자)" id="msgSubject" style="width: 100%; pointer-events: none;"/>
+          ${voteInfo}
+          <button type="button" class="btn btn-secondary" onclick="resetMsg()">다시쓰기</button>
+          <span style="text-align: right">
+            
+            <span class="bytes">0/90bytes</span>
+          </span> 
+
+          <div class="php-email-form">
+
+            <textarea class="form-control" name="msg" id="msg" rows="16" style="width: 100%;"
+              data-rule="required" data-msg="메세지를 입력해주세요" placeholder="메세지 입력" >${voteItem}</textarea>
+        
+            
+            <button type="button" class="btn btn-info" onclick="saveUserMsg()">문자저장</button>
+            <button type="button" class="btn btn-info" onclick="showUserMsg()">내문자</button>
+            <button type="button" class="btn btn-info">특수문자</button>
+            <button type="button" class="btn btn-info">이름추가</button>
+            
+            <input type="text" class="form-control" placeholder="발신번호" id="sender" style="margin-top: 10px; width: 100%;"/>
+            <input type="text" class="form-control" placeholder="무료거부" style="margin-top: 10px; width: 100%;"/>
+            <input type="text" class="form-control" name="passwd" id="passwd" placeholder="비밀번호" style="margin-top: 10px;width: 100%;"/>
+          
+            <div class="mb-3">
+              <div class="loading">로딩중...</div>
+              <div class="error-message"></div>
+              <div class="sent-message">문자발송 성공!</div>
+            </div>
+            <div class="text-center"><button class="submitButton" type="button" style="margin-bottom:10px;">발송</button></div>
+          </div>
+        </div>
+        `
+      }
     }
-    
-  
-  
-  
- 
-
-
-
 }
